@@ -1,0 +1,29 @@
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
+
+# Testing
+coverage/
+.nyc_output/
+
+# Cache
+.eslintcache
+.cache/
+.turbo/
+*.tsbuildinfo

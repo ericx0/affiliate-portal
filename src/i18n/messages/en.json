@@ -1,0 +1,28 @@
+{
+  "landing": {
+    "title": "Affiliate Partner Program",
+    "subtitle": "Promote LCM's administrative & travel coordination services. Earn affiliate commissions on qualifying purchases.",
+    "registerCta": "Apply Now",
+    "loginCta": "Log In"
+  },
+  "register": {
+    "title": "Join as Affiliate Partner",
+    "name": "Your name",
+    "email": "Contact email",
+    "country": "Country",
+    "platform": "Primary platform",
+    "platformUrl": "Platform URL",
+    "submit": "Submit application",
+    "success": "Application submitted! Check your email for next steps."
+  },
+  "dashboard": {
+    "title": "Affiliate Dashboard",
+    "codes": "My Referral Codes",
+    "earnings": "Earnings",
+    "payouts": "Payouts",
+    "settings": "Settings"
+  },
+  "disclosure": {
+    "message": "This is a paid partnership page. Affiliate partners earn commissions from qualifying purchases. {entity} provides {serviceType} — NOT medical diagnosis or treatment."
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "landing": {
+    "title": "联盟营销合作伙伴计划",
+    "subtitle": "推广 LCM 跨境就医行政与差旅协助,获得合规联盟返佣。",
+    "registerCta": "立即申请",
+    "loginCta": "登录"
+  },
+  "register": {
+    "title": "加入联盟营销合作伙伴",
+    "name": "姓名",
+    "email": "联系邮箱",
+    "country": "国家",
+    "platform": "主要推广平台",
+    "platformUrl": "平台链接",
+    "submit": "提交申请",
+    "success": "申请已提交!请查收邮件获取下一步指引。"
+  },
+  "dashboard": {
+    "title": "推广者看板",
+    "codes": "我的推广码",
+    "earnings": "佣金明细",
+    "payouts": "结算历史",
+    "settings": "设置"
+  },
+  "disclosure": {
+    "message": "本页面为联盟营销合作伙伴页面。KOL 推广可获得合规返佣。{entity} 仅提供 {serviceType},不提供医疗诊断或治疗。"
+  }
+}
