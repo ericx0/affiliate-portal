@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+
+const TURNSTILE_SITE_KEY =
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
+  "1x00000000000000000000AA"; // Cloudflare's official test key (always passes)
 
 export default function RegisterPage() {
   const t = useTranslations("register");
@@ -17,25 +21,70 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+
+  const turnstileRef = useRef<HTMLDivElement>(null);
+  const widgetIdRef = useRef<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Render the Turnstile widget imperatively after the SDK has loaded.
+  useEffect(() => {
+    if (!mounted) return;
+    const render = () => {
+      if (!turnstileRef.current || !window.turnstile) return;
+      if (widgetIdRef.current) {
+        try { window.turnstile.remove(widgetIdRef.current); } catch {}
+      }
+      widgetIdRef.current = window.turnstile.render(turnstileRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        callback: (token: string) => setTurnstileToken(token),
+        "expired-callback": () => setTurnstileToken(""),
+        "error-callback": () => setTurnstileToken(""),
+      });
+    };
+    if (window.turnstile) {
+      render();
+    } else {
+      window.__lcm_turnstile_cb = render;
+    }
+    return () => {
+      if (widgetIdRef.current && window.turnstile) {
+        try { window.turnstile.remove(widgetIdRef.current); } catch {}
+        widgetIdRef.current = null;
+      }
+    };
+  }, [mounted]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
+    if (!turnstileToken) {
+      setError("Please complete the security check.");
+      return;
+    }
+
+    setLoading(true);
     try {
-      // 1. Sign up via Supabase Auth
+      // 1. Sign up via Supabase Auth, attaching the Turnstile token
+      //    (Supabase verifies the captcha server-side, configured in
+      //    Supabase Dashboard → Auth → Captcha).
       const { data: authData, error: authErr } = await supabase.auth.signUp({
         email,
-        password: crypto.randomUUID(),  // KOL will set password after email verification
+        password: crypto.randomUUID(),
         options: {
+          captchaToken: turnstileToken,
           data: { name, country, primary_platform: platform, primary_platform_url: platformUrl },
         },
       });
 
       if (authErr) throw authErr;
 
-      // 2. Call affiliate-service to create promoter record
+      // 2. Call affiliate-service to create the promoter record
       const res = await fetch(`${process.env.NEXT_PUBLIC_AFFILIATE_API_URL}/api/affiliate/promoters`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -76,52 +125,40 @@ export default function RegisterPage() {
       <h1 className="text-2xl font-bold mb-6">{t("title")}</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          placeholder={t("name")}
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="w-full p-3 border rounded-xl"
-        />
-        <input
-          type="email"
-          placeholder={t("email")}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full p-3 border rounded-xl"
-        />
-        <select value={country} onChange={(e) => setCountry(e.target.value)} className="w-full p-3 border rounded-xl">
+        <input type="text" placeholder={t("name")} value={name}
+          onChange={(e) => setName(e.target.value)} required
+          className="w-full p-3 border rounded-xl" />
+        <input type="email" placeholder={t("email")} value={email}
+          onChange={(e) => setEmail(e.target.value)} required
+          className="w-full p-3 border rounded-xl" />
+        <select value={country} onChange={(e) => setCountry(e.target.value)}
+          className="w-full p-3 border rounded-xl">
           <option value="US">United States</option>
           <option value="CA">Canada</option>
           <option value="GB">United Kingdom</option>
           <option value="AU">Australia</option>
           <option value="OTHER">Other</option>
         </select>
-        <select value={platform} onChange={(e) => setPlatform(e.target.value)} className="w-full p-3 border rounded-xl">
+        <select value={platform} onChange={(e) => setPlatform(e.target.value)}
+          className="w-full p-3 border rounded-xl">
           <option value="tiktok">TikTok</option>
           <option value="youtube">YouTube</option>
           <option value="instagram">Instagram</option>
           <option value="x">X (Twitter)</option>
           <option value="other">Other</option>
         </select>
-        <input
-          type="url"
-          placeholder={t("platformUrl")}
-          value={platformUrl}
-          onChange={(e) => setPlatformUrl(e.target.value)}
-          required
-          className="w-full p-3 border rounded-xl"
-        />
+        <input type="url" placeholder={t("platformUrl")} value={platformUrl}
+          onChange={(e) => setPlatformUrl(e.target.value)} required
+          className="w-full p-3 border rounded-xl" />
+
+        <div className="flex justify-center my-2">
+          {mounted && <div ref={turnstileRef} />}
+        </div>
 
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full py-3 bg-brand-500 text-white rounded-xl font-semibold disabled:opacity-50"
-        >
+        <button type="submit" disabled={loading || !turnstileToken}
+          className="w-full py-3 bg-brand-500 text-white rounded-xl font-semibold disabled:opacity-50">
           {loading ? "..." : t("submit")}
         </button>
       </form>

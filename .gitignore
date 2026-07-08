@@ -27,3 +27,4 @@ coverage/
 .cache/
 .turbo/
 *.tsbuildinfo
+.vercel
