@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 interface StripeStatus {
   connected: boolean;
@@ -13,11 +14,16 @@ export default function StripeSettingsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_AFFILIATE_API_URL}/api/affiliate/me/stripe-status`)
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) => setStatus(d.data ?? { connected: false, accountId: null, payoutsEnabled: false }))
-      .catch(() => setStatus({ connected: false, accountId: null, payoutsEnabled: false }))
-      .finally(() => setLoading(false));
+    (async () => {
+      try {
+        const d = await apiFetch<{ data: StripeStatus }>("/api/affiliate/me/stripe-status");
+        setStatus(d.data ?? { connected: false, accountId: null, payoutsEnabled: false });
+      } catch {
+        setStatus({ connected: false, accountId: null, payoutsEnabled: false });
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   if (loading) return <p className="text-slate-500">Loading...</p>;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 interface Profile {
   name: string;
@@ -17,11 +18,16 @@ export default function ProfilePage() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_AFFILIATE_API_URL}/api/affiliate/me`)
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) => setProfile(d.data ?? null))
-      .catch(() => setProfile(null))
-      .finally(() => setLoading(false));
+    (async () => {
+      try {
+        const d = await apiFetch<{ data: Profile | null }>("/api/affiliate/me");
+        setProfile(d.data ?? null);
+      } catch {
+        setProfile(null);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   const handleSave = async (e: React.FormEvent) => {

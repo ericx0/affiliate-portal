@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 interface ReferralCode {
   id: string;
@@ -16,11 +17,16 @@ export default function CodesPage() {
   const [copied, setCopied] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_AFFILIATE_API_URL}/api/affiliate/me/codes`)
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) => setCodes(d.data ?? []))
-      .catch(() => setCodes([]))
-      .finally(() => setLoading(false));
+    (async () => {
+      try {
+        const d = await apiFetch<{ data: ReferralCode[] }>("/api/affiliate/me/codes");
+        setCodes(d.data ?? []);
+      } catch {
+        setCodes([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   const handleCopy = (code: string) => {

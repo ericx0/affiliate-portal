@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { apiFetch } from "@/lib/api";
 
 const TURNSTILE_SITE_KEY =
   process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
@@ -84,24 +85,20 @@ export default function RegisterPage() {
 
       if (authErr) throw authErr;
 
-      // 2. Call affiliate-service to create the promoter record
-      const res = await fetch(`${process.env.NEXT_PUBLIC_AFFILIATE_API_URL}/api/affiliate/promoters`, {
+      // 2. Call affiliate-service to create the promoter record.
+      //    apiFetch attaches the Supabase session Bearer token so the
+      //    backend can verify the email matches the authenticated user.
+      await apiFetch("/api/affiliate/auth/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+        body: {
           authUserId: authData.user!.id,
           name,
           email,
           countryCode: country,
           primaryPlatform: platform,
           primaryPlatformUrl: platformUrl,
-        }),
+        },
       });
-
-      if (!res.ok) {
-        const errData = await res.json();
-        throw new Error(errData.error?.message || "Registration failed");
-      }
 
       setSuccess(true);
       setTimeout(() => router.push("/login"), 3000);

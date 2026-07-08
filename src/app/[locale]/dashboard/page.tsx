@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { apiFetch } from "@/lib/api";
 
 interface Stats {
   totalPaid: number;
@@ -14,20 +14,24 @@ interface Stats {
 export default function DashboardOverview() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_AFFILIATE_API_URL}/api/affiliate/me/stats`, {
-        headers: { Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}` },
-      });
-      const data = await res.json();
-      setStats(data);
-      setLoading(false);
+      try {
+        const data = await apiFetch<Stats>("/api/affiliate/me/stats");
+        setStats(data);
+      } catch (e: any) {
+        setError(e.message);
+      } finally {
+        setLoading(false);
+      }
     })();
   }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div className="text-red-600">{error}</div>;
+  if (!stats) return <div>No data</div>;
 
   if (loading) return <div>Loading...</div>;
   if (!stats) return <div>No data</div>;

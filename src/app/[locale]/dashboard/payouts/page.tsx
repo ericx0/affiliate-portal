@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 interface Payout {
   id: string;
@@ -17,15 +18,18 @@ export default function PayoutsPage() {
   const [totalPaid, setTotalPaid] = useState(0);
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_AFFILIATE_API_URL}/api/affiliate/me/payouts`)
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) => {
+    (async () => {
+      try {
+        const d = await apiFetch<{ data: Payout[] }>("/api/affiliate/me/payouts");
         const list: Payout[] = d.data ?? [];
         setPayouts(list);
         setTotalPaid(list.reduce((sum, p) => sum + p.amountUsd, 0));
-      })
-      .catch(() => setPayouts([]))
-      .finally(() => setLoading(false));
+      } catch {
+        setPayouts([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   return (

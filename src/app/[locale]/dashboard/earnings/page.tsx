@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { apiFetch } from "@/lib/api";
 
 interface Earning {
   id: string;
@@ -18,11 +19,16 @@ export default function EarningsPage() {
   const [monthFilter, setMonthFilter] = useState<string>("all");
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_AFFILIATE_API_URL}/api/affiliate/me/earnings`)
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((d) => setEarnings(d.data ?? []))
-      .catch(() => setEarnings([]))
-      .finally(() => setLoading(false));
+    (async () => {
+      try {
+        const d = await apiFetch<{ data: Earning[] }>("/api/affiliate/me/earnings");
+        setEarnings(d.data ?? []);
+      } catch {
+        setEarnings([]);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   const months = useMemo(() => {
