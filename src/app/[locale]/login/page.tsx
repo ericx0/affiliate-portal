@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabase";
 
 const TURNSTILE_SITE_KEY =
   process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
-  "1x00000000000000000000AA";
+  (process.env.NODE_ENV !== "production" ? "1x00000000000000000000AA" : "");
 
 export default function LoginPage() {
   const router = useRouter();

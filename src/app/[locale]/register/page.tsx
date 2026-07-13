@@ -8,7 +8,7 @@ import { apiFetch } from "@/lib/api";
 
 const TURNSTILE_SITE_KEY =
   process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
-  "1x00000000000000000000AA"; // Cloudflare's official test key (always passes)
+  (process.env.NODE_ENV !== "production" ? "1x00000000000000000000AA" : ""); // test key only outside production
 
 export default function RegisterPage() {
   const t = useTranslations("register");

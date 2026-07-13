@@ -1,23 +1,21 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, notFound } from "next/navigation";
 
-/**
- * Dev-only mock for Stripe Connect onboarding.
- *
- * The affiliate-service returns this page's URL when STRIPE_SECRET_KEY
- * is a placeholder — so KOLs can exercise the connect flow locally
- * without real Stripe keys.
- *
- * In production (live mode), Stripe hosts the real onboarding URL
- * and this page is never visited.
- */
+// Only allow internal, single-slash-prefixed paths — never an absolute URL
+// or protocol-relative "//host" that could redirect off-site.
+function safeInternalPath(raw: string | null): string {
+  const fallback = "/dashboard/settings/stripe";
+  if (!raw || !raw.startsWith("/") || raw.startsWith("//")) return fallback;
+  return raw;
+}
+
 function StripeMockInner() {
   const router = useRouter();
   const search = useSearchParams();
   const account = search.get("account") || "unknown";
-  const returnTo = search.get("return") || "/dashboard/settings/stripe";
+  const returnTo = safeInternalPath(search.get("return"));
   const [completed, setCompleted] = useState(false);
 
   function handleComplete() {
@@ -63,6 +61,10 @@ function StripeMockInner() {
 }
 
 export default function StripeMockPage() {
+  // This mock must never be reachable in production.
+  if (process.env.NODE_ENV === "production") {
+    notFound();
+  }
   return (
     <Suspense fallback={<div className="p-8">Loading…</div>}>
       <StripeMockInner />
