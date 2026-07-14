@@ -17,6 +17,17 @@ export default function AffiliateAgreement() {
       </section>
 
       <section>
+        <h2 className="text-2xl font-bold text-slate-900">1.1. Independent Contractor Status</h2>
+        <p>
+          The relationship between LinkChinaMed and the Promoter is that of independent contractors. 
+          Nothing in this Agreement shall be construed to create a partnership, joint venture, agency, 
+          franchise, sales representative, or employment relationship. You have no authority to make 
+          or accept any offers or representations on our behalf. You will be solely responsible for all 
+          applicable taxes, insurance, and withholding obligations arising from payments made to you.
+        </p>
+      </section>
+
+      <section>
         <h2 className="text-2xl font-bold text-slate-900">2. Programme</h2>
         <p>
           The programme lets you earn a commission for each new paying
@@ -102,6 +113,18 @@ export default function AffiliateAgreement() {
           commission due to refunds, chargebacks, or platform changes.
           Nothing in this section limits liability that cannot be
           excluded by law.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold text-slate-900">9.1. Indemnification</h2>
+        <p>
+          You agree to indemnify, defend, and hold harmless LinkChinaMed (Ionverge LLC), its affiliates, 
+          and their respective officers, directors, employees, and agents from and against any and all 
+          claims, liabilities, losses, damages, costs, and expenses (including reasonable attorneys' fees) 
+          arising out of or relating to: (a) your breach of this Agreement or the Promoter Code of Conduct; 
+          (b) your promotion of LinkChinaMed services; or (c) any negligent, willful, or unlawful act 
+          or omission by you.
         </p>
       </section>
 

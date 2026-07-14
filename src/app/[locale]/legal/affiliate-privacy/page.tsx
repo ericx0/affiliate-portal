@@ -84,7 +84,9 @@ export default function AffiliatePrivacy() {
           withdraw consent. Email{" "}
           <a className="text-brand-600 hover:underline" href="mailto:privacy@linkchinamed.com">privacy@linkchinamed.com</a>.
           We respond within 30 days. You can also lodge a complaint
-          with your local data-protection authority.
+          with your local data-protection authority (for EEA users, 
+          your national DPA; for UK users, the Information Commissioner's 
+          Office (ICO)).
         </p>
       </section>
 
