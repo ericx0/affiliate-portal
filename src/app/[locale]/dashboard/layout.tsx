@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { apiFetch } from "@/lib/api";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -17,6 +18,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       } else {
         setUser(data.user);
         setLoading(false);
+        // AS-P1-8 followup: sync the KOL profile (email, etc.) with
+        // the verified JWT identity. Idempotent; runs once per
+        // session. Failures are silent (analytics-only — the
+        // /sync endpoint is best-effort; promoter lookup falls back
+        // to email if it fails).
+        const session = data.user.id;
+        if (typeof session === "string") {
+          apiFetch("/api/affiliate/auth/sync", {
+            method: "POST",
+            body: JSON.stringify({}),
+          }).catch(() => {});
+        }
       }
     });
   }, [router]);
