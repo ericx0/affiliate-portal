@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { apiFetch } from "@/lib/api";
 
 const TURNSTILE_SITE_KEY =
   process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
@@ -89,7 +90,14 @@ export default function LoginPage() {
         type: "email",
       });
       if (verifyErr) throw verifyErr;
-      router.push("/dashboard");
+      // Redirect by role: agent -> /agent, KOL -> /dashboard.
+      // /agent/stats returns 200 for agents (agent-auth), 403 for KOLs.
+      try {
+        await apiFetch("/api/affiliate/agent/stats");
+        router.push("/agent");
+      } catch {
+        router.push("/dashboard");
+      }
     } catch (e: any) {
       setError(e.message);
     } finally {
