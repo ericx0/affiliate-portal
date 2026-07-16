@@ -197,11 +197,11 @@ function NewKolForm({ onCreated }: NewKolFormProps) {
           />
         </label>
         <label className="block">
-          <span className="text-xs text-slate-500">Commission rate (%)</span>
+          <span className="text-xs text-slate-500">Commission rate (%) - max 10%</span>
           <input
             type="number"
             min={0}
-            max={50}
+            max={10}
             step={0.5}
             value={form.commission_rate}
             onChange={(e) => setForm({ ...form, commission_rate: Number(e.target.value) })}

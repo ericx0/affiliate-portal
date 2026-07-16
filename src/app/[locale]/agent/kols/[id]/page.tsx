@@ -163,7 +163,7 @@ export default function KolDetail() {
           <input
             type="number"
             min={0}
-            max={50}
+            max={10}
             step={0.5}
             value={rateForm.rate}
             onChange={(e) => setRateForm({ ...rateForm, rate: Number(e.target.value) })}
