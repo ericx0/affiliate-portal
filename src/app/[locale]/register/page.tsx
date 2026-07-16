@@ -16,6 +16,14 @@ export default function RegisterPage() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [referralCode, setReferralCode] = useState("");
+
+  // Auto-fill referral code from ?ref=CODE (agent invite link).
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+    if (ref) setReferralCode(ref.toUpperCase());
+  }, []);
   const [country, setCountry] = useState("US");
   const [platform, setPlatform] = useState("tiktok");
   const [platformUrl, setPlatformUrl] = useState("");
@@ -97,6 +105,7 @@ export default function RegisterPage() {
           countryCode: country,
           primaryPlatform: platform,
           primaryPlatformUrl: platformUrl,
+          referralCode,
         },
       });
 
@@ -146,6 +155,9 @@ export default function RegisterPage() {
         </select>
         <input type="url" placeholder={t("platformUrl")} value={platformUrl}
           onChange={(e) => setPlatformUrl(e.target.value)} required
+          className="w-full p-3 border rounded-xl" />
+        <input type="text" placeholder="邀请码 (Referral Code) *" value={referralCode}
+          onChange={(e) => setReferralCode(e.target.value.toUpperCase())} required
           className="w-full p-3 border rounded-xl" />
 
         <div className="flex justify-center my-2">
