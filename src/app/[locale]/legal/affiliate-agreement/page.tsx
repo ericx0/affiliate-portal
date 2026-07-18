@@ -72,11 +72,18 @@ export default function AffiliateAgreement() {
       <section>
         <h2 className="text-2xl font-bold text-slate-900">6. Intellectual Property &amp; Brand Use</h2>
         <p>
-          We grant you a non-exclusive, revocable licence to use our
+          <strong>6.1. Brand License:</strong> We grant you a non-exclusive, revocable, non-transferable licence to use our
           brand assets (logo, name) for the sole purpose of promoting
           LinkChinaMed in accordance with our brand guidelines. You may
           not modify the assets, register them as your own, or use them
           in a misleading or defamatory context.
+        </p>
+        <p className="mt-2">
+          <strong>6.2. Partner-Generated Content License:</strong> By posting promotional content (including but not limited to videos,
+          images, audio, and written text) that references LinkChinaMed or uses your referral code/link, you hereby grant 
+          to Ionverge LLC a worldwide, royalty-free, perpetual, irrevocable, non-exclusive, and fully sublicensable license 
+          to use, reproduce, modify, adapt, publish, translate, create derivative works from, distribute, perform, 
+          and display such content on our website, social media, and other marketing channels without further consent or compensation.
         </p>
       </section>
 
@@ -131,10 +138,16 @@ export default function AffiliateAgreement() {
       <section>
         <h2 className="text-2xl font-bold text-slate-900">10. Governing law &amp; disputes</h2>
         <p>
-          This Agreement is governed by the laws of the State of
-          Wyoming, USA. Disputes are resolved in the competent courts of
-          Wyoming unless mandatory consumer law of your jurisdiction
-          requires otherwise.
+          This Agreement is governed by, and construed in accordance with, the laws of the State of
+          Wyoming, USA, without regard to its conflict-of-laws rules. 
+        </p>
+        <p className="mt-2">
+          Any dispute, claim, or controversy where the total amount in controversy is less than 
+          Ten Thousand U.S. Dollars (10,000 USD) shall be resolved exclusively in the Small Claims Court 
+          of Laramie County, Wyoming, or through binding online document-based arbitration. All other major 
+          disputes shall be submitted to binding arbitration administered by the American Arbitration 
+          Association (AAA) in accordance with its Commercial Arbitration Rules, to be held virtually, 
+          conducted in English.
         </p>
       </section>
 
