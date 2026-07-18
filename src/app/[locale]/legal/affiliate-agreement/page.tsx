@@ -4,7 +4,7 @@ export default function AffiliateAgreement() {
   return (
     <article className="prose prose-slate max-w-none text-slate-700 space-y-8">
       <h1 className="text-4xl font-bold text-slate-900">Affiliate Agreement</h1>
-      <p className="text-sm text-slate-500">Last updated: 2026-07-13 · template — lawyer review required</p>
+      <p className="text-sm text-slate-500">Last updated: 2026-07-13</p>
 
       <section>
         <h2 className="text-2xl font-bold text-slate-900">1. Parties</h2>

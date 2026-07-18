@@ -13,16 +13,6 @@ export default function LegalLayout({
 }) {
   return (
     <main className="max-w-4xl mx-auto px-4 py-12">
-      <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-        <strong>⚠️ Template — requires lawyer review.</strong>{" "}
-        These documents are templates prepared for the LinkChinaMed
-        affiliate programme and have not been individually reviewed by
-        an attorney. Before publishing to promoters, have a qualified
-        lawyer (ideally one familiar with the laws of the promoter
-        jurisdictions you target) review and adapt each section to
-        your actual commission structure, payment processor terms
-        and tax obligations.
-      </div>
       {children}
       <nav className="mt-12 flex flex-wrap gap-4 border-t border-slate-200 pt-6 text-sm">
         <Link
@@ -48,6 +38,12 @@ export default function LegalLayout({
           className="text-brand-600 hover:underline"
         >
           Commission Rules
+        </Link>
+        <Link
+          href="/legal/nda"
+          className="text-brand-600 hover:underline"
+        >
+          Non-Disclosure Agreement
         </Link>
       </nav>
     </main>
