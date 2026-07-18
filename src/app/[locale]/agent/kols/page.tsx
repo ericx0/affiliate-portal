@@ -14,6 +14,7 @@ interface Kol {
   created_at: string;
   total_commission_earned: number;
   total_commission_paid: number;
+  gmv_total: number;
 }
 
 interface KolsResponse {
@@ -102,8 +103,8 @@ export default function AgentKols() {
                   <td className="p-3 text-center text-sm">
                     <StatusBadge status={k.status} />
                   </td>
-                  <td className="p-3 text-right text-sm text-slate-400" title="GMV not returned by /api/affiliate/agent/kols - requires affiliate-service extension">
-                    -
+                  <td className="p-3 text-right text-sm text-slate-600">
+                    ${Number(k.gmv_total || 0).toFixed(2)}
                   </td>
                   <td className="p-3 text-right font-medium text-green-600">
                     ${Number(k.total_commission_earned || 0).toFixed(2)}
