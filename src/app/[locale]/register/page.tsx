@@ -17,12 +17,15 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [referralCode, setReferralCode] = useState("");
+  const [agentInviteCode, setAgentInviteCode] = useState("");
 
-  // Auto-fill referral code from ?ref=CODE (agent invite link).
+  // Auto-fill from invite links: ?ref=CODE (referral) or ?agent=CODE (agent invite).
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const ref = params.get("ref");
     if (ref) setReferralCode(ref.toUpperCase());
+    const agent = params.get("agent");
+    if (agent) setAgentInviteCode(agent.toUpperCase());
   }, []);
   const [country, setCountry] = useState("US");
   const [platform, setPlatform] = useState("tiktok");
@@ -106,6 +109,7 @@ export default function RegisterPage() {
           primaryPlatform: platform,
           primaryPlatformUrl: platformUrl,
           referralCode,
+          ...(agentInviteCode ? { agent_invite_code: agentInviteCode } : {}),
         },
       });
 

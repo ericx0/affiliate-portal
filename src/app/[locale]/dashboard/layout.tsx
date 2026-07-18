@@ -27,7 +27,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         if (typeof session === "string") {
           apiFetch("/api/affiliate/auth/sync", {
             method: "POST",
-            body: JSON.stringify({}),
+            body: {},
           }).catch(() => {});
         }
       }
