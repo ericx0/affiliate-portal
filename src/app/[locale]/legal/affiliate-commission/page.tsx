@@ -10,7 +10,8 @@ export default function CommissionRules() {
         <h2 className="text-2xl font-bold text-slate-900">1. What is commissionable</h2>
         <p>
           Commission is calculated on the <strong>service fees</strong>{" "}
-          that referred customers pay to LinkChinaMed via the iOS app
+          that referred customers pay to LinkChinaMed via our platform (including
+          our website or mobile applications) for our services
           (coordination, translation, on-site escort, transportation,
           administrative concierge).{" "}
           <strong>Medical fees paid directly to the hospital are
