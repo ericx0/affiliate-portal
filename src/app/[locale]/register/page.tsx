@@ -34,6 +34,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
+  const [agreed, setAgreed] = useState(false);
 
   const turnstileRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
@@ -168,9 +169,35 @@ export default function RegisterPage() {
           {mounted && <div ref={turnstileRef} />}
         </div>
 
+        <div className="flex items-start gap-2 text-sm text-slate-600 my-4">
+          <input
+            type="checkbox"
+            id="agreeTerms"
+            required
+            checked={agreed}
+            onChange={(e) => setAgreed(e.target.checked)}
+            className="mt-1 h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+          />
+          <label htmlFor="agreeTerms" className="leading-snug">
+            I agree to the{" "}
+            <a href="/legal/affiliate-agreement" target="_blank" className="text-brand-500 underline hover:text-brand-600">
+              Affiliate Agreement
+            </a>
+            ,{" "}
+            <a href="/legal/nda" target="_blank" className="text-brand-500 underline hover:text-brand-600">
+              Non-Disclosure Agreement (NDA)
+            </a>
+            , and pledge to follow the{" "}
+            <a href="/docs/kol-guidelines/KOL_Onboarding_and_Posting_Guidelines" target="_blank" className="text-brand-500 underline hover:text-brand-600">
+              KOL Posting Guidelines
+            </a>
+            .
+          </label>
+        </div>
+
         {error && <p className="text-red-600 text-sm">{error}</p>}
 
-        <button type="submit" disabled={loading || !turnstileToken}
+        <button type="submit" disabled={loading || !turnstileToken || !agreed}
           className="w-full py-3 bg-brand-500 text-white rounded-xl font-semibold disabled:opacity-50">
           {loading ? "..." : t("submit")}
         </button>
