@@ -58,9 +58,15 @@ export default function NonDisclosureAgreement() {
       <section>
         <h2 className="text-2xl font-bold text-slate-900">4. Duration</h2>
         <p>
-          This Agreement is effective from the date of acceptance and remains
-          in force for <strong>two (2) years</strong> after termination of the
+          This Agreement is effective from the date of acceptance. The Recipient's 
+          confidentiality obligations with respect to Company's business trade secrets 
+          shall remain in force for <strong>three (3) years</strong> after termination of the
           business relationship.
+        </p>
+        <p className="mt-2">
+          <strong>CRITICAL PRIVACY UNDERTAKING:</strong> Notwithstanding anything to the contrary, the 
+          Recipient's confidentiality obligations with respect to Patient Data, Personal Identifiable 
+          Information (PII), and Protected Health Information (PHI) shall <strong>SURVIVE the termination of this Agreement INDEFINITELY</strong>.
         </p>
       </section>
 
