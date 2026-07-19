@@ -14,6 +14,8 @@ interface ReferralCode {
 export default function CodesPage() {
   const [codes, setCodes] = useState<ReferralCode[]>([]);
   const [loading, setLoading] = useState(true);
+  const [generating, setGenerating] = useState(false);
+  const [generateError, setGenerateError] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,9 +38,19 @@ export default function CodesPage() {
     setTimeout(() => setCopied(null), 1500);
   };
 
-  const handleGenerate = () => {
-    // Placeholder: would POST to /api/affiliate/me/codes
-    alert("Generate new code — coming soon (test mode)");
+  const handleGenerate = async () => {
+    setGenerating(true);
+    setGenerateError(null);
+    try {
+      const d = await apiFetch<{ data: ReferralCode }>("/api/affiliate/me/codes", {
+        method: "POST",
+      });
+      setCodes((prev) => [d.data, ...prev]);
+    } catch (err) {
+      setGenerateError(err instanceof Error ? err.message : "Failed to generate code");
+    } finally {
+      setGenerating(false);
+    }
   };
 
   return (
@@ -47,11 +59,16 @@ export default function CodesPage() {
         <h1 className="text-2xl font-bold">My Referral Codes</h1>
         <button
           onClick={handleGenerate}
-          className="px-4 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold"
+          disabled={generating}
+          className="px-4 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold disabled:opacity-50"
         >
-          Generate New Code
+          {generating ? "Generating..." : "Generate New Code"}
         </button>
       </div>
+
+      {generateError && (
+        <p className="text-sm text-rose-600 mb-4">{generateError}</p>
+      )}
 
       <p className="text-sm text-slate-600 mb-4">
         Share your unique code or link. You earn affiliate commissions on qualifying purchases referred through these codes.

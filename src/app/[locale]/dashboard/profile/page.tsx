@@ -16,6 +16,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -35,11 +36,22 @@ export default function ProfilePage() {
     if (!profile) return;
     setSaving(true);
     setSaved(false);
+    setSaveError(null);
     try {
-      // Placeholder: would PATCH /api/affiliate/me
-      await new Promise((res) => setTimeout(res, 500));
+      const d = await apiFetch<{ data: Profile }>("/api/affiliate/me", {
+        method: "PATCH",
+        body: {
+          name: profile.name,
+          countryCode: profile.countryCode,
+          primaryPlatform: profile.primaryPlatform,
+          primaryPlatformUrl: profile.primaryPlatformUrl,
+        },
+      });
+      setProfile(d.data);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : "Save failed");
     } finally {
       setSaving(false);
     }
@@ -70,9 +82,13 @@ export default function ProfilePage() {
           <input
             type="email"
             value={profile.email}
-            onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-            className="w-full p-3 border rounded-xl"
+            readOnly
+            disabled
+            className="w-full p-3 border rounded-xl bg-slate-50 text-slate-400"
           />
+          <p className="text-[11px] text-slate-400 mt-1">
+            Email is your sign-in identity and can&apos;t be changed here.
+          </p>
         </div>
 
         <div>
@@ -124,6 +140,7 @@ export default function ProfilePage() {
             {saving ? "Saving..." : "Save Changes"}
           </button>
           {saved && <span className="text-green-600 text-sm">Saved.</span>}
+          {saveError && <span className="text-rose-600 text-sm">{saveError}</span>}
         </div>
       </form>
     </div>
