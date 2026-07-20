@@ -111,6 +111,8 @@ export default function RegisterPage() {
           primaryPlatformUrl: platformUrl,
           referralCode,
           ...(agentInviteCode ? { agent_invite_code: agentInviteCode } : {}),
+          // ESIGN: the typed `name` + this checkbox = electronic signature.
+          consent_confirmed: agreed,
         },
       });
 
@@ -191,7 +193,8 @@ export default function RegisterPage() {
             <a href="/docs/kol-guidelines/KOL_Onboarding_and_Posting_Guidelines" target="_blank" className="text-brand-500 underline hover:text-brand-600">
               KOL Posting Guidelines
             </a>
-            .
+            . By typing my name above and checking this box, I am signing
+            these agreements electronically under the U.S. ESIGN Act.
           </label>
         </div>
 
