@@ -5,6 +5,12 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api";
 
+function maskEmail(email: string): string {
+  const at = email.indexOf("@");
+  if (at < 1) return email;
+  return `${email.charAt(0)}***${email.slice(at)}`;
+}
+
 interface Kol {
   id: string;
   name: string;
@@ -114,7 +120,7 @@ export default function KolDetail() {
       <div className="flex justify-between items-start">
         <div>
           <h1 className="text-2xl font-bold">{kol.name}</h1>
-          <p className="text-sm text-slate-400">{kol.email}</p>
+          <p className="text-sm text-slate-400">{maskEmail(kol.email)}</p>
           {kol.brand_name && <p className="text-sm text-slate-500">{kol.brand_name}</p>}
         </div>
         <div className="flex gap-2">
