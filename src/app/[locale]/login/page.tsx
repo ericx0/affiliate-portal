@@ -89,10 +89,14 @@ export default function LoginPage() {
         type: "email",
       });
       if (verifyErr) throw verifyErr;
-      // Redirect to /agent. agent/layout verifies role=agent via /agent/stats
-      // (200 stays, 403 KOL redirects to /dashboard). Doing the probe here
-      // fails because session isn't established yet right after verifyOtp.
-      router.push("/agent");
+      // Redirect to the original target (middleware set ?redirect=) or /agent.
+      // agent/layout verifies role=agent via /agent/stats (200 stays, 403 KOL
+      // redirects to /dashboard). Validate the target is a safe internal path
+      // (starts with "/", not "//host") to avoid open-redirect.
+      const params = new URLSearchParams(window.location.search);
+      const target = params.get("redirect");
+      const safeTarget = target && target.startsWith("/") && !target.startsWith("//") ? target : "/agent";
+      router.push(safeTarget);
     } catch (e: any) {
       setError(e.message);
     } finally {
