@@ -4,7 +4,7 @@ export default function CommissionRules() {
   return (
     <article className="prose prose-slate max-w-none text-slate-700 space-y-8">
       <h1 className="text-4xl font-bold text-slate-900">Commission Rules</h1>
-      <p className="text-sm text-slate-500">Last updated: 2026-07-13</p>
+      <p className="text-sm text-slate-500">Last updated: 2026-07-21</p>
 
       <section>
         <h2 className="text-2xl font-bold text-slate-900">1. What is commissionable</h2>
@@ -22,9 +22,10 @@ export default function CommissionRules() {
       <section>
         <h2 className="text-2xl font-bold text-slate-900">2. Default rate</h2>
         <p>
-          Standard rate is <strong>5% of net service fees</strong>{" "}
-          (after Stripe fees, refunds, chargebacks). Custom rates
-          (higher or lower) are visible in your promoter dashboard
+          Standard rate is <strong>5% of service fees</strong>{" "}
+          (after refunds and chargebacks; card processing fees are
+          absorbed by us, not deducted from your commission). Custom
+          rates (higher or lower) are visible in your promoter dashboard
           per partner tier.
         </p>
       </section>
@@ -74,7 +75,9 @@ export default function CommissionRules() {
           You are responsible for declaring and paying any tax due on
           your commission. For US persons, we will collect a W-9; for
           non-US persons, a W-8BEN. We may withhold US backup tax
-          (24%) if the correct form is not on file. Consult your own
+          (24%) if the correct form is not on file. For US persons,
+          note the IRS Form 1099-NEC reporting threshold is $2,000
+          for payments made after December 31, 2025. Consult your own
           tax advisor.
         </p>
       </section>

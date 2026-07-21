@@ -4,7 +4,7 @@ export default function AffiliatePrivacy() {
   return (
     <article className="prose prose-slate max-w-none text-slate-700 space-y-8">
       <h1 className="text-4xl font-bold text-slate-900">Promoter Privacy Policy</h1>
-      <p className="text-sm text-slate-500">Last updated: 2026-07-13</p>
+      <p className="text-sm text-slate-500">Last updated: 2026-07-21</p>
 
       <section>
         <h2 className="text-2xl font-bold text-slate-900">1. Scope</h2>
@@ -58,10 +58,11 @@ export default function AffiliatePrivacy() {
       <section>
         <h2 className="text-2xl font-bold text-slate-900">5. International transfers</h2>
         <p>
-          Our servers are in the United States. We rely on the EU-US
-          Data Privacy Framework and on Standard Contractual Clauses
-          (2021/914) for transfers from the EEA, UK or Switzerland
-          to the US. You can request a copy of the safeguards at{" "}
+          Our servers are in the United States. For transfers from the
+          EEA, UK or Switzerland to the US, we rely on Standard
+          Contractual Clauses (2021/914), together with supplementary
+          measures where required. You can request a copy of the
+          safeguards at{" "}
           <a className="text-brand-600 hover:underline" href="mailto:privacy@linkchinamed.com">privacy@linkchinamed.com</a>.
         </p>
       </section>
@@ -91,7 +92,28 @@ export default function AffiliatePrivacy() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold text-slate-900">8. Cookies set on the promoter portal</h2>
+        <h2 className="text-2xl font-bold text-slate-900">8. US state privacy rights</h2>
+        <p>
+          If you are a resident of a US state with a comprehensive privacy law (including California 
+          under the CCPA/CPRA, which also covers business-to-business contacts), you have the right to:
+        </p>
+        <ul className="list-disc pl-6 space-y-1">
+          <li><strong>Know / access</strong> the categories and specific pieces of personal information we hold about you.</li>
+          <li><strong>Correct</strong> inaccurate personal information.</li>
+          <li><strong>Delete</strong> your personal information, subject to legal retention requirements (e.g. tax records).</li>
+          <li><strong>Opt out of the sale or sharing</strong> of your personal information. We do not sell your personal information, and we do not share it for cross-context behavioral advertising.</li>
+          <li><strong>Non-discrimination:</strong> we will not discriminate against you for exercising any of these rights.</li>
+        </ul>
+        <p>
+          To exercise these rights, email{" "}
+          <a className="text-brand-600 hover:underline" href="mailto:privacy@linkchinamed.com">privacy@linkchinamed.com</a>. 
+          You may also designate an authorized agent to make a request on your behalf; we may require 
+          proof of the agent&apos;s authorization and verification of your identity.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold text-slate-900">9. Cookies set on the promoter portal</h2>
         <ul className="list-disc pl-6 space-y-1">
           <li><strong>Essential (always on):</strong> session cookie, CSRF token.</li>
           <li><strong>Analytics (opt-out):</strong> aggregated, cookieless page views.</li>
@@ -100,7 +122,7 @@ export default function AffiliatePrivacy() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold text-slate-900">9. Contact</h2>
+        <h2 className="text-2xl font-bold text-slate-900">10. Contact</h2>
         <p>
           <strong>Data controller:</strong> Ionverge LLC
           <br />

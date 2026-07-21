@@ -4,7 +4,7 @@ export default function NonDisclosureAgreement() {
   return (
     <article className="prose prose-slate max-w-none text-slate-700 space-y-8">
       <h1 className="text-4xl font-bold text-slate-900">Non-Disclosure Agreement</h1>
-      <p className="text-sm text-slate-500">Last updated: 2026-07-18</p>
+      <p className="text-sm text-slate-500">Last updated: 2026-07-21</p>
 
       <section>
         <h2 className="text-2xl font-bold text-slate-900">Parties</h2>
@@ -26,7 +26,6 @@ export default function NonDisclosureAgreement() {
         <h2 className="text-2xl font-bold text-slate-900">1. Definition of Confidential Information</h2>
         <p>&ldquo;Confidential Information&rdquo; includes, but is not limited to:</p>
         <ul className="list-disc pl-6 space-y-1">
-          <li>Patient names, contact details, health records, and insurance information</li>
           <li>Company&apos;s partner hospital lists, pricing structures, and service protocols</li>
           <li>Technical systems, source code, and database structures</li>
           <li>Business plans, financial data, and marketing strategies</li>
@@ -60,13 +59,15 @@ export default function NonDisclosureAgreement() {
         <p>
           This Agreement is effective from the date of acceptance. The Recipient's 
           confidentiality obligations with respect to Company's business trade secrets 
-          shall remain in force for <strong>three (3) years</strong> after termination of the
-          business relationship.
+          shall remain in force <strong>for as long as the information remains a trade secret under applicable law</strong>. 
+          Obligations with respect to other Confidential Information shall remain in force 
+          for <strong>three (3) years</strong> after termination of the business relationship.
         </p>
         <p className="mt-2">
           <strong>CRITICAL PRIVACY UNDERTAKING:</strong> Notwithstanding anything to the contrary, the 
-          Recipient's confidentiality obligations with respect to Patient Data, Personal Identifiable 
-          Information (PII), and Protected Health Information (PHI) shall <strong>SURVIVE the termination of this Agreement INDEFINITELY</strong>.
+          Recipient's confidentiality obligations with respect to any patient-related personal or health 
+          information the Recipient may incidentally encounter, and any Personal Identifiable 
+          Information (PII) or Protected Health Information (PHI), shall <strong>SURVIVE the termination of this Agreement INDEFINITELY</strong>.
         </p>
       </section>
 
@@ -103,6 +104,21 @@ export default function NonDisclosureAgreement() {
           regarding confidentiality and supersedes all prior agreements on the
           same subject.
         </p>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold text-slate-900">9. Whistleblower Immunity Notice (18 U.S.C. § 1833(b))</h2>
+        <p>
+          <strong>Immunity from Liability for Confidential Disclosure of a Trade Secret to the Government or in a Court Filing:</strong>
+        </p>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>
+            <strong>Immunity</strong> — An individual shall not be held criminally or civilly liable under any Federal or State trade secret law for the disclosure of a trade secret that is made (i) in confidence to a Federal, State, or local government official, either directly or indirectly, or to an attorney, and solely for the purpose of reporting or investigating a suspected violation of law; or (ii) in a complaint or other document filed in a lawsuit or other proceeding, if such filing is made under seal.
+          </li>
+          <li>
+            <strong>Use of Trade Secret Information in Anti-Retaliation Lawsuit</strong> — An individual who files a lawsuit for retaliation by an employer for reporting a suspected violation of law may disclose the trade secret to the attorney of the individual and use the trade secret information in the court proceeding, if the individual files any document containing the trade secret under seal and does not disclose the trade secret, except pursuant to court order.
+          </li>
+        </ol>
       </section>
 
       <section>
