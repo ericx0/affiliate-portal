@@ -42,8 +42,9 @@ interface FraudFlag {
 export default function AdminAffiliateDashboard() {
   const [agents, setAgents] = useState<AgentRecord[]>([]);
   const [fraudFlags, setFraudFlags] = useState<FraudFlag[]>([]);
+  const [payouts, setPayouts] = useState<{ promoter_id?: string; commission_amount?: number; status?: string; month_key?: string }[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"agents" | "fraud">("agents");
+  const [activeTab, setActiveTab] = useState<"agents" | "fraud" | "payouts">("agents");
 
   // Create Agent Modal
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -69,6 +70,11 @@ export default function AdminAffiliateDashboard() {
         "/api/affiliate/admin/fraud-flags",
       ).catch(() => []);
       setFraudFlags(flagData || []);
+
+      const payoutData = await apiFetch<
+        { promoter_id?: string; commission_amount?: number; status?: string; month_key?: string }[]
+      >("/api/affiliate/admin/payouts").catch(() => []);
+      setPayouts(payoutData || []);
     } finally {
       setLoading(false);
     }
@@ -201,6 +207,16 @@ export default function AdminAffiliateDashboard() {
         >
           风控预警队列 ({fraudFlags.length})
         </button>
+        <button
+          onClick={() => setActiveTab("payouts")}
+          className={`pb-3 font-bold text-sm transition-colors border-b-2 ${
+            activeTab === "payouts"
+              ? "border-blue-600 text-blue-600"
+              : "border-transparent text-slate-500 hover:text-slate-900"
+          }`}
+        >
+          打款管理 ({payouts.length})
+        </button>
       </div>
 
       {/* Tab 1: Agent List Table */}
@@ -285,6 +301,52 @@ export default function AdminAffiliateDashboard() {
               {/* Fraud flags list */}
               <p>风控列表</p>
             </div>
+          )}
+        </div>
+      )}
+
+      {/* Tab 3: Payouts */}
+      {activeTab === "payouts" && (
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-8">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="font-bold text-slate-900">待打款佣金</h3>
+            <button
+              onClick={async () => {
+                try {
+                  await apiFetch("/api/affiliate/admin/payout/batch", { method: "POST" });
+                  loadAdminData();
+                } catch (e: any) {
+                  alert(e.message || "批量打款失败");
+                }
+              }}
+              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-sm font-bold"
+            >
+              批量打款
+            </button>
+          </div>
+          {payouts.length === 0 ? (
+            <div className="text-center py-12 text-slate-400 text-sm">暂无待打款记录</div>
+          ) : (
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-slate-100 text-xs text-slate-400 uppercase font-semibold">
+                <tr>
+                  <th className="py-3 px-4">推广者</th>
+                  <th className="py-3 px-4">金额</th>
+                  <th className="py-3 px-4">状态</th>
+                  <th className="py-3 px-4">月份</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {payouts.map((p, i) => (
+                  <tr key={i} className="hover:bg-slate-50">
+                    <td className="py-4 px-4 font-mono text-xs">{p.promoter_id?.slice(0, 8) || "-"}</td>
+                    <td className="py-4 px-4 font-bold">${((p.commission_amount || 0) / 100).toFixed(2)}</td>
+                    <td className="py-4 px-4"><span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700">{p.status}</span></td>
+                    <td className="py-4 px-4 text-slate-500">{p.month_key || "-"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           )}
         </div>
       )}
