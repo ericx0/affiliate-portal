@@ -21,6 +21,20 @@ test.describe("Affiliate full lifecycle", () => {
 
     await expect(page.locator("text=Application submitted")).toBeVisible({ timeout: 10000 });
 
+    // ── R4: assert both NDA + Affiliate Agreement signings exist
+    // (audit 🟡 R2/R3: registration must atomically record ESIGN evidence
+    // for BOTH documents the KOL clicked "I agree" to). ──
+    await new Promise((r) => setTimeout(r, 1000)); // allow RPC to commit
+    const signingsRes = await request.get(
+      `${process.env.NEXT_PUBLIC_AFFILIATE_API_URL}/api/affiliate/admin/signings?email=${testEmail}`,
+      { headers: { Authorization: `Bearer ${process.env.ADMIN_JWT}` } }
+    );
+    expect(signingsRes.ok()).toBeTruthy();
+    const { data: signings } = await signingsRes.json();
+    expect(signings).toHaveLength(2);
+    expect(signings.map((s: { templateType: string }) => s.templateType).sort())
+      .toEqual(["kol_affiliate_agreement", "nda"]);
+
     // ── Step 2: Get KOL's referral code from DB (via API) ──
     const { data: promoterData } = await request.get(
       `${process.env.NEXT_PUBLIC_AFFILIATE_API_URL}/api/affiliate/admin/promoters?search=${testEmail}`,
