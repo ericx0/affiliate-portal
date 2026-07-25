@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
 
 interface Earning {
@@ -13,6 +14,7 @@ interface Earning {
 }
 
 export default function EarningsPage() {
+  const t = useTranslations("earnings");
   const [earnings, setEarnings] = useState<Earning[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<string>("all");
@@ -46,9 +48,9 @@ export default function EarningsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-2">Earnings</h1>
+      <h1 className="text-2xl font-bold mb-2">{t("title")}</h1>
       <p className="text-sm text-slate-600 mb-6">
-        Affiliate commissions on qualifying purchases. Status updates as referred orders progress.
+        {t("description")}
       </p>
 
       <div className="flex gap-3 mb-4">
@@ -57,43 +59,43 @@ export default function EarningsPage() {
           onChange={(e) => setStatusFilter(e.target.value)}
           className="px-3 py-2 border rounded-xl text-sm bg-white"
         >
-          <option value="all">All statuses</option>
-          <option value="pending">Pending</option>
-          <option value="approved">Approved</option>
-          <option value="paid">Paid</option>
-          <option value="reversed">Reversed</option>
+          <option value="all">{t("filterAllStatuses")}</option>
+          <option value="pending">{t("statusPending")}</option>
+          <option value="approved">{t("statusApproved")}</option>
+          <option value="paid">{t("statusPaid")}</option>
+          <option value="reversed">{t("statusReversed")}</option>
         </select>
         <select
           value={monthFilter}
           onChange={(e) => setMonthFilter(e.target.value)}
           className="px-3 py-2 border rounded-xl text-sm bg-white"
         >
-          <option value="all">All months</option>
+          <option value="all">{t("filterAllMonths")}</option>
           {months.map((m) => (
             <option key={m} value={m}>{m}</option>
           ))}
         </select>
         <div className="ml-auto px-4 py-2 bg-white border rounded-xl text-sm">
-          Total: <span className="font-bold">${total.toFixed(2)}</span>
+          {t("totalLabel")} <span className="font-bold">${total.toFixed(2)}</span>
         </div>
       </div>
 
       {loading ? (
-        <p className="text-slate-500">Loading...</p>
+        <p className="text-slate-500">{t("loading")}</p>
       ) : filtered.length === 0 ? (
         <div className="bg-white p-8 rounded-xl border text-center text-slate-500">
-          No earnings yet.
+          {t("emptyState")}
         </div>
       ) : (
         <div className="bg-white rounded-xl border overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left">
               <tr>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3">Order</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3 text-right">Amount (USD)</th>
-                <th className="px-4 py-3">Timeline</th>
+                <th className="px-4 py-3">{t("thDate")}</th>
+                <th className="px-4 py-3">{t("thOrder")}</th>
+                <th className="px-4 py-3">{t("thStatus")}</th>
+                <th className="px-4 py-3 text-right">{t("thAmount")}</th>
+                <th className="px-4 py-3">{t("thTimeline")}</th>
               </tr>
             </thead>
             <tbody>
@@ -117,9 +119,9 @@ export default function EarningsPage() {
                   <td className="px-4 py-3 text-right font-mono">${e.amountUsd.toFixed(2)}</td>
                   <td className="px-4 py-3 text-xs text-slate-500">
                     {e.timeline
-                      .filter((t) => t.at)
-                      .map((t) => t.label)
-                      .join(" → ") || "—"}
+                      .filter((item) => item.at)
+                      .map((item) => item.label)
+                      .join(" -> ") || "-"}
                   </td>
                 </tr>
               ))}

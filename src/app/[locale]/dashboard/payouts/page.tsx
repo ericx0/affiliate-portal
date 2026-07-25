@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
 
 interface Payout {
@@ -13,6 +14,7 @@ interface Payout {
 }
 
 export default function PayoutsPage() {
+  const t = useTranslations("payouts");
   const [payouts, setPayouts] = useState<Payout[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPaid, setTotalPaid] = useState(0);
@@ -34,32 +36,32 @@ export default function PayoutsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-2">Payout History</h1>
+      <h1 className="text-2xl font-bold mb-2">{t("title")}</h1>
       <p className="text-sm text-slate-600 mb-6">
-        Affiliate commissions that have been paid out to your connected account.
+        {t("description")}
       </p>
 
       <div className="mb-4 p-4 bg-white border rounded-xl inline-block">
-        <div className="text-xs text-slate-500">Lifetime paid</div>
+        <div className="text-xs text-slate-500">{t("lifetimePaid")}</div>
         <div className="text-2xl font-bold">${totalPaid.toFixed(2)}</div>
       </div>
 
       {loading ? (
-        <p className="text-slate-500">Loading...</p>
+        <p className="text-slate-500">{t("loading")}</p>
       ) : payouts.length === 0 ? (
         <div className="bg-white p-8 rounded-xl border text-center text-slate-500">
-          No payouts yet. Payouts are issued after the refund window closes on referred orders.
+          {t("emptyState")}
         </div>
       ) : (
         <div className="bg-white rounded-xl border overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-left">
               <tr>
-                <th className="px-4 py-3">Paid On</th>
-                <th className="px-4 py-3">Method</th>
-                <th className="px-4 py-3">Earnings</th>
-                <th className="px-4 py-3 text-right">Amount (USD)</th>
-                <th className="px-4 py-3">Stripe Transfer ID</th>
+                <th className="px-4 py-3">{t("thPaidOn")}</th>
+                <th className="px-4 py-3">{t("thMethod")}</th>
+                <th className="px-4 py-3">{t("thEarnings")}</th>
+                <th className="px-4 py-3 text-right">{t("thAmount")}</th>
+                <th className="px-4 py-3">{t("thStripeTransferId")}</th>
               </tr>
             </thead>
             <tbody>
@@ -74,7 +76,7 @@ export default function PayoutsPage() {
                     ${p.amountUsd.toFixed(2)}
                   </td>
                   <td className="px-4 py-3 font-mono text-xs text-slate-500">
-                    {p.stripeTransferId ?? "—"}
+                    {p.stripeTransferId ?? "-"}
                   </td>
                 </tr>
               ))}

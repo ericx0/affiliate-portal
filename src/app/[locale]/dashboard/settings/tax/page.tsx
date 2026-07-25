@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { supabase } from "@/lib/supabase";
 import { apiFetch } from "@/lib/api";
 
@@ -20,6 +21,7 @@ function sanitizeFileName(name: string): string {
 }
 
 export default function TaxSettingsPage() {
+  const t = useTranslations("tax");
   const [formType, setFormType] = useState<"W9" | "W8BEN" | "">("");
   const [fullName, setFullName] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -54,12 +56,12 @@ export default function TaxSettingsPage() {
       return;
     }
     if (!ALLOWED_TYPES.includes(f.type)) {
-      setError("File must be a PDF or image (PNG/JPEG/WEBP).");
+      setError(t("errorInvalidFileType"));
       setFile(null);
       return;
     }
     if (f.size > MAX_FILE_BYTES) {
-      setError("File exceeds 10MB limit.");
+      setError(t("errorFileTooLarge"));
       setFile(null);
       return;
     }
@@ -73,15 +75,15 @@ export default function TaxSettingsPage() {
     setSuccess("");
 
     if (!formType) {
-      setError("Select a tax form type.");
+      setError(t("errorSelectFormType"));
       return;
     }
     if (!fullName.trim()) {
-      setError("Full legal name is required.");
+      setError(t("errorNameRequired"));
       return;
     }
     if (!file) {
-      setError("Upload your signed tax form.");
+      setError(t("errorUploadRequired"));
       return;
     }
 
@@ -90,7 +92,7 @@ export default function TaxSettingsPage() {
       // 1. Resolve the caller's auth_uid (storage path + backend path check).
       const { data: userData, error: userErr } = await supabase.auth.getUser();
       if (userErr || !userData.user) {
-        throw new Error("Not authenticated. Please sign in again.");
+        throw new Error(t("errorNotAuthenticated"));
       }
       const authUid = userData.user.id;
       const filePath = `${authUid}/${Date.now()}-${sanitizeFileName(file.name)}`;
@@ -101,7 +103,7 @@ export default function TaxSettingsPage() {
         .from("tax-forms")
         .upload(filePath, file, { upsert: false, contentType: file.type });
       if (uploadErr) {
-        throw new Error(`Upload failed: ${uploadErr.message}`);
+        throw new Error(t("errorUploadFailed", { message: uploadErr.message }));
       }
 
       // 3. Record metadata in affiliate.tax_forms (upsert replaces prior form).
@@ -115,9 +117,9 @@ export default function TaxSettingsPage() {
       });
       setExisting(res.data);
       setFile(null);
-      setSuccess("Tax form submitted. You are now eligible for payouts.");
+      setSuccess(t("successSubmitted"));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Submission failed.");
+      setError(err instanceof Error ? err.message : t("errorSubmissionFailed"));
     } finally {
       setSubmitting(false);
     }
@@ -125,39 +127,36 @@ export default function TaxSettingsPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-2">Tax Information</h1>
+      <h1 className="text-2xl font-bold mb-2">{t("title")}</h1>
       <p className="text-sm text-slate-600 mb-6">
-        Required for issuing affiliate commission payouts. US persons submit Form W-9; non-US persons
-        submit Form W-8BEN. Download the form from the IRS, fill it (including your TIN), sign it, and
-        upload the signed PDF below.
+        {t("description")}
       </p>
 
       {existing && (
         <div className="bg-brand-50 border border-brand-200 rounded-xl p-4 mb-6 max-w-xl">
           <p className="text-sm font-semibold text-brand-700">
-            Current form: {existing.form_type === "W9" ? "W-9 (US)" : "W-8BEN (non-US)"}
+            {t("currentForm", { formType: existing.form_type === "W9" ? t("w9Us") : t("w8benNonUs") })}
           </p>
           <p className="text-xs text-slate-600 mt-1">
-            Signed by {existing.signer_name} · submitted{" "}
-            {new Date(existing.submitted_at).toLocaleDateString()} · status:{" "}
+            {t("signedBy", { name: existing.signer_name })} · {t("submittedOn", { date: new Date(existing.submitted_at).toLocaleDateString() })} · {t("statusLabel")}:{" "}
             <span className="font-medium">{existing.status}</span>
           </p>
           {existing.status === "rejected" && (
             <p className="text-xs text-red-600 mt-1">
-              Your previous submission was rejected. Please re-submit a corrected form.
+              {t("rejectedNotice")}
             </p>
           )}
-          <p className="text-xs text-slate-500 mt-1">Re-submitting replaces the current form.</p>
+          <p className="text-xs text-slate-500 mt-1">{t("resubmitNote")}</p>
         </div>
       )}
 
       {loadingExisting && (
-        <p className="text-sm text-slate-400 mb-4">Loading current status…</p>
+        <p className="text-sm text-slate-400 mb-4">{t("loadingStatus")}</p>
       )}
 
       <form onSubmit={handleSubmit} className="bg-white p-6 rounded-xl border max-w-xl space-y-4">
         <div>
-          <label className="block text-xs text-slate-500 mb-2">Tax form type</label>
+          <label className="block text-xs text-slate-500 mb-2">{t("formTypeLabel")}</label>
           <div className="flex gap-3">
             <label className="flex items-center gap-2 px-4 py-2 border rounded-xl cursor-pointer has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
               <input
@@ -167,7 +166,7 @@ export default function TaxSettingsPage() {
                 checked={formType === "W9"}
                 onChange={() => setFormType("W9")}
               />
-              <span className="text-sm">W-9 (US person)</span>
+              <span className="text-sm">{t("w9UsPerson")}</span>
             </label>
             <label className="flex items-center gap-2 px-4 py-2 border rounded-xl cursor-pointer has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
               <input
@@ -177,33 +176,33 @@ export default function TaxSettingsPage() {
                 checked={formType === "W8BEN"}
                 onChange={() => setFormType("W8BEN")}
               />
-              <span className="text-sm">W-8BEN (non-US)</span>
+              <span className="text-sm">{t("w8benNonUs")}</span>
             </label>
           </div>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-500 mb-1">Full legal name</label>
+          <label className="block text-xs text-slate-500 mb-1">{t("fullNameLabel")}</label>
           <input
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            placeholder="As shown on tax form"
+            placeholder={t("fullNamePlaceholder")}
             className="w-full p-3 border rounded-xl"
             required
           />
         </div>
 
         <div>
-          <label className="block text-xs text-slate-500 mb-1">Upload signed form</label>
+          <label className="block text-xs text-slate-500 mb-1">{t("uploadLabel")}</label>
           <div className="flex items-center gap-3">
             <label className="px-4 py-2 bg-slate-100 rounded-xl text-sm cursor-pointer hover:bg-slate-200">
-              Choose file…
+              {t("chooseFile")}
               <input type="file" accept="application/pdf,image/*" onChange={handleFile} className="hidden" />
             </label>
-            <span className="text-xs text-slate-500">{file?.name ?? "No file selected"}</span>
+            <span className="text-xs text-slate-500">{file?.name ?? t("noFileSelected")}</span>
           </div>
           <p className="text-xs text-slate-400 mt-1">
-            PDF or image, max 10MB. Your TIN goes in the form itself - do not type it here.
+            {t("uploadHint")}
           </p>
         </div>
 
@@ -216,7 +215,7 @@ export default function TaxSettingsPage() {
             disabled={submitting || !formType}
             className="px-4 py-2 bg-brand-500 text-white rounded-xl font-semibold disabled:opacity-50"
           >
-            {submitting ? "Submitting…" : "Submit Tax Information"}
+            {submitting ? t("submitting") : t("submit")}
           </button>
         </div>
       </form>

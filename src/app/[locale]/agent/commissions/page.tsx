@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
 
 interface Commission {
@@ -22,6 +23,7 @@ interface CommissionsResponse {
 }
 
 export default function AgentCommissions() {
+  const t = useTranslations("agent");
   const [commissions, setCommissions] = useState<Commission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -39,25 +41,25 @@ export default function AgentCommissions() {
     })();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>{t("loading")}</div>;
   if (error) return <div className="text-red-600">{error}</div>;
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold">Override Commissions</h1>
+      <h1 className="text-2xl font-bold">{t("commissionsTitle")}</h1>
       {commissions.length === 0 ? (
-        <p className="text-slate-500">No override commissions yet.</p>
+        <p className="text-slate-500">{t("noCommissions")}</p>
       ) : (
         <div className="bg-white rounded-2xl border overflow-hidden">
           <table className="w-full">
             <thead className="bg-slate-50">
               <tr>
-                <th className="text-left p-3 text-xs uppercase">Type</th>
-                <th className="text-right p-3 text-xs uppercase">Order Amt</th>
-                <th className="text-right p-3 text-xs uppercase">Rate</th>
-                <th className="text-right p-3 text-xs uppercase">Commission</th>
-                <th className="text-center p-3 text-xs uppercase">Status</th>
-                <th className="text-right p-3 text-xs uppercase">Date</th>
+                <th className="text-left p-3 text-xs uppercase">{t("thType")}</th>
+                <th className="text-right p-3 text-xs uppercase">{t("thOrderAmount")}</th>
+                <th className="text-right p-3 text-xs uppercase">{t("thRate")}</th>
+                <th className="text-right p-3 text-xs uppercase">{t("commission")}</th>
+                <th className="text-center p-3 text-xs uppercase">{t("thStatus")}</th>
+                <th className="text-right p-3 text-xs uppercase">{t("thDate")}</th>
               </tr>
             </thead>
             <tbody>

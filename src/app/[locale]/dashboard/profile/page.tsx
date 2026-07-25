@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
 
 interface Profile {
@@ -12,6 +13,7 @@ interface Profile {
 }
 
 export default function ProfilePage() {
+  const t = useTranslations("profile");
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -51,25 +53,25 @@ export default function ProfilePage() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (err) {
-      setSaveError(err instanceof Error ? err.message : "Save failed");
+      setSaveError(err instanceof Error ? err.message : t("saveFailed"));
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) return <p className="text-slate-500">Loading...</p>;
-  if (!profile) return <p className="text-slate-500">Could not load profile.</p>;
+  if (loading) return <p className="text-slate-500">{t("loading")}</p>;
+  if (!profile) return <p className="text-slate-500">{t("couldNotLoadProfile")}</p>;
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-2">Profile</h1>
+      <h1 className="text-2xl font-bold mb-2">{t("title")}</h1>
       <p className="text-sm text-slate-600 mb-6">
-        Update your contact details and primary platform information.
+        {t("subtitle")}
       </p>
 
       <form onSubmit={handleSave} className="bg-white p-6 rounded-xl border max-w-xl space-y-4">
         <div>
-          <label className="block text-xs text-slate-500 mb-1">Name</label>
+          <label className="block text-xs text-slate-500 mb-1">{t("nameLabel")}</label>
           <input
             value={profile.name}
             onChange={(e) => setProfile({ ...profile, name: e.target.value })}
@@ -78,7 +80,7 @@ export default function ProfilePage() {
         </div>
 
         <div>
-          <label className="block text-xs text-slate-500 mb-1">Email</label>
+          <label className="block text-xs text-slate-500 mb-1">{t("emailLabel")}</label>
           <input
             type="email"
             value={profile.email}
@@ -87,42 +89,42 @@ export default function ProfilePage() {
             className="w-full p-3 border rounded-xl bg-slate-50 text-slate-400"
           />
           <p className="text-[11px] text-slate-400 mt-1">
-            Email is your sign-in identity and can&apos;t be changed here.
+            {t("emailNote")}
           </p>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-500 mb-1">Country</label>
+          <label className="block text-xs text-slate-500 mb-1">{t("countryLabel")}</label>
           <select
             value={profile.countryCode}
             onChange={(e) => setProfile({ ...profile, countryCode: e.target.value })}
             className="w-full p-3 border rounded-xl"
           >
-            <option value="US">United States</option>
-            <option value="CA">Canada</option>
-            <option value="GB">United Kingdom</option>
-            <option value="AU">Australia</option>
-            <option value="OTHER">Other</option>
+            <option value="US">{t("countryUS")}</option>
+            <option value="CA">{t("countryCA")}</option>
+            <option value="GB">{t("countryGB")}</option>
+            <option value="AU">{t("countryAU")}</option>
+            <option value="OTHER">{t("countryOther")}</option>
           </select>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-500 mb-1">Primary Platform</label>
+          <label className="block text-xs text-slate-500 mb-1">{t("primaryPlatformLabel")}</label>
           <select
             value={profile.primaryPlatform}
             onChange={(e) => setProfile({ ...profile, primaryPlatform: e.target.value })}
             className="w-full p-3 border rounded-xl"
           >
-            <option value="tiktok">TikTok</option>
-            <option value="youtube">YouTube</option>
-            <option value="instagram">Instagram</option>
-            <option value="x">X (Twitter)</option>
-            <option value="other">Other</option>
+            <option value="tiktok">{t("platformTiktok")}</option>
+            <option value="youtube">{t("platformYoutube")}</option>
+            <option value="instagram">{t("platformInstagram")}</option>
+            <option value="x">{t("platformX")}</option>
+            <option value="other">{t("platformOther")}</option>
           </select>
         </div>
 
         <div>
-          <label className="block text-xs text-slate-500 mb-1">Platform URL</label>
+          <label className="block text-xs text-slate-500 mb-1">{t("platformUrlLabel")}</label>
           <input
             type="url"
             value={profile.primaryPlatformUrl}
@@ -137,9 +139,9 @@ export default function ProfilePage() {
             disabled={saving}
             className="px-4 py-2 bg-brand-500 text-white rounded-xl font-semibold disabled:opacity-50"
           >
-            {saving ? "Saving..." : "Save Changes"}
+            {saving ? t("saving") : t("saveChanges")}
           </button>
-          {saved && <span className="text-green-600 text-sm">Saved.</span>}
+          {saved && <span className="text-green-600 text-sm">{t("saved")}</span>}
           {saveError && <span className="text-rose-600 text-sm">{saveError}</span>}
         </div>
       </form>
