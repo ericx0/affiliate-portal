@@ -74,7 +74,14 @@
     "submitWithdraw": "Submit Withdrawal",
     "invalidAmount": "Enter a valid amount",
     "withdrawSubmitted": "✅ Withdrawal submitted, under review!",
-    "submitFailed": "❌ Submit failed: "
+    "submitFailed": "❌ Submit failed: ",
+    "subIdTitle": "Sub-ID / UTM Builder",
+    "subIdDesc": "Add tracking params to your link for different platforms (TikTok, Instagram, Pinterest)",
+    "subIdLabel": "Sub-ID",
+    "utmSourceLabel": "utm_source",
+    "utmMediumLabel": "utm_medium",
+    "utmCampaignLabel": "utm_campaign",
+    "generatedLink": "Generated Link"
   },
   "disclosure": {
     "message": "This is a paid partnership page. Affiliate partners earn commissions from qualifying purchases. {entity} provides {serviceType} - NOT medical diagnosis or treatment."

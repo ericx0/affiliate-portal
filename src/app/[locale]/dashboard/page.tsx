@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
-import { QRCodeSVG } from "qrcode.react";
+import { QRCodeCanvas } from "qrcode.react";
 import {
   Users,
   FileCheck,
@@ -64,6 +64,14 @@ export default function DashboardOverview() {
   const [withdrawMsg, setWithdrawMsg] = useState("");
 
   const [payouts, setPayouts] = useState<PayoutRecord[]>([]);
+
+  // Sub-ID / UTM builder (P1-9) + QR poster download (P1-10)
+  const [subId, setSubId] = useState("");
+  const [utmSource, setUtmSource] = useState("");
+  const [utmMedium, setUtmMedium] = useState("");
+  const [utmCampaign, setUtmCampaign] = useState("");
+  const [copiedGenLink, setCopiedGenLink] = useState(false);
+  const qrWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetchDashboardData();
@@ -155,6 +163,36 @@ export default function DashboardOverview() {
 
   const referralLink = stats?.referral_link ?? "";
   const promoCode = stats?.promo_code ?? "";
+
+  // P1-9: generated link with Sub-ID + UTM params appended.
+  const generatedLink = (() => {
+    if (!referralLink) return "";
+    const params = new URLSearchParams();
+    if (subId) params.set("sub_id", subId);
+    if (utmSource) params.set("utm_source", utmSource);
+    if (utmMedium) params.set("utm_medium", utmMedium);
+    if (utmCampaign) params.set("utm_campaign", utmCampaign);
+    const qs = params.toString();
+    return qs ? `${referralLink}&${qs}` : referralLink;
+  })();
+
+  // P1-10: real QR poster download (canvas -> PNG), replaces the alert.
+  const handleDownloadPoster = () => {
+    const canvas = qrWrapperRef.current?.querySelector("canvas");
+    if (!canvas) return;
+    const url = (canvas as HTMLCanvasElement).toDataURL("image/png");
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "linkchinamed-qr.png";
+    a.click();
+  };
+
+  const handleCopyGenLink = () => {
+    if (!generatedLink) return;
+    navigator.clipboard.writeText(generatedLink);
+    setCopiedGenLink(true);
+    setTimeout(() => setCopiedGenLink(false), 2000);
+  };
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto pb-16">
@@ -265,6 +303,40 @@ export default function DashboardOverview() {
         </div>
       </div>
 
+      {/* Sub-ID / UTM Builder (P1-9) */}
+      <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+        <div>
+          <h2 className="text-base font-bold text-slate-900">{t("subIdTitle")}</h2>
+          <p className="text-xs text-slate-400 mt-1">{t("subIdDesc")}</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("subIdLabel")}</label>
+            <input value={subId} onChange={(e) => setSubId(e.target.value)} placeholder="tiktok_video_01" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("utmSourceLabel")}</label>
+            <input value={utmSource} onChange={(e) => setUtmSource(e.target.value)} placeholder="tiktok" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("utmMediumLabel")}</label>
+            <input value={utmMedium} onChange={(e) => setUtmMedium(e.target.value)} placeholder="social" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
+          </div>
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("utmCampaignLabel")}</label>
+            <input value={utmCampaign} onChange={(e) => setUtmCampaign(e.target.value)} placeholder="summer_promo" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
+          </div>
+        </div>
+        {generatedLink !== referralLink && (
+          <div className="bg-slate-50 p-3 pl-5 rounded-2xl border border-slate-200 flex items-center justify-between gap-4">
+            <div className="font-mono text-xs text-slate-700 truncate select-all">{generatedLink}</div>
+            <button onClick={handleCopyGenLink} className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold flex-shrink-0">
+              {copiedGenLink ? <><Check className="w-4 h-4" /> {t("copied")}</> : <><Copy className="w-4 h-4" /> {t("copyLink")}</>}
+            </button>
+          </div>
+        )}
+      </div>
+
       <div className="bg-gradient-to-br from-slate-900 to-blue-950 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row md:items-center md:justify-between gap-8">
         <div className="space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-xs font-semibold text-blue-300 border border-white/10 backdrop-blur-sm"><FolderDown className="w-3.5 h-3.5 text-blue-400" />{t("assetBadge")}</div>
@@ -315,7 +387,7 @@ export default function DashboardOverview() {
               <p className="text-xs text-slate-500">{t("qrModalDesc")}</p>
             </div>
             <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-6 rounded-2xl shadow-inner flex flex-col items-center justify-center text-white space-y-4">
-              <div className="bg-white p-4 rounded-xl shadow-lg"><QRCodeSVG value={referralLink} size={180} level="H" includeMargin={true} /></div>
+              <div className="bg-white p-4 rounded-xl shadow-lg" ref={qrWrapperRef}><QRCodeCanvas value={referralLink} size={180} level="H" includeMargin={true} /></div>
               <div className="text-center">
                 <div className="font-bold text-sm">{t("qrBrand")}</div>
                 <div className="text-[11px] text-blue-100 mt-0.5">{t("qrSubtitle")}</div>
@@ -323,7 +395,7 @@ export default function DashboardOverview() {
             </div>
             <div className="flex gap-3">
               <button onClick={handleCopyLink} className="flex-1 py-3 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors">{t("copyLink")}</button>
-              <button onClick={() => alert(t("qrSaveHint"))} className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm inline-flex items-center justify-center gap-1.5"><Download className="w-4 h-4" /> {t("savePoster")}</button>
+              <button onClick={handleDownloadPoster} className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm inline-flex items-center justify-center gap-1.5"><Download className="w-4 h-4" /> {t("savePoster")}</button>
             </div>
           </div>
         </div>

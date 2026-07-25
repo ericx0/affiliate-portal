@@ -74,7 +74,14 @@
     "submitWithdraw": "确认提交提现申请",
     "invalidAmount": "请输入有效提现金额",
     "withdrawSubmitted": "✅ 提现申请已提交,审核处理中!",
-    "submitFailed": "❌ 提交失败: "
+    "submitFailed": "❌ 提交失败: ",
+    "subIdTitle": "Sub-ID / UTM 追踪参数",
+    "subIdDesc": "为链接添加追踪参数,区分不同平台 (TikTok、Instagram、Pinterest)",
+    "subIdLabel": "Sub-ID",
+    "utmSourceLabel": "utm_source",
+    "utmMediumLabel": "utm_medium",
+    "utmCampaignLabel": "utm_campaign",
+    "generatedLink": "生成链接"
   },
   "disclosure": {
     "message": "本页面为联盟营销合作伙伴页面。KOL 推广可获得合规返佣。{entity} 仅提供 {serviceType},不提供医疗诊断或治疗。"
