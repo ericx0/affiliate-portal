@@ -6,7 +6,7 @@ import TurnstileLoader from "@/components/TurnstileLoader";
 import LegalFooter from "@/components/LegalFooter";
 import "../globals.css";
 
-const locales = ["en", "zh"];
+const locales = ["en", "zh", "ar", "ru", "es"];
 
 export default async function LocaleLayout({
   children,
@@ -20,7 +20,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <body className="min-h-screen bg-slate-50 flex flex-col">
         <NextIntlClientProvider messages={messages}>
           <DisclosureBanner />
