@@ -45,13 +45,19 @@ export async function apiFetch<T = unknown>(
 
   if (!res.ok) {
     let message = `Request failed: ${res.status} ${res.statusText}`;
+    let code: string | undefined;
     try {
-      const errBody = (await res.json()) as { error?: { message?: string } };
+      const errBody = (await res.json()) as {
+        error?: { message?: string; code?: string };
+      };
       if (errBody?.error?.message) message = errBody.error.message;
+      code = errBody?.error?.code;
     } catch {
       // ignore JSON parse errors
     }
-    throw new Error(message);
+    const err = new Error(message) as Error & { code?: string };
+    if (code) err.code = code;
+    throw err;
   }
 
   if (res.status === 204) return undefined as T;

@@ -70,7 +70,8 @@ export default function AgentKols() {
     try {
       setUpdatingRate(true);
       setUpdateMsg("");
-      await apiFetch(`/api/affiliate/agent/kols/${editingKol.id}/commission`, {
+      // Backend route is PATCH /api/affiliate/agent/kols/:id (no /commission suffix).
+      await apiFetch(`/api/affiliate/agent/kols/${editingKol.id}`, {
         method: "PATCH",
         body: { commission_rate: Number(newRate) },
       });
@@ -174,7 +175,8 @@ export default function AgentKols() {
                     </button>
                   </td>
                   <td className="py-4 px-4 text-right font-medium text-slate-700">
-                    ${Number(k.gmv_total || 0).toFixed(2)}
+                    {/* gmv_total is summed from commissions.order_amount (cents) */}
+                    ${(Number(k.gmv_total || 0) / 100).toFixed(2)}
                   </td>
                   <td className="py-4 px-4 text-right font-bold text-emerald-600">
                     ${Number(k.total_commission_earned || 0).toFixed(2)}

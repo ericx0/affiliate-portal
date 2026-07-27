@@ -4,7 +4,7 @@ export default function CommissionRules() {
   return (
     <article className="prose prose-slate max-w-none text-slate-700 space-y-8">
       <h1 className="text-4xl font-bold text-slate-900">Commission Rules</h1>
-      <p className="text-sm text-slate-500">Last updated: 2026-07-21</p>
+      <p className="text-sm text-slate-500">Last updated: 2026-07-27</p>
 
       <section>
         <h2 className="text-2xl font-bold text-slate-900">1. What is commissionable</h2>
@@ -43,9 +43,10 @@ export default function CommissionRules() {
         <h2 className="text-2xl font-bold text-slate-900">4. Cancellations &amp; refunds</h2>
         <p>
           If a referred customer is refunded, the related commission
-          is reversed. Chargebacks cost the commission plus a{" "}
-          <strong>15 USD fee</strong> deducted from your next payout
-          (or invoiced separately if there is no next payout).
+          is reversed (proportional to the refunded amount for partial
+          refunds). Chargebacks cost the commission plus a{" "}
+          <strong>15 USD fee</strong> which we may deduct from your next
+          payout (or invoice separately if there is no next payout).
         </p>
       </section>
 
@@ -53,7 +54,7 @@ export default function CommissionRules() {
         <h2 className="text-2xl font-bold text-slate-900">5. Minimum payout &amp; schedule</h2>
         <ul className="list-disc pl-6 space-y-1">
           <li>Minimum payout: <strong>50 USD</strong> (or equivalent).</li>
-          <li>Payouts are processed on the <strong>15th of each month</strong>, covering payable balance from the previous month.</li>
+          <li>Payouts are processed on the <strong>14th of each month</strong> (23:00 UTC), covering payable balance accrued up to that date; amounts below the minimum carry over to the next cycle.</li>
           <li>Method: <strong>Stripe Connect</strong> (bank transfer or local rails depending on country).</li>
           <li>Currency: USD by default; EUR / GBP / JPY supported via Stripe's FX.</li>
         </ul>
@@ -93,7 +94,23 @@ export default function CommissionRules() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold text-slate-900">9. Changes</h2>
+        <h2 className="text-2xl font-bold text-slate-900">9. Agent program</h2>
+        <p>
+          Registration is by <strong>agent invitation only</strong>: every
+          KOL joins through an agent's invite link or invite code, so
+          every referral has a clear, attributable source. Agents earn an{" "}
+          <strong>override commission</strong> on orders referred by the
+          KOLs they recruited, on top of the KOL's own commission. The
+          override rate scales with the number of active recruited KOLs:{" "}
+          <strong>5%</strong> (1–10 KOLs), <strong>8%</strong> (11–100),{" "}
+          <strong>10%</strong> (101+). Override commissions follow the
+          same cooling-off, refund-reversal, minimum-payout and monthly
+          schedule rules above.
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-bold text-slate-900">10. Changes</h2>
         <p>
           We may update the commission rate, schedule, or rules with
           30 days' notice. Material changes are e-mailed and
@@ -102,7 +119,7 @@ export default function CommissionRules() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold text-slate-900">10. Contact</h2>
+        <h2 className="text-2xl font-bold text-slate-900">11. Contact</h2>
         <p>
           Questions? Email{" "}
           <a className="text-brand-600 hover:underline" href="mailto:affiliates@linkchinamed.com">affiliates@linkchinamed.com</a>.

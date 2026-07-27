@@ -7,7 +7,7 @@ import { apiFetch } from "@/lib/api";
 interface Earning {
   id: string;
   date: string;
-  amountUsd: number;
+  amountCents: number;
   status: "pending" | "approved" | "paid" | "reversed";
   referredOrderId: string;
   timeline: { label: string; at: string | null }[];
@@ -44,7 +44,7 @@ export default function EarningsPage() {
     return true;
   });
 
-  const total = filtered.reduce((sum, e) => sum + e.amountUsd, 0);
+  const total = filtered.reduce((sum, e) => sum + e.amountCents / 100, 0);
 
   return (
     <div>
@@ -116,7 +116,7 @@ export default function EarningsPage() {
                       {e.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-right font-mono">${e.amountUsd.toFixed(2)}</td>
+                  <td className="px-4 py-3 text-right font-mono">${(e.amountCents / 100).toFixed(2)}</td>
                   <td className="px-4 py-3 text-xs text-slate-500">
                     {e.timeline
                       .filter((item) => item.at)

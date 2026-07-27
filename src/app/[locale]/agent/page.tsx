@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
+import { QRCodeCanvas } from "qrcode.react";
 import {
   Users,
   Award,
@@ -13,6 +14,9 @@ import {
   Share2,
   ChevronRight,
   Sparkles,
+  QrCode,
+  Download,
+  X,
 } from "lucide-react";
 
 interface AgentStats {
@@ -28,16 +32,16 @@ interface InviteCodeResponse {
   invite_link: string;
 }
 
-const KOL_REGISTER_BASE =
-  process.env.NEXT_PUBLIC_KOL_REGISTER_BASE ||
-  "https://affiliate.linkchinamed.com/register";
-
 export default function AgentDashboard() {
   const t = useTranslations("agent");
+  // Reuse the dashboard QR poster brand/copy keys for the invite QR modal.
+  const tDash = useTranslations("dashboard");
   const [stats, setStats] = useState<AgentStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [invite, setInvite] = useState<InviteCodeResponse | null>(null);
   const [copied, setCopied] = useState(false);
+  const [showQrModal, setShowQrModal] = useState(false);
+  const qrWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -46,23 +50,22 @@ export default function AgentDashboard() {
         const data = await apiFetch<AgentStats>("/api/affiliate/agent/stats").catch(
           () => null
         );
-        setStats({
-          totalKols: data?.totalKols ?? 12,
-          activeKols: data?.activeKols ?? 8,
-          totalPaid: data?.totalPaid ?? 4250.0,
-          totalPending: data?.totalPending ?? 680.0,
-          totalApproved: data?.totalApproved ?? 1200.0,
-        });
+        // No fabricated fallback numbers: show real zeros when the API has
+        // no data yet.
+        setStats(
+          data ?? {
+            totalKols: 0,
+            activeKols: 0,
+            totalPaid: 0,
+            totalPending: 0,
+            totalApproved: 0,
+          }
+        );
 
         const inviteData = await apiFetch<InviteCodeResponse>(
           "/api/affiliate/agent/invite-code"
         ).catch(() => null);
-        setInvite(
-          inviteData || {
-            agent_invite_code: "AGENT888",
-            invite_link: "https://affiliate.linkchinamed.com/register?agent=AGENT888",
-          }
-        );
+        setInvite(inviteData);
       } finally {
         setLoading(false);
       }
@@ -90,11 +93,27 @@ export default function AgentDashboard() {
   }
 
   const handleCopyLink = () => {
-    const link =
-      invite?.invite_link || `${KOL_REGISTER_BASE}?agent=${invite?.agent_invite_code || "AGENT888"}`;
+    const link = invite?.invite_link;
+    if (!link) return;
     navigator.clipboard.writeText(link);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  // The QR encodes exactly the same invite link the copy button copies
+  // (backend-provided invite_link: <portal>/register?agent=CODE).
+  const inviteLink = invite?.invite_link ?? "";
+
+  // Poster-style PNG download (brand block + QR canvas), mirrors the KOL
+  // dashboard QR poster.
+  const handleDownloadQrPoster = () => {
+    const canvas = qrWrapperRef.current?.querySelector("canvas");
+    if (!canvas) return;
+    const url = (canvas as HTMLCanvasElement).toDataURL("image/png");
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "linkchinamed-agent-invite-qr.png";
+    a.click();
   };
 
   return (
@@ -167,7 +186,7 @@ export default function AgentDashboard() {
           <div>
             <div className="text-xs text-slate-400 font-bold">{t("statTotalPaid")}</div>
             <div className="text-2xl font-bold text-slate-900 mt-1">
-              ${(stats?.totalPaid || 0).toFixed(2)}
+              ${((stats?.totalPaid ?? 0) / 100).toFixed(2)}
             </div>
           </div>
         </div>
@@ -179,7 +198,7 @@ export default function AgentDashboard() {
           <div>
             <div className="text-xs text-slate-400 font-bold">{t("statPendingCommission")}</div>
             <div className="text-2xl font-bold text-slate-900 mt-1">
-              ${((stats?.totalPending || 0) + (stats?.totalApproved || 0)).toFixed(2)}
+              ${(((stats?.totalPending ?? 0) + (stats?.totalApproved ?? 0)) / 100).toFixed(2)}
             </div>
           </div>
         </div>
@@ -199,7 +218,7 @@ export default function AgentDashboard() {
           <div>
             <div className="text-xs text-slate-400 font-bold uppercase">{t("inviteCodeLabel")}</div>
             <div className="font-mono text-xl font-extrabold text-blue-600 mt-0.5">
-              {invite?.agent_invite_code || "AGENT888"}
+              {invite?.agent_invite_code ?? "—"}
             </div>
           </div>
 
@@ -209,18 +228,25 @@ export default function AgentDashboard() {
               <input
                 type="text"
                 readOnly
-                value={
-                  invite?.invite_link ||
-                  `${KOL_REGISTER_BASE}?agent=${invite?.agent_invite_code || "AGENT888"}`
-                }
+                value={invite?.invite_link ?? ""}
+                placeholder={t("inviteUnavailable")}
                 className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-mono text-slate-700 select-all"
               />
               <button
                 onClick={handleCopyLink}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm flex-shrink-0 flex items-center gap-1"
+                disabled={!invite?.invite_link}
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-colors shadow-sm flex-shrink-0 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
                 {copied ? t("copied") : t("copyLink")}
+              </button>
+              <button
+                onClick={() => setShowQrModal(true)}
+                disabled={!inviteLink}
+                className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold transition-colors shadow-sm flex-shrink-0 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <QrCode className="w-3.5 h-3.5 text-emerald-400" />
+                {t("qrButton")}
               </button>
             </div>
           </div>
@@ -234,6 +260,27 @@ export default function AgentDashboard() {
         <p>{t("ruleLevel2")}</p>
         <p>{t("ruleLevel3")}</p>
       </div>
+
+      {/* Invite QR poster modal (mirrors the KOL dashboard QR poster) */}
+      {showQrModal && inviteLink && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full space-y-6 relative shadow-2xl">
+            <button onClick={() => setShowQrModal(false)} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-600 rounded-full"><X className="w-5 h-5" /></button>
+            <div className="text-center space-y-1">
+              <h3 className="text-lg font-bold text-slate-900">{t("qrModalTitle")}</h3>
+              <p className="text-xs text-slate-500">{t("qrModalDesc")}</p>
+            </div>
+            <div className="bg-gradient-to-br from-blue-500 to-indigo-600 p-6 rounded-2xl shadow-inner flex flex-col items-center justify-center text-white space-y-4">
+              <div className="bg-white p-4 rounded-xl shadow-lg" ref={qrWrapperRef}><QRCodeCanvas value={inviteLink} size={180} level="H" includeMargin={true} /></div>
+              <div className="text-center">
+                <div className="font-bold text-sm">{tDash("qrBrand")}</div>
+                <div className="text-[11px] text-blue-100 mt-0.5">{tDash("qrSubtitle")}</div>
+              </div>
+            </div>
+            <button onClick={handleDownloadQrPoster} className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm inline-flex items-center justify-center gap-1.5"><Download className="w-4 h-4" /> {tDash("savePoster")}</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

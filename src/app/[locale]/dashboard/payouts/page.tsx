@@ -7,7 +7,7 @@ import { apiFetch } from "@/lib/api";
 interface Payout {
   id: string;
   paidAt: string;
-  amountUsd: number;
+  amountCents: number;
   method: "stripe" | "manual";
   stripeTransferId: string | null;
   earningsCount: number;
@@ -25,7 +25,7 @@ export default function PayoutsPage() {
         const d = await apiFetch<{ data: Payout[] }>("/api/affiliate/me/payouts");
         const list: Payout[] = d.data ?? [];
         setPayouts(list);
-        setTotalPaid(list.reduce((sum, p) => sum + p.amountUsd, 0));
+        setTotalPaid(list.reduce((sum, p) => sum + p.amountCents / 100, 0));
       } catch {
         setPayouts([]);
       } finally {
@@ -73,7 +73,7 @@ export default function PayoutsPage() {
                   <td className="px-4 py-3 capitalize">{p.method}</td>
                   <td className="px-4 py-3">{p.earningsCount}</td>
                   <td className="px-4 py-3 text-right font-mono font-semibold">
-                    ${p.amountUsd.toFixed(2)}
+                    ${(p.amountCents / 100).toFixed(2)}
                   </td>
                   <td className="px-4 py-3 font-mono text-xs text-slate-500">
                     {p.stripeTransferId ?? "-"}

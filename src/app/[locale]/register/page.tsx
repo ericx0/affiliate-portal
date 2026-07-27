@@ -76,6 +76,14 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
 
+    // An agent invite code is mandatory: either typed into the visible
+    // field (sent as referralCode) or auto-filled from ?agent=CODE
+    // (sent as agent_invite_code). The backend accepts both paths.
+    if (!referralCode.trim() && !agentInviteCode) {
+      setError(t("errorInviteRequired"));
+      return;
+    }
+
     if (!turnstileToken) {
       setError("Please complete the security check.");
       return;
@@ -119,7 +127,16 @@ export default function RegisterPage() {
       setSuccess(true);
       setTimeout(() => router.push("/login"), 3000);
     } catch (e: any) {
-      setError(e.message);
+      // Map backend invite-code errors to friendly localized copy instead
+      // of showing the raw English server message.
+      const code = (e as { code?: string })?.code;
+      if (code === "INVITE_CODE_REQUIRED") {
+        setError(t("errorInviteRequired"));
+      } else if (code === "INVALID_INVITE_CODE") {
+        setError(t("errorInviteInvalid"));
+      } else {
+        setError(e.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -163,9 +180,19 @@ export default function RegisterPage() {
         <input type="url" placeholder={t("platformUrl")} value={platformUrl}
           onChange={(e) => setPlatformUrl(e.target.value)} required
           className="w-full p-3 border rounded-xl" />
-        <input type="text" placeholder="邀请码 (Referral Code) *" value={referralCode}
-          onChange={(e) => setReferralCode(e.target.value.toUpperCase())} required
-          className="w-full p-3 border rounded-xl" />
+        <div>
+          <label htmlFor="inviteCode" className="block text-xs font-bold text-slate-700 mb-1.5">
+            {t("inviteCodeLabel")}
+          </label>
+          <input id="inviteCode" type="text" placeholder={t("inviteCodePlaceholder")} value={referralCode}
+            onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+            className="w-full p-3 border rounded-xl" />
+          {agentInviteCode && !referralCode && (
+            <p className="text-xs text-emerald-600 mt-1.5">
+              {t("inviteCodeAutoFilled", { code: agentInviteCode })}
+            </p>
+          )}
+        </div>
 
         <div className="flex justify-center my-2">
           {mounted && <div ref={turnstileRef} />}

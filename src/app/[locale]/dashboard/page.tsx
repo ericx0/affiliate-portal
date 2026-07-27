@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
 import { QRCodeCanvas } from "qrcode.react";
@@ -13,57 +14,75 @@ import {
   Check,
   QrCode,
   Download,
-  FolderDown,
   ArrowRight,
-  ExternalLink,
   Loader2,
   X,
-  CreditCard,
-  Building2,
-  HelpCircle,
   Sparkles,
+  CalendarClock,
+  Hourglass,
 } from "lucide-react";
 
+// Shape returned by GET /api/affiliate/me/stats (affiliate_get_my_stats RPC).
+// Money fields are integer CENTS (migration 010).
 interface StatsData {
-  invite_count?: number;
-  valid_orders?: number;
-  withdrawable_amount?: number;
-  paid_out_amount?: number;
-  referral_link?: string;
-  promo_code?: string;
-  google_drive_url?: string;
-  totalPaid?: number;
-  totalPending?: number;
-  totalApproved?: number;
-  activeCodes?: number;
+  totalPaid: number;
+  totalPending: number;
+  totalApproved: number;
+  totalClicks: number;
+  activeCodes: number;
 }
 
-interface PayoutRecord {
+// Shape returned by GET /api/affiliate/me/codes entries.
+interface ReferralCode {
   id: string;
-  amount: number;
-  status: string;
-  created_at: string;
-  payout_method: string;
-  payout_details: string;
+  code: string;
+  uses: number;
+  active: boolean;
+  createdAt: string;
+}
+
+// Shape returned by GET /api/affiliate/me/payouts entries
+// (grouped by stripe_transfer_id; amountCents in cents).
+interface Payout {
+  id: string;
+  paidAt: string;
+  amountCents: number;
+  method: string;
+  stripeTransferId: string | null;
+  earningsCount: number;
+}
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://linkchinamed.com";
+
+// Business rule (affiliate-service jobs/monthly-payout-batch.ts): the payout
+// batch runs on the 14th of each month; balances below $50 roll over.
+const PAYOUT_DAY = 14;
+const MIN_PAYOUT_CENTS = 5000;
+
+const fmtUsd = (cents: number | undefined) => ((cents ?? 0) / 100).toFixed(2);
+
+function nextSettlementDate(): Date {
+  const now = new Date();
+  const d = new Date(now.getFullYear(), now.getMonth(), PAYOUT_DAY);
+  if (now.getDate() >= PAYOUT_DAY) {
+    return new Date(now.getFullYear(), now.getMonth() + 1, PAYOUT_DAY);
+  }
+  return d;
 }
 
 export default function DashboardOverview() {
   const t = useTranslations("dashboard");
   const [stats, setStats] = useState<StatsData | null>(null);
+  const [codes, setCodes] = useState<ReferralCode[]>([]);
+  const [payouts, setPayouts] = useState<Payout[]>([]);
+  const [stripeReady, setStripeReady] = useState<boolean | null>(null);
+  const [taxSubmitted, setTaxSubmitted] = useState<boolean | null>(null);
+  const [accountPending, setAccountPending] = useState(false);
   const [loading, setLoading] = useState(true);
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
 
   const [showQrModal, setShowQrModal] = useState(false);
-  const [showWithdrawModal, setShowWithdrawModal] = useState(false);
-
-  const [withdrawAmount, setWithdrawAmount] = useState("");
-  const [payoutMethod, setPayoutMethod] = useState("paypal");
-  const [payoutDetails, setPayoutDetails] = useState("");
-  const [submittingWithdraw, setSubmittingWithdraw] = useState(false);
-  const [withdrawMsg, setWithdrawMsg] = useState("");
-
-  const [payouts, setPayouts] = useState<PayoutRecord[]>([]);
 
   // Sub-ID / UTM builder (P1-9) + QR poster download (P1-10)
   const [subId, setSubId] = useState("");
@@ -80,28 +99,43 @@ export default function DashboardOverview() {
   async function fetchDashboardData() {
     try {
       setLoading(true);
-      const data = await apiFetch<StatsData>("/api/affiliate/me/stats").catch(
-        () => null,
+      // Account status comes from GET /api/affiliate/me/profile (promoters.status).
+      // Fail-open: if the profile call errors or lacks the field, render
+      // normally so existing active KOLs are never blocked.
+      const profile = await apiFetch<{ data: { status?: string } | null }>(
+        "/api/affiliate/me/profile",
+      ).catch(() => null);
+      if (profile?.data?.status === "pending") {
+        setAccountPending(true);
+        return;
+      }
+
+      const statsData = await apiFetch<StatsData>(
+        "/api/affiliate/me/stats",
+      ).catch(() => null);
+      setStats(statsData);
+
+      const codesData = await apiFetch<{ data: ReferralCode[] }>(
+        "/api/affiliate/me/codes",
+      ).catch(() => null);
+      setCodes(codesData?.data ?? []);
+
+      const payoutData = await apiFetch<{ data: Payout[] }>(
+        "/api/affiliate/me/payouts",
+      ).catch(() => null);
+      setPayouts(payoutData?.data ?? []);
+
+      const stripeData = await apiFetch<{
+        data: { connected: boolean; payoutsEnabled: boolean };
+      }>("/api/affiliate/me/stripe-status").catch(() => null);
+      setStripeReady(
+        stripeData ? stripeData.data.connected && stripeData.data.payoutsEnabled : null,
       );
 
-      setStats({
-        invite_count: data?.invite_count ?? 0,
-        valid_orders: data?.valid_orders ?? 0,
-        withdrawable_amount: data?.withdrawable_amount ?? 0,
-        paid_out_amount: data?.paid_out_amount ?? 0,
-        referral_link:
-          data?.referral_link ||
-          (data?.promo_code
-            ? `https://linkchinamed.com/?ref=${data.promo_code}`
-            : ""),
-        promo_code: data?.promo_code ?? "",
-        google_drive_url: data?.google_drive_url ?? "",
-      });
-
-      const payoutData = await apiFetch<PayoutRecord[]>(
-        "/api/affiliate/me/payouts",
-      ).catch(() => []);
-      setPayouts(payoutData || []);
+      const taxData = await apiFetch<{ data: unknown }>(
+        "/api/affiliate/me/tax-form",
+      ).catch(() => null);
+      setTaxSubmitted(taxData ? taxData.data != null : null);
     } catch (e: any) {
       console.error("Dashboard data load error:", e);
     } finally {
@@ -110,47 +144,17 @@ export default function DashboardOverview() {
   }
 
   const handleCopyLink = () => {
-    if (!stats?.referral_link) return;
-    navigator.clipboard.writeText(stats.referral_link);
+    if (!referralLink) return;
+    navigator.clipboard.writeText(referralLink);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
   const handleCopyCode = () => {
-    if (!stats?.promo_code) return;
-    navigator.clipboard.writeText(stats.promo_code);
+    if (!promoCode) return;
+    navigator.clipboard.writeText(promoCode);
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
-  };
-
-  const handleWithdrawSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!withdrawAmount || Number(withdrawAmount) <= 0) {
-      setWithdrawMsg(t("invalidAmount"));
-      return;
-    }
-    try {
-      setSubmittingWithdraw(true);
-      setWithdrawMsg("");
-      await apiFetch("/api/affiliate/me/withdraw", {
-        method: "POST",
-        body: {
-          amount: Number(withdrawAmount),
-          method: payoutMethod,
-          details: payoutDetails,
-        },
-      });
-      setWithdrawMsg(t("withdrawSubmitted"));
-      setTimeout(() => {
-        setShowWithdrawModal(false);
-        setWithdrawMsg("");
-        fetchDashboardData();
-      }, 1800);
-    } catch (err: any) {
-      setWithdrawMsg(`${t("submitFailed")}${err.message || ""}`);
-    } finally {
-      setSubmittingWithdraw(false);
-    }
   };
 
   if (loading) {
@@ -161,8 +165,42 @@ export default function DashboardOverview() {
     );
   }
 
-  const referralLink = stats?.referral_link ?? "";
-  const promoCode = stats?.promo_code ?? "";
+  // KOL account pending admin approval: show the review state. The user can
+  // still finish Stripe onboarding and submit the tax form in Settings.
+  if (accountPending) {
+    return (
+      <div className="max-w-2xl mx-auto py-16">
+        <div className="bg-white p-10 rounded-3xl border border-slate-100 shadow-sm text-center space-y-5">
+          <div className="w-16 h-16 bg-amber-50 text-amber-500 rounded-full flex items-center justify-center mx-auto">
+            <Hourglass className="w-8 h-8" />
+          </div>
+          <h1 className="text-2xl font-bold text-slate-900">{t("pendingTitle")}</h1>
+          <p className="text-sm text-slate-500 leading-relaxed">{t("pendingDesc")}</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+            <Link
+              href="/dashboard/settings/stripe"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors"
+            >
+              {t("pendingStripeCta")}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/dashboard/settings/tax"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors"
+            >
+              {t("pendingTaxCta")}
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Referral link / promo code come from the codes endpoint (stats RPC does
+  // not return them). Prefer the first active code.
+  const promoCode = codes.find((c) => c.active)?.code ?? codes[0]?.code ?? "";
+  const referralLink = promoCode ? `${SITE_URL}/?ref=${promoCode}` : "";
 
   // P1-9: generated link with Sub-ID + UTM params appended.
   const generatedLink = (() => {
@@ -202,22 +240,19 @@ export default function DashboardOverview() {
           <p className="text-sm text-slate-500 mt-1">{t("overviewSubtitle")}</p>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            onClick={() => setShowQrModal(true)}
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl font-medium text-sm hover:bg-slate-800 transition-colors shadow-sm"
-          >
-            <QrCode className="w-4 h-4 text-emerald-400" />
-            {t("generateQrPoster")}
-          </button>
-          <a
-            href={stats?.google_drive_url || undefined}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-700 border border-blue-200 rounded-xl font-medium text-sm hover:bg-blue-100 transition-colors shadow-sm"
-          >
-            <FolderDown className="w-4 h-4 text-blue-600" />
-            {t("assetLibrary")}
-          </a>
+          {referralLink && (
+            <button
+              onClick={() => setShowQrModal(true)}
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl font-medium text-sm hover:bg-slate-800 transition-colors shadow-sm"
+            >
+              <QrCode className="w-4 h-4 text-emerald-400" />
+              {t("generateQrPoster")}
+            </button>
+          )}
+          {/* TODO(marketing-assets): the "Marketing Assets" button used to read
+              google_drive_url from the stats response, which the backend never
+              returned. Hidden until the asset-library URL is served from a real
+              source (e.g. a system_config endpoint). */}
         </div>
       </div>
 
@@ -227,8 +262,8 @@ export default function DashboardOverview() {
             <Users className="w-7 h-7 text-blue-600" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-slate-400">{t("statInvites")}</div>
-            <div className="text-2xl font-bold text-slate-900 mt-1">{stats?.invite_count || 0}</div>
+            <div className="text-xs font-semibold text-slate-400">{t("statClicks")}</div>
+            <div className="text-2xl font-bold text-slate-900 mt-1">{stats?.totalClicks ?? 0}</div>
           </div>
         </div>
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
@@ -236,21 +271,18 @@ export default function DashboardOverview() {
             <FileCheck className="w-7 h-7 text-sky-500" />
           </div>
           <div>
-            <div className="text-xs font-semibold text-slate-400">{t("statOrders")}</div>
-            <div className="text-2xl font-bold text-slate-900 mt-1">{stats?.valid_orders || 0}</div>
+            <div className="text-xs font-semibold text-slate-400">{t("statActiveCodes")}</div>
+            <div className="text-2xl font-bold text-slate-900 mt-1">{stats?.activeCodes ?? 0}</div>
           </div>
         </div>
-        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center flex-shrink-0">
-              <Wallet className="w-7 h-7 text-amber-500" />
-            </div>
-            <div>
-              <div className="text-xs font-semibold text-slate-400">{t("statWithdrawable")}</div>
-              <div className="text-2xl font-bold text-slate-900 mt-1">${(stats?.withdrawable_amount || 0).toFixed(2)}</div>
-            </div>
+        <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+            <Wallet className="w-7 h-7 text-amber-500" />
           </div>
-          <button onClick={() => setShowWithdrawModal(true)} className="px-4 py-1.5 border border-blue-500 text-blue-600 hover:bg-blue-50 rounded-full font-bold text-xs transition-colors shadow-sm flex-shrink-0">{t("withdraw")}</button>
+          <div>
+            <div className="text-xs font-semibold text-slate-400">{t("statSettleable")}</div>
+            <div className="text-2xl font-bold text-slate-900 mt-1">${fmtUsd(stats?.totalApproved)}</div>
+          </div>
         </div>
         <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
@@ -258,9 +290,63 @@ export default function DashboardOverview() {
           </div>
           <div>
             <div className="text-xs font-semibold text-slate-400">{t("statPaidOut")}</div>
-            <div className="text-2xl font-bold text-slate-900 mt-1">${(stats?.paid_out_amount || 0).toFixed(2)}</div>
+            <div className="text-2xl font-bold text-slate-900 mt-1">${fmtUsd(stats?.totalPaid)}</div>
           </div>
         </div>
+      </div>
+
+      {/* Automatic monthly payout via Stripe Connect (replaces the manual
+          withdraw UI — there is no withdraw endpoint; commissions are paid
+          by the monthly batch on the 14th, $50 minimum, or manually by an
+          admin). */}
+      <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-5">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
+            <CalendarClock className="w-5 h-5 text-emerald-600" />
+          </div>
+          <div>
+            <h2 className="text-base font-bold text-slate-900">{t("autoPayoutTitle")}</h2>
+            <p className="text-xs text-slate-500 mt-0.5">{t("autoPayoutDesc")}</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <div className="text-xs font-semibold text-slate-400">{t("nextSettlementLabel")}</div>
+            <div className="text-lg font-bold text-slate-900 mt-1">
+              {nextSettlementDate().toLocaleDateString()}
+            </div>
+          </div>
+          <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <div className="text-xs font-semibold text-slate-400">{t("minThresholdLabel")}</div>
+            <div className="text-lg font-bold text-slate-900 mt-1">${fmtUsd(MIN_PAYOUT_CENTS)}</div>
+          </div>
+          <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
+            <div className="text-xs font-semibold text-slate-400">{t("settleableBalanceLabel")}</div>
+            <div className="text-lg font-bold text-emerald-600 mt-1">${fmtUsd(stats?.totalApproved)}</div>
+          </div>
+        </div>
+        {(stripeReady === false || taxSubmitted === false) && (
+          <div className="flex flex-col sm:flex-row gap-3 pt-1">
+            {stripeReady === false && (
+              <Link
+                href="/dashboard/settings/stripe"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-xl text-sm font-semibold hover:bg-blue-100 transition-colors"
+              >
+                {t("setupStripeCta")}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            )}
+            {taxSubmitted === false && (
+              <Link
+                href="/dashboard/settings/tax"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl text-sm font-semibold hover:bg-amber-100 transition-colors"
+              >
+                {t("submitTaxCta")}
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
@@ -268,12 +354,21 @@ export default function DashboardOverview() {
           <h2 className="text-base font-bold text-slate-900">{t("referralLinkTitle")}</h2>
           <span className="text-xs text-slate-400 flex items-center gap-1"><Sparkles className="w-3.5 h-3.5 text-amber-500" />{t("cookieTracking")}</span>
         </div>
-        <div className="bg-slate-50 p-3 pl-5 rounded-2xl border border-slate-200 flex items-center justify-between gap-4">
-          <div className="font-mono text-sm text-slate-700 truncate select-all">{referralLink}</div>
-          <button onClick={handleCopyLink} className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm flex-shrink-0">
-            {copiedLink ? <><Check className="w-4 h-4" /> {t("copied")}</> : <><Copy className="w-4 h-4" /> {t("copyLink")}</>}
-          </button>
-        </div>
+        {referralLink ? (
+          <div className="bg-slate-50 p-3 pl-5 rounded-2xl border border-slate-200 flex items-center justify-between gap-4">
+            <div className="font-mono text-sm text-slate-700 truncate select-all">{referralLink}</div>
+            <button onClick={handleCopyLink} className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm flex-shrink-0">
+              {copiedLink ? <><Check className="w-4 h-4" /> {t("copied")}</> : <><Copy className="w-4 h-4" /> {t("copyLink")}</>}
+            </button>
+          </div>
+        ) : (
+          <div className="bg-slate-50 p-4 pl-5 rounded-2xl border border-slate-200 flex items-center justify-between gap-4">
+            <span className="text-sm text-slate-500">{t("noCodeYet")}</span>
+            <Link href="/dashboard/codes" className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm flex-shrink-0">
+              {t("createCodeCta")} <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        )}
         <div className="flex items-center gap-3 text-xs text-slate-500 pt-2">
           <span className="font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">01</span><span>{t("stepVisit")}</span>
           <span className="text-slate-300">······</span>
@@ -283,68 +378,63 @@ export default function DashboardOverview() {
         </div>
       </div>
 
-      <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
-        <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-900">{t("promoCodeTitle")}</h2>
-          <span className="text-xs text-slate-400">{t("promoCodeDesc")}</span>
-        </div>
-        <div className="bg-slate-50 p-3 pl-5 rounded-2xl border border-slate-200 flex items-center justify-between gap-4">
-          <div className="font-mono text-sm text-slate-700 font-semibold tracking-wide truncate select-all">{promoCode}</div>
-          <button onClick={handleCopyCode} className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm flex-shrink-0">
-            {copiedCode ? <><Check className="w-4 h-4" /> {t("copied")}</> : <><Copy className="w-4 h-4" /> {t("copyCode")}</>}
-          </button>
-        </div>
-        <div className="flex items-center gap-3 text-xs text-slate-500 pt-2">
-          <span className="font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">01</span><span>{t("stepBuy")}</span>
-          <span className="text-slate-300">······</span>
-          <span className="font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">02</span><span>{t("stepUseCode")}</span>
-          <span className="text-slate-300">······</span>
-          <span className="font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">03</span><span className="text-slate-900 font-semibold">{t("stepLinked")}</span>
-        </div>
-      </div>
-
-      {/* Sub-ID / UTM Builder (P1-9) */}
-      <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
-        <div>
-          <h2 className="text-base font-bold text-slate-900">{t("subIdTitle")}</h2>
-          <p className="text-xs text-slate-400 mt-1">{t("subIdDesc")}</p>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("subIdLabel")}</label>
-            <input value={subId} onChange={(e) => setSubId(e.target.value)} placeholder="tiktok_video_01" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
+      {promoCode && (
+        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-base font-bold text-slate-900">{t("promoCodeTitle")}</h2>
+            <span className="text-xs text-slate-400">{t("promoCodeDesc")}</span>
           </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("utmSourceLabel")}</label>
-            <input value={utmSource} onChange={(e) => setUtmSource(e.target.value)} placeholder="tiktok" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("utmMediumLabel")}</label>
-            <input value={utmMedium} onChange={(e) => setUtmMedium(e.target.value)} placeholder="social" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
-          </div>
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("utmCampaignLabel")}</label>
-            <input value={utmCampaign} onChange={(e) => setUtmCampaign(e.target.value)} placeholder="summer_promo" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
-          </div>
-        </div>
-        {generatedLink !== referralLink && (
           <div className="bg-slate-50 p-3 pl-5 rounded-2xl border border-slate-200 flex items-center justify-between gap-4">
-            <div className="font-mono text-xs text-slate-700 truncate select-all">{generatedLink}</div>
-            <button onClick={handleCopyGenLink} className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold flex-shrink-0">
-              {copiedGenLink ? <><Check className="w-4 h-4" /> {t("copied")}</> : <><Copy className="w-4 h-4" /> {t("copyLink")}</>}
+            <div className="font-mono text-sm text-slate-700 font-semibold tracking-wide truncate select-all">{promoCode}</div>
+            <button onClick={handleCopyCode} className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm flex-shrink-0">
+              {copiedCode ? <><Check className="w-4 h-4" /> {t("copied")}</> : <><Copy className="w-4 h-4" /> {t("copyCode")}</>}
             </button>
           </div>
-        )}
-      </div>
-
-      <div className="bg-gradient-to-br from-slate-900 to-blue-950 rounded-3xl p-8 text-white shadow-xl flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-        <div className="space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 rounded-full text-xs font-semibold text-blue-300 border border-white/10 backdrop-blur-sm"><FolderDown className="w-3.5 h-3.5 text-blue-400" />{t("assetBadge")}</div>
-          <h3 className="text-2xl font-bold">{t("assetTitle")}</h3>
-          <p className="text-slate-300 text-sm max-w-xl leading-relaxed">{t("assetDesc")}</p>
+          <div className="flex items-center gap-3 text-xs text-slate-500 pt-2">
+            <span className="font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">01</span><span>{t("stepBuy")}</span>
+            <span className="text-slate-300">······</span>
+            <span className="font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">02</span><span>{t("stepUseCode")}</span>
+            <span className="text-slate-300">······</span>
+            <span className="font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">03</span><span className="text-slate-900 font-semibold">{t("stepLinked")}</span>
+          </div>
         </div>
-        <a href={stats?.google_drive_url || undefined} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-colors shadow-lg shadow-blue-600/30 flex-shrink-0">{t("openDrive")}<ExternalLink className="w-4 h-4" /></a>
-      </div>
+      )}
+
+      {/* Sub-ID / UTM Builder (P1-9) */}
+      {referralLink && (
+        <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+          <div>
+            <h2 className="text-base font-bold text-slate-900">{t("subIdTitle")}</h2>
+            <p className="text-xs text-slate-400 mt-1">{t("subIdDesc")}</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("subIdLabel")}</label>
+              <input value={subId} onChange={(e) => setSubId(e.target.value)} placeholder="tiktok_video_01" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("utmSourceLabel")}</label>
+              <input value={utmSource} onChange={(e) => setUtmSource(e.target.value)} placeholder="tiktok" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("utmMediumLabel")}</label>
+              <input value={utmMedium} onChange={(e) => setUtmMedium(e.target.value)} placeholder="social" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("utmCampaignLabel")}</label>
+              <input value={utmCampaign} onChange={(e) => setUtmCampaign(e.target.value)} placeholder="summer_promo" className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium" />
+            </div>
+          </div>
+          {generatedLink !== referralLink && (
+            <div className="bg-slate-50 p-3 pl-5 rounded-2xl border border-slate-200 flex items-center justify-between gap-4">
+              <div className="font-mono text-xs text-slate-700 truncate select-all">{generatedLink}</div>
+              <button onClick={handleCopyGenLink} className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold flex-shrink-0">
+                {copiedGenLink ? <><Check className="w-4 h-4" /> {t("copied")}</> : <><Copy className="w-4 h-4" /> {t("copyLink")}</>}
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm space-y-6">
         <h2 className="text-base font-bold text-slate-900">{t("payoutHistory")}</h2>
@@ -359,17 +449,15 @@ export default function DashboardOverview() {
                   <th className="py-3 px-4">{t("thDate")}</th>
                   <th className="py-3 px-4">{t("thAmount")}</th>
                   <th className="py-3 px-4">{t("thMethod")}</th>
-                  <th className="py-3 px-4">{t("thStatus")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {payouts.map((p) => (
                   <tr key={p.id} className="hover:bg-slate-50">
-                    <td className="py-4 px-4 font-mono text-xs text-slate-700">{p.id.slice(0, 8)}</td>
-                    <td className="py-4 px-4 text-slate-500">{new Date(p.created_at).toLocaleDateString()}</td>
-                    <td className="py-4 px-4 font-bold text-slate-900">${p.amount.toFixed(2)}</td>
-                    <td className="py-4 px-4 text-slate-600 capitalize">{p.payout_method}</td>
-                    <td className="py-4 px-4"><span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${p.status === "paid" ? "bg-emerald-100 text-emerald-700" : p.status === "pending" ? "bg-amber-100 text-amber-700" : "bg-slate-100 text-slate-600"}`}>{p.status === "paid" ? t("statusPaid") : p.status === "pending" ? t("statusPending") : p.status}</span></td>
+                    <td className="py-4 px-4 font-mono text-xs text-slate-700">{p.id.slice(0, 12)}</td>
+                    <td className="py-4 px-4 text-slate-500">{new Date(p.paidAt).toLocaleDateString()}</td>
+                    <td className="py-4 px-4 font-bold text-slate-900">${fmtUsd(p.amountCents)}</td>
+                    <td className="py-4 px-4 text-slate-600 capitalize">{p.method}</td>
                   </tr>
                 ))}
               </tbody>
@@ -378,7 +466,7 @@ export default function DashboardOverview() {
         )}
       </div>
 
-      {showQrModal && (
+      {showQrModal && referralLink && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-8 max-w-sm w-full space-y-6 relative shadow-2xl">
             <button onClick={() => setShowQrModal(false)} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-600 rounded-full"><X className="w-5 h-5" /></button>
@@ -397,38 +485,6 @@ export default function DashboardOverview() {
               <button onClick={handleCopyLink} className="flex-1 py-3 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors">{t("copyLink")}</button>
               <button onClick={handleDownloadPoster} className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm inline-flex items-center justify-center gap-1.5"><Download className="w-4 h-4" /> {t("savePoster")}</button>
             </div>
-          </div>
-        </div>
-      )}
-
-      {showWithdrawModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-8 max-w-md w-full space-y-6 relative shadow-2xl">
-            <button onClick={() => setShowWithdrawModal(false)} className="absolute top-6 right-6 p-2 text-slate-400 hover:text-slate-600 rounded-full"><X className="w-5 h-5" /></button>
-            <div>
-              <h3 className="text-lg font-bold text-slate-900">{t("withdrawModalTitle")}</h3>
-              <p className="text-xs text-slate-500 mt-1">{t("withdrawBalance")} <span className="font-bold text-emerald-600">${(stats?.withdrawable_amount || 0).toFixed(2)}</span></p>
-            </div>
-            <form onSubmit={handleWithdrawSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("withdrawAmountLabel")}</label>
-                <input type="number" step="0.01" placeholder="0.00" value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("withdrawMethodLabel")}</label>
-                <select value={payoutMethod} onChange={(e) => setPayoutMethod(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                  <option value="paypal">{t("methodPaypal")}</option>
-                  <option value="wire">{t("methodWire")}</option>
-                  <option value="wise">{t("methodWise")}</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">{t("withdrawDetailsLabel")}</label>
-                <textarea rows={2} placeholder={payoutMethod === "paypal" ? t("ppPaypalPlaceholder") : t("ppBankPlaceholder")} value={payoutDetails} onChange={(e) => setPayoutDetails(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-              </div>
-              {withdrawMsg && <div className={`text-xs p-3 rounded-xl font-medium ${withdrawMsg.startsWith("✅") ? "bg-emerald-50 text-emerald-700" : "bg-red-50 text-red-600"}`}>{withdrawMsg}</div>}
-              <button type="submit" disabled={submittingWithdraw} className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-sm transition-colors shadow-sm flex items-center justify-center gap-2">{submittingWithdraw ? <Loader2 className="w-4 h-4 animate-spin" /> : t("submitWithdraw")}</button>
-            </form>
           </div>
         </div>
       )}

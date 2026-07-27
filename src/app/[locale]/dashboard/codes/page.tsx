@@ -19,10 +19,21 @@ export default function CodesPage() {
   const [generating, setGenerating] = useState(false);
   const [generateError, setGenerateError] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
+  const [accountPending, setAccountPending] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
+        // Pending KOLs (awaiting admin approval) cannot create codes — the
+        // backend rejects POST /me/codes with 403 PROMOTER_NOT_ACTIVE. Read
+        // the status from the profile endpoint; fail-open on error.
+        const profile = await apiFetch<{ data: { status?: string } | null }>(
+          "/api/affiliate/me/profile",
+        ).catch(() => null);
+        if (profile?.data?.status === "pending") {
+          setAccountPending(true);
+          return;
+        }
         const d = await apiFetch<{ data: ReferralCode[] }>("/api/affiliate/me/codes");
         setCodes(d.data ?? []);
       } catch {
@@ -59,14 +70,22 @@ export default function CodesPage() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">{t("title")}</h1>
-        <button
-          onClick={handleGenerate}
-          disabled={generating}
-          className="px-4 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold disabled:opacity-50"
-        >
-          {generating ? t("generating") : t("generateNewCode")}
-        </button>
+        {!accountPending && (
+          <button
+            onClick={handleGenerate}
+            disabled={generating}
+            className="px-4 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold disabled:opacity-50"
+          >
+            {generating ? t("generating") : t("generateNewCode")}
+          </button>
+        )}
       </div>
+
+      {accountPending && (
+        <div className="bg-amber-50 border border-amber-200 text-amber-800 text-sm rounded-xl p-4 mb-4">
+          {t("pendingNotice")}
+        </div>
+      )}
 
       {generateError && (
         <p className="text-sm text-rose-600 mb-4">{generateError}</p>

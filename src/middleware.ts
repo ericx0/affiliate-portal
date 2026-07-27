@@ -9,8 +9,11 @@ const intlMiddleware = createMiddleware({
   localePrefix: "always",
 });
 
-// Protected area: /<locale>/dashboard[/...] /<locale>/agent[/...] /<locale>/admin[/...]
-const PROTECTED = /^\/(en|zh)\/(dashboard|agent|admin)(?:\/|$)/;
+// Protected area: /<locale>/dashboard[/...] /<locale>/agent[/...]
+// Built from the locales list so every locale (en/zh/ar/ru/es) is guarded.
+const PROTECTED = new RegExp(
+  `^/(${locales.join("|")})/(dashboard|agent)(?:/|$)`,
+);
 
 export async function middleware(request: NextRequest) {
   const response = intlMiddleware(request);

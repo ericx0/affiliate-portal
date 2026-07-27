@@ -213,10 +213,11 @@ export default function KolDetail() {
                 {commissions.map((c) => (
                   <tr key={c.id} className="border-t">
                     <td className="p-3 text-sm">{c.commission_type}</td>
-                    <td className="p-3 text-right">${Number(c.order_amount || 0).toFixed(2)}</td>
+                    {/* order_amount / commission_amount are stored in cents (migration 010) */}
+                    <td className="p-3 text-right">${(Number(c.order_amount || 0) / 100).toFixed(2)}</td>
                     <td className="p-3 text-right">{c.commission_rate}%</td>
                     <td className="p-3 text-right font-medium text-green-600">
-                      ${Number(c.commission_amount || 0).toFixed(2)}
+                      ${(Number(c.commission_amount || 0) / 100).toFixed(2)}
                     </td>
                     <td className="p-3 text-center text-sm">{c.status}</td>
                     <td className="p-3 text-right text-xs text-slate-400">
