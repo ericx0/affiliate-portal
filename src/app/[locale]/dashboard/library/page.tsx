@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Card, SectionTitle, Pill } from "@/components/ui/Card";
 import { Tabs } from "@/components/ui/Tabs";
@@ -24,6 +25,7 @@ import {
   Loader2,
   MessageSquareQuote,
   Search,
+  Sparkles,
   Stethoscope,
   Video,
 } from "lucide-react";
@@ -313,23 +315,29 @@ function CaseCard({ caseItem }: { caseItem: LibraryCase }) {
         ).toLocaleString()}`
       : null;
   return (
-    <Card className="flex flex-col">
-      <div className="flex items-center gap-2 mb-2 flex-wrap">
-        <Pill tone="blue">{caseItem.treatmentCategory}</Pill>
-        <Pill tone="slate">{caseItem.country}</Pill>
-        <Pill tone="emerald">{caseItem.ageRange}</Pill>
-        <Pill tone="amber">{t(`gender_${caseItem.gender}` as any)}</Pill>
-      </div>
-      <h3 className="text-sm font-semibold text-slate-900">{caseItem.hospital}</h3>
-      <p className="text-xs text-slate-600 mt-2 line-clamp-3">{caseItem.summaryEn}</p>
-      <p className="text-xs text-slate-500 mt-2 line-clamp-3 italic">
-        <span className="font-semibold text-slate-700">{t("outcome")}: </span>
-        {caseItem.outcomeEn}
-      </p>
-      {cost ? (
-        <div className="text-xs text-brand-700 font-semibold mt-3">{cost}</div>
-      ) : null}
-    </Card>
+    <Link href={`/dashboard/cases/${caseItem.id}`} className="block">
+      <Card className="flex flex-col hover:border-brand-300 transition-colors cursor-pointer">
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
+          <Pill tone="blue">{caseItem.treatmentCategory}</Pill>
+          <Pill tone="slate">{caseItem.country}</Pill>
+          <Pill tone="emerald">{caseItem.ageRange}</Pill>
+          <Pill tone="amber">{t(`gender_${caseItem.gender}` as any)}</Pill>
+        </div>
+        <h3 className="text-sm font-semibold text-slate-900">{caseItem.hospital}</h3>
+        <p className="text-xs text-slate-600 mt-2 line-clamp-3">{caseItem.summaryEn}</p>
+        <p className="text-xs text-slate-500 mt-2 line-clamp-3 italic">
+          <span className="font-semibold text-slate-700">{t("outcome")}: </span>
+          {caseItem.outcomeEn}
+        </p>
+        {cost ? (
+          <div className="text-xs text-brand-700 font-semibold mt-3">{cost}</div>
+        ) : null}
+        <div className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-600">
+          <Sparkles className="w-3 h-3" />
+          <span>{t("open")} → AI rewrite</span>
+        </div>
+      </Card>
+    </Link>
   );
 }
 
