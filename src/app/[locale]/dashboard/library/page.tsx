@@ -29,6 +29,7 @@ import {
   Stethoscope,
   Video,
 } from "lucide-react";
+import { useFormat } from "@/lib/format";
 
 type Tab = "assets" | "scripts" | "cases";
 
@@ -308,11 +309,10 @@ function ScriptCard({ script }: { script: LibraryScript }) {
 
 function CaseCard({ caseItem }: { caseItem: LibraryCase }) {
   const t = useTranslations("library");
+  const fmt = useFormat();
   const cost =
     caseItem.costRangeLowCents && caseItem.costRangeHighCents
-      ? `$${Math.round(caseItem.costRangeLowCents / 100).toLocaleString()} – $${Math.round(
-          caseItem.costRangeHighCents / 100,
-        ).toLocaleString()}`
+      ? `${fmt.currency(caseItem.costRangeLowCents)} – ${fmt.currency(caseItem.costRangeHighCents)}`
       : null;
   return (
     <Link href={`/dashboard/cases/${caseItem.id}`} className="block">

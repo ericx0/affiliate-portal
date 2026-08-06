@@ -1,10 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+
+import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { apiFetch } from "@/lib/api";
+import { supabase } from "@/lib/supabase";
+// @/navigation 而非 next/link + next/navigation：后者导航时会丢掉当前 locale。
+import { Link, useRouter } from "@/navigation";
 
 /**
  * Agent layout.
@@ -15,6 +18,7 @@ import { apiFetch } from "@/lib/api";
  * to the KOL dashboard.
  */
 export default function AgentLayout({ children }: { children: React.ReactNode }) {
+  const t = useTranslations("nav");
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<{ email?: string } | null>(null);
@@ -38,24 +42,27 @@ export default function AgentLayout({ children }: { children: React.ReactNode })
     })();
   }, [router]);
 
-  if (loading) return <div className="p-8">Loading...</div>;
+  if (loading) return <div className="p-8">{t("loading")}</div>;
 
   return (
     <div className="min-h-screen">
       <nav className="bg-white border-b">
         <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex gap-6">
-            <Link href="/agent" className="font-bold">Agent Portal</Link>
-            <Link href="/agent/kols">KOLs</Link>
-            <Link href="/agent/commissions">Commissions</Link>
-            <Link href="/dashboard/settings/stripe">Settings</Link>
+            <Link href="/agent" className="font-bold">{t("agentPortalTitle")}</Link>
+            <Link href="/agent/kols">{t("kols")}</Link>
+            <Link href="/agent/commissions">{t("commissions")}</Link>
+            <Link href="/dashboard/settings/stripe">{t("settings")}</Link>
           </div>
-          <button
-            onClick={() => supabase.auth.signOut().then(() => router.push("/"))}
-            className="text-sm text-slate-500"
-          >
-            Log out
-          </button>
+          <div className="flex items-center gap-3">
+            <LocaleSwitcher />
+            <button
+              onClick={() => supabase.auth.signOut().then(() => router.push("/"))}
+              className="text-sm text-slate-500"
+            >
+              {t("logout")}
+            </button>
+          </div>
         </div>
       </nav>
       <main className="max-w-6xl mx-auto px-4 py-8">{children}</main>

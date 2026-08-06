@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
+import { useFormat } from "@/lib/format";
 
 interface Payout {
   id: string;
@@ -15,6 +16,7 @@ interface Payout {
 
 export default function PayoutsPage() {
   const t = useTranslations("payouts");
+  const fmt = useFormat();
   const [payouts, setPayouts] = useState<Payout[]>([]);
   const [loading, setLoading] = useState(true);
   const [totalPaid, setTotalPaid] = useState(0);
@@ -68,7 +70,7 @@ export default function PayoutsPage() {
               {payouts.map((p) => (
                 <tr key={p.id} className="border-t">
                   <td className="px-4 py-3 text-slate-500">
-                    {new Date(p.paidAt).toLocaleDateString()}
+                    {fmt.date(p.paidAt)}
                   </td>
                   <td className="px-4 py-3 capitalize">{p.method}</td>
                   <td className="px-4 py-3">{p.earningsCount}</td>

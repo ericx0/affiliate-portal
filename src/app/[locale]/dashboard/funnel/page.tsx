@@ -18,6 +18,7 @@ import {
   TrendingUp,
   Users,
 } from "lucide-react";
+import { useFormat } from "@/lib/format";
 
 /**
  * /dashboard/funnel — T4 cross-platform UTM funnel dashboard.
@@ -28,12 +29,11 @@ import {
  *   - Engagement aggregate from published_posts
  */
 
-const fmtUsd = (cents: number | undefined) =>
-  ((cents ?? 0) / 100).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const pct = (n: number) => `${(n * 100).toFixed(1)}%`;
 
 export default function FunnelPage() {
   const t = useTranslations("funnel");
+  const fmt = useFormat();
   const [data, setData] = React.useState<FunnelData | null>(null);
   const [loading, setLoading] = React.useState(true);
   const [days, setDays] = React.useState<number>(30);
@@ -109,26 +109,26 @@ export default function FunnelPage() {
           <SummaryCard
             icon={<Activity className="w-5 h-5 text-blue-600" />}
             label={t("summaryClicks")}
-            value={data.summary.clicks.toLocaleString()}
+            value={fmt.number(data.summary.clicks)}
             tone="bg-blue-50"
           />
           <SummaryCard
             icon={<Users className="w-5 h-5 text-emerald-600" />}
             label={t("summarySignUps")}
-            value={data.summary.signUps.toLocaleString()}
+            value={fmt.number(data.summary.signUps)}
             sub={pct(data.summary.conversionRate)}
             tone="bg-emerald-50"
           />
           <SummaryCard
             icon={<DollarSign className="w-5 h-5 text-amber-600" />}
             label={t("summaryOrders")}
-            value={data.summary.orders.toLocaleString()}
+            value={fmt.number(data.summary.orders)}
             tone="bg-amber-50"
           />
           <SummaryCard
             icon={<Coins className="w-5 h-5 text-emerald-700" />}
             label={t("summaryCommission")}
-            value={`$${fmtUsd(data.summary.commissionCents)}`}
+            value={fmt.currency(data.summary.commissionCents ?? 0)}
             tone="bg-emerald-50"
           />
           <SummaryCard
@@ -168,10 +168,10 @@ export default function FunnelPage() {
                       <td className="py-3 px-3">
                         <Pill tone="blue">{row.platform}</Pill>
                       </td>
-                      <td className="py-3 px-3 font-mono text-slate-700">{row.clicks.toLocaleString()}</td>
-                      <td className="py-3 px-3 font-mono text-slate-700">{row.signUps.toLocaleString()}</td>
-                      <td className="py-3 px-3 font-mono text-slate-700">{row.orders.toLocaleString()}</td>
-                      <td className="py-3 px-3 font-mono text-slate-700">${fmtUsd(row.commissionCents)}</td>
+                      <td className="py-3 px-3 font-mono text-slate-700">{fmt.number(row.clicks)}</td>
+                      <td className="py-3 px-3 font-mono text-slate-700">{fmt.number(row.signUps)}</td>
+                      <td className="py-3 px-3 font-mono text-slate-700">{fmt.number(row.orders)}</td>
+                      <td className="py-3 px-3 font-mono text-slate-700">{fmt.currency(row.commissionCents ?? 0)}</td>
                       <td className="py-3 px-3 font-mono text-slate-700">{pct(row.conversionRate)}</td>
                     </tr>
                   ))}
@@ -266,13 +266,14 @@ function EngagementCard({
   label: string;
   value: number;
 }) {
+  const fmt = useFormat();
   return (
     <div className="rounded-xl p-3 bg-slate-50 border border-slate-100">
       <div className="flex items-center gap-1.5 mb-1">
         {icon}
         <span className="text-xs font-semibold text-slate-600">{label}</span>
       </div>
-      <div className="text-lg font-bold text-slate-900">{value.toLocaleString()}</div>
+      <div className="text-lg font-bold text-slate-900">{fmt.number(value)}</div>
     </div>
   );
 }

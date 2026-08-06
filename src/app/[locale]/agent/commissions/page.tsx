@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
+import { useFormat } from "@/lib/format";
 
 interface Commission {
   id: string;
@@ -24,6 +25,7 @@ interface CommissionsResponse {
 
 export default function AgentCommissions() {
   const t = useTranslations("agent");
+  const fmt = useFormat();
   const [commissions, setCommissions] = useState<Commission[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -74,7 +76,7 @@ export default function AgentCommissions() {
                   </td>
                   <td className="p-3 text-center text-sm">{c.status}</td>
                   <td className="p-3 text-right text-xs text-slate-400">
-                    {c.created_at ? new Date(c.created_at).toLocaleDateString() : "-"}
+                    {c.created_at ? fmt.date(c.created_at) : "-"}
                   </td>
                 </tr>
               ))}

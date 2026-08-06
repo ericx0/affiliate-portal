@@ -1,10 +1,12 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { apiFetch } from "@/lib/api";
+
+import LocaleSwitcher from "@/components/LocaleSwitcher";
 
 const TURNSTILE_SITE_KEY =
   process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
@@ -12,6 +14,7 @@ const TURNSTILE_SITE_KEY =
 
 export default function RegisterPage() {
   const t = useTranslations("register");
+  const locale = useLocale();
   const router = useRouter();
 
   const [name, setName] = useState("");
@@ -121,6 +124,10 @@ export default function RegisterPage() {
           ...(agentInviteCode ? { agent_invite_code: agentInviteCode } : {}),
           // ESIGN: the typed `name` + this checkbox = electronic signature.
           consent_confirmed: agreed,
+          // KOL's UI locale at registration. Persisted to
+          // affiliate.promoters.preferred_locale so the notification
+          // pipeline picks the right language (i18n Task #7).
+          preferredLocale: locale,
         },
       });
 
@@ -152,6 +159,9 @@ export default function RegisterPage() {
 
   return (
     <main className="max-w-md mx-auto px-4 py-16">
+      <div className="flex justify-end mb-6">
+        <LocaleSwitcher />
+      </div>
       <h1 className="text-2xl font-bold mb-6">{t("title")}</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">

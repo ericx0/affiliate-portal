@@ -14,6 +14,7 @@ import {
   listAccounts,
   startOAuth,
 } from "@/lib/social";
+import { useFormat } from "@/lib/format";
 import { Card, Pill } from "@/components/ui/Card";
 import {
   CheckCircle2,
@@ -61,6 +62,7 @@ function statusBadge(status: AccountStatus): {
 
 export default function AccountsPage() {
   const t = useTranslations("publishAccounts");
+  const fmt = useFormat();
   const params = useSearchParams();
   const justConnected = params.get("connected");
   const oauthError = params.get("error");
@@ -180,7 +182,7 @@ export default function AccountsPage() {
                   {acc?.connectedAt ? (
                     <div>
                       <span className="font-semibold text-slate-700">{t("connectedAt")}:</span>{" "}
-                      {new Date(acc.connectedAt).toLocaleDateString()}
+                      {fmt.date(acc.connectedAt)}
                     </div>
                   ) : null}
                   {acc?.scopes?.length ? (

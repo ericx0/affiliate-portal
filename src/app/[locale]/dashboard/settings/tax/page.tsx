@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { supabase } from "@/lib/supabase";
 import { apiFetch } from "@/lib/api";
+import { useFormat } from "@/lib/format";
 
 interface TaxFormRecord {
   id: string;
@@ -22,6 +23,7 @@ function sanitizeFileName(name: string): string {
 
 export default function TaxSettingsPage() {
   const t = useTranslations("tax");
+  const fmt = useFormat();
   const [formType, setFormType] = useState<"W9" | "W8BEN" | "">("");
   const [fullName, setFullName] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -138,7 +140,7 @@ export default function TaxSettingsPage() {
             {t("currentForm", { formType: existing.form_type === "W9" ? t("w9Us") : t("w8benNonUs") })}
           </p>
           <p className="text-xs text-slate-600 mt-1">
-            {t("signedBy", { name: existing.signer_name })} · {t("submittedOn", { date: new Date(existing.submitted_at).toLocaleDateString() })} · {t("statusLabel")}:{" "}
+            {t("signedBy", { name: existing.signer_name })} · {t("submittedOn", { date: fmt.date(existing.submitted_at) })} · {t("statusLabel")}:{" "}
             <span className="font-medium">{existing.status}</span>
           </p>
           {existing.status === "rejected" && (

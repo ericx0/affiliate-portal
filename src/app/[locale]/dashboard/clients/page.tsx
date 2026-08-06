@@ -12,6 +12,7 @@ import {
   listClients,
 } from "@/lib/clients";
 import { Loader2, Plus, Search, Filter, UserPlus } from "lucide-react";
+import { useFormat } from "@/lib/format";
 
 const STATUS_TONES: Record<KolClient["status"], "slate" | "blue" | "amber" | "emerald" | "rose"> = {
   lead: "slate",
@@ -23,6 +24,7 @@ const STATUS_TONES: Record<KolClient["status"], "slate" | "blue" | "amber" | "em
 
 export default function ClientsListPage() {
   const t = useTranslations("clients");
+  const fmt = useFormat();
   const [clients, setClients] = React.useState<KolClient[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [search, setSearch] = React.useState("");
@@ -184,7 +186,7 @@ export default function ClientsListPage() {
                       {c.budgetBracket ? t(`budget_${c.budgetBracket}` as any) : "—"}
                     </td>
                     <td className="py-3 px-4 text-xs text-slate-500">
-                      {c.nextFollowUpAt ? new Date(c.nextFollowUpAt).toLocaleDateString() : "—"}
+                      {c.nextFollowUpAt ? fmt.date(c.nextFollowUpAt) : "—"}
                     </td>
                     <td className="py-3 px-4">
                       <Link

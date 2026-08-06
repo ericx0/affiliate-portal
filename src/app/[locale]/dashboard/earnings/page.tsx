@@ -6,6 +6,7 @@ import { apiFetch } from "@/lib/api";
 import { Card, SectionTitle, Pill } from "@/components/ui/Card";
 import { Sparkline } from "@/components/ui/Sparkline";
 import { Calculator, FileDown, Loader2, Receipt, Wallet } from "lucide-react";
+import { useFormat } from "@/lib/format";
 
 interface Earning {
   id: string;
@@ -49,6 +50,7 @@ interface Projection {
  */
 export default function EarningsPage() {
   const t = useTranslations("earnings");
+  const fmt = useFormat();
   const tProj = useTranslations("earningsProjection");
   const tTax = useTranslations("earningsTax");
   const [earnings, setEarnings] = useState<Earning[]>([]);
@@ -196,7 +198,7 @@ export default function EarningsPage() {
                       </div>
                       <div className="text-xs text-slate-500">
                         {tTax("generatedAt", {
-                          date: new Date(doc.generatedAt).toLocaleDateString(),
+                          date: fmt.date(doc.generatedAt),
                         })}
                       </div>
                     </div>
@@ -325,6 +327,7 @@ export default function EarningsPage() {
 
 function PayoutHistoryTable() {
   const t = useTranslations("payouts");
+  const fmt = useFormat();
   const [payouts, setPayouts] = useState<
     { id: string; paidAt: string; amountCents: number; method: string; stripeTransferId: string | null; earningsCount: number }[]
   >([]);
@@ -362,7 +365,7 @@ function PayoutHistoryTable() {
         <tbody className="divide-y divide-slate-100">
           {payouts.map((p) => (
             <tr key={p.id}>
-              <td className="py-3 px-4 text-slate-500">{new Date(p.paidAt).toLocaleDateString()}</td>
+              <td className="py-3 px-4 text-slate-500">{fmt.date(p.paidAt)}</td>
               <td className="py-3 px-4 text-slate-600 capitalize">{p.method}</td>
               <td className="py-3 px-4 text-slate-500">{p.earningsCount}</td>
               <td className="py-3 px-4 font-bold text-slate-900">${(p.amountCents / 100).toFixed(2)}</td>

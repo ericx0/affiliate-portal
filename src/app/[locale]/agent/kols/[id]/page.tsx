@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { apiFetch } from "@/lib/api";
+import { useFormat } from "@/lib/format";
 
 function maskEmail(email: string): string {
   const at = email.indexOf("@");
@@ -41,6 +43,9 @@ interface Commission {
 export default function KolDetail() {
   const params = useParams();
   const id = params.id as string;
+  const t = useTranslations("kolDetail");
+  const tNav = useTranslations("nav");
+  const fmt = useFormat();
   const [kol, setKol] = useState<Kol | null>(null);
   const [commissions, setCommissions] = useState<Commission[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,10 +78,11 @@ export default function KolDetail() {
   }, [id]);
 
   const suspend = async () => {
-    if (!window.confirm("Suspend this KOL? They will stop earning commissions.")) return;
+    if (!window.confirm(t("suspendConfirm"))) return;
     try {
       await apiFetch(`/api/affiliate/agent/kols/${id}/suspend`, {
         method: "POST",
+        // reason is stored in audit logs as English data — not user-facing UI.
         body: { reason: "Suspended by agent" },
       });
       await load();
@@ -109,13 +115,13 @@ export default function KolDetail() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div>{tNav("loading")}</div>;
   if (error) return <div className="text-red-600">{error}</div>;
-  if (!kol) return <div>KOL not found.</div>;
+  if (!kol) return <div>{t("notFound")}</div>;
 
   return (
     <div className="space-y-6">
-      <Link href="/agent/kols" className="text-sm text-slate-500">← Back to KOLs</Link>
+      <Link href="/agent/kols" className="text-sm text-slate-500">{t("backToKols")}</Link>
 
       <div className="flex justify-between items-start">
         <div>
@@ -126,11 +132,11 @@ export default function KolDetail() {
         <div className="flex gap-2">
           {kol.status === "active" ? (
             <button onClick={suspend} className="px-3 py-1.5 text-sm border border-red-300 text-red-600 rounded-lg">
-              Suspend
+              {t("suspend")}
             </button>
           ) : (
             <button onClick={activate} className="px-3 py-1.5 text-sm border border-green-300 text-green-600 rounded-lg">
-              Activate
+              {t("activate")}
             </button>
           )}
         </div>
@@ -138,25 +144,25 @@ export default function KolDetail() {
 
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-white p-4 rounded-2xl border">
-          <div className="text-xs text-slate-400 uppercase">Commission rate</div>
+          <div className="text-xs text-slate-400 uppercase">{t("commissionRate")}</div>
           <div className="text-xl font-bold mt-1">{kol.commission_rate}%</div>
           {!rateForm.show && (
             <button
               onClick={() => setRateForm({ show: true, rate: kol.commission_rate, submitting: false })}
               className="text-xs text-blue-600 mt-1"
             >
-              Change
+              {t("change")}
             </button>
           )}
         </div>
         <div className="bg-white p-4 rounded-2xl border">
-          <div className="text-xs text-slate-400 uppercase">Earned</div>
+          <div className="text-xs text-slate-400 uppercase">{t("earned")}</div>
           <div className="text-xl font-bold mt-1 text-green-600">
             ${Number(kol.total_commission_earned || 0).toFixed(2)}
           </div>
         </div>
         <div className="bg-white p-4 rounded-2xl border">
-          <div className="text-xs text-slate-400 uppercase">Paid</div>
+          <div className="text-xs text-slate-400 uppercase">{t("paid")}</div>
           <div className="text-xl font-bold mt-1 text-green-600">
             ${Number(kol.total_commission_paid || 0).toFixed(2)}
           </div>
@@ -165,7 +171,7 @@ export default function KolDetail() {
 
       {rateForm.show && (
         <div className="bg-white p-4 rounded-2xl border flex items-center gap-3">
-          <span className="text-sm">New rate (%):</span>
+          <span className="text-sm">{t("newRate")}</span>
           <input
             type="number"
             min={0}
@@ -181,32 +187,32 @@ export default function KolDetail() {
             className="px-3 py-1.5 text-sm text-white rounded-lg disabled:opacity-50"
             style={{ background: "#7c3aed" }}
           >
-            {rateForm.submitting ? "Saving..." : "Save"}
+            {rateForm.submitting ? t("saving") : t("save")}
           </button>
           <button
             onClick={() => setRateForm({ show: false, rate: kol.commission_rate, submitting: false })}
             className="px-3 py-1.5 text-sm border rounded-lg"
           >
-            Cancel
+            {t("cancel")}
           </button>
         </div>
       )}
 
       <div>
-        <h2 className="font-bold mb-3">Commission history ({commissions.length})</h2>
+        <h2 className="font-bold mb-3">{t("commissionHistory", { count: commissions.length })}</h2>
         {commissions.length === 0 ? (
-          <p className="text-slate-500">No commissions yet.</p>
+          <p className="text-slate-500">{t("noCommissions")}</p>
         ) : (
           <div className="bg-white rounded-2xl border overflow-hidden">
             <table className="w-full">
               <thead className="bg-slate-50">
                 <tr>
-                  <th className="text-left p-3 text-xs uppercase">Type</th>
-                  <th className="text-right p-3 text-xs uppercase">Order Amt</th>
-                  <th className="text-right p-3 text-xs uppercase">Rate</th>
-                  <th className="text-right p-3 text-xs uppercase">Commission</th>
-                  <th className="text-center p-3 text-xs uppercase">Status</th>
-                  <th className="text-right p-3 text-xs uppercase">Date</th>
+                  <th className="text-left p-3 text-xs uppercase">{t("type")}</th>
+                  <th className="text-right p-3 text-xs uppercase">{t("orderAmt")}</th>
+                  <th className="text-right p-3 text-xs uppercase">{t("rate")}</th>
+                  <th className="text-right p-3 text-xs uppercase">{t("commission")}</th>
+                  <th className="text-center p-3 text-xs uppercase">{t("status")}</th>
+                  <th className="text-right p-3 text-xs uppercase">{t("date")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -221,7 +227,7 @@ export default function KolDetail() {
                     </td>
                     <td className="p-3 text-center text-sm">{c.status}</td>
                     <td className="p-3 text-right text-xs text-slate-400">
-                      {c.created_at ? new Date(c.created_at).toLocaleDateString() : "-"}
+                      {c.created_at ? fmt.date(c.created_at) : "-"}
                     </td>
                   </tr>
                 ))}
