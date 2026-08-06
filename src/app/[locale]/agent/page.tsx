@@ -80,18 +80,18 @@ export default function AgentDashboard() {
   const kolCount = stats?.totalKols || 0;
 
   // Calculate Tier
-  let tierName = t("tierLevel1");
+  let tierName = t("tierBronze");
   let tierRate = "5%";
   let nextGoal = t("goalToLevel2", { count: LEVEL_2_MIN_KOLS - kolCount });
   let progressPercent = (kolCount / (LEVEL_2_MIN_KOLS - 1)) * 100;
 
   if (kolCount >= LEVEL_3_MIN_KOLS) {
-    tierName = t("tierLevel3");
+    tierName = t("tierGold");
     tierRate = "10%";
     nextGoal = t("maxTierReached");
     progressPercent = 100;
   } else if (kolCount >= LEVEL_2_MIN_KOLS) {
-    tierName = t("tierLevel2");
+    tierName = t("tierSilver");
     tierRate = "8%";
     nextGoal = t("goalToLevel3", { count: LEVEL_3_MIN_KOLS - kolCount });
     progressPercent = (kolCount / (LEVEL_3_MIN_KOLS - 1)) * 100;
