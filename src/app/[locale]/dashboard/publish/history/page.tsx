@@ -22,6 +22,7 @@ import {
   Send,
   Share2,
 } from "lucide-react";
+import { useFormat } from "@/lib/format";
 
 /**
  * /dashboard/publish/history — Published + scheduled posts.
@@ -47,6 +48,7 @@ const STATUS_TONE: Record<
 
 export default function HistoryPage() {
   const t = useTranslations("publishHistory");
+  const fmt = useFormat();
   const [rows, setRows] = React.useState<HistoryRow[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [filters, setFilters] = React.useState<HistoryFilters>({});
@@ -191,6 +193,7 @@ function HistoryCard({
   onRefresh: () => void;
 }) {
   const t = useTranslations("publishHistory");
+  const fmt = useFormat();
   const status = STATUS_TONE[row.status];
   return (
     <Card>
@@ -203,8 +206,8 @@ function HistoryCard({
             {row.scheduledAt ? (
               <span className="text-xs text-slate-400">
                 {row.publishedAt
-                  ? new Date(row.publishedAt).toLocaleString()
-                  : new Date(row.scheduledAt).toLocaleString()}
+                  ? fmt.dateTime(row.publishedAt)
+                  : fmt.dateTime(row.scheduledAt)}
               </span>
             ) : null}
           </div>
@@ -229,7 +232,7 @@ function HistoryCard({
               </span>
               {row.metrics.impressions != null ? (
                 <span className="text-slate-400">
-                  {row.metrics.impressions.toLocaleString()} {t("impressions")}
+                  {fmt.number(row.metrics.impressions)} {t("impressions")}
                 </span>
               ) : null}
             </div>

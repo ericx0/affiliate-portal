@@ -21,6 +21,7 @@ import {
   CalendarClock,
   Hourglass,
 } from "lucide-react";
+import { useFormat } from "@/lib/format";
 
 // Shape returned by GET /api/affiliate/me/stats (affiliate_get_my_stats RPC).
 // Money fields are integer CENTS (migration 010).
@@ -72,6 +73,7 @@ function nextSettlementDate(): Date {
 
 export default function DashboardOverview() {
   const t = useTranslations("dashboard");
+  const fmt = useFormat();
   const [stats, setStats] = useState<StatsData | null>(null);
   const [codes, setCodes] = useState<ReferralCode[]>([]);
   const [payouts, setPayouts] = useState<Payout[]>([]);
@@ -313,7 +315,7 @@ export default function DashboardOverview() {
           <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
             <div className="text-xs font-semibold text-slate-400">{t("nextSettlementLabel")}</div>
             <div className="text-lg font-bold text-slate-900 mt-1">
-              {nextSettlementDate().toLocaleDateString()}
+              {fmt.date(nextSettlementDate())}
             </div>
           </div>
           <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
@@ -455,7 +457,7 @@ export default function DashboardOverview() {
                 {payouts.map((p) => (
                   <tr key={p.id} className="hover:bg-slate-50">
                     <td className="py-4 px-4 font-mono text-xs text-slate-700">{p.id.slice(0, 12)}</td>
-                    <td className="py-4 px-4 text-slate-500">{new Date(p.paidAt).toLocaleDateString()}</td>
+                    <td className="py-4 px-4 text-slate-500">{fmt.date(p.paidAt)}</td>
                     <td className="py-4 px-4 font-bold text-slate-900">${fmtUsd(p.amountCents)}</td>
                     <td className="py-4 px-4 text-slate-600 capitalize">{p.method}</td>
                   </tr>

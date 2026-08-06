@@ -15,6 +15,7 @@ import {
   Loader2,
   BarChart3,
 } from "lucide-react";
+import { useFormat } from "@/lib/format";
 
 /**
  * /dashboard/v2 — upgraded analytics dashboard.
@@ -50,15 +51,9 @@ function pct(n: number, d: number) {
   return Math.round((n / d) * 100);
 }
 
-function fmtUsd(cents: number) {
-  return (cents / 100).toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
-
 export default function DashboardV2() {
   const t = useTranslations("dashboardV2");
+  const fmt = useFormat();
   const [range, setRange] = React.useState<Range>(30);
   const [data, setData] = React.useState<AnalyticsData | null>(null);
   const [loading, setLoading] = React.useState(true);
@@ -148,27 +143,27 @@ export default function DashboardV2() {
               <FunnelStage
                 icon={<Users className="w-5 h-5" />}
                 label={t("funnelClicks")}
-                value={funnel.clicks.toLocaleString()}
+                value={fmt.number(funnel.clicks)}
                 drop={null}
               />
               <FunnelStage
                 icon={<Users className="w-5 h-5" />}
                 label={t("funnelReg")}
-                value={funnel.registrations.toLocaleString()}
+                value={fmt.number(funnel.registrations)}
                 drop={cR < 10 && funnel.clicks > 0 ? t("funnelDropLow") : null}
                 conv={`${cR}%`}
               />
               <FunnelStage
                 icon={<ShoppingBag className="w-5 h-5" />}
                 label={t("funnelOrders")}
-                value={funnel.orders.toLocaleString()}
+                value={fmt.number(funnel.orders)}
                 drop={rO < 5 && funnel.registrations > 0 ? t("funnelDropLow") : null}
                 conv={`${rO}%`}
               />
               <FunnelStage
                 icon={<Coins className="w-5 h-5" />}
                 label={t("funnelCommission")}
-                value={`$${fmtUsd(funnel.commissionsCents)}`}
+                value={fmt.currency(funnel.commissionsCents)}
                 drop={null}
               />
             </div>

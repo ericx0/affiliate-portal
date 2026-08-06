@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
+import { useFormat } from "@/lib/format";
 
 interface ReferralCode {
   id: string;
@@ -14,6 +15,7 @@ interface ReferralCode {
 
 export default function CodesPage() {
   const t = useTranslations("codes");
+  const fmt = useFormat();
   const [codes, setCodes] = useState<ReferralCode[]>([]);
   const [loading, setLoading] = useState(true);
   const [generating, setGenerating] = useState(false);
@@ -124,7 +126,7 @@ export default function CodesPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-slate-500">
-                    {new Date(c.createdAt).toLocaleDateString()}
+                    {fmt.date(c.createdAt)}
                   </td>
                   <td className="px-4 py-3 text-right space-x-2">
                     <button

@@ -19,6 +19,11 @@ import {
   X,
 } from "lucide-react";
 
+// 代理阶梯门槛，与 agent.ruleLevel1-3 文案一致：
+// Level 1 = 1-10 KOL (5%)，Level 2 = 11-100 (8%)，Level 3 = 100+ (10%)。
+const LEVEL_2_MIN_KOLS = 11;
+const LEVEL_3_MIN_KOLS = 101;
+
 interface AgentStats {
   totalKols: number;
   activeKols: number;
@@ -77,19 +82,19 @@ export default function AgentDashboard() {
   // Calculate Tier
   let tierName = t("tierLevel1");
   let tierRate = "5%";
-  let nextGoal = t("goalToLevel2", { count: 1 });
-  let progressPercent = (kolCount / 10) * 100;
+  let nextGoal = t("goalToLevel2", { count: LEVEL_2_MIN_KOLS - kolCount });
+  let progressPercent = (kolCount / (LEVEL_2_MIN_KOLS - 1)) * 100;
 
-  if (kolCount > 100) {
+  if (kolCount >= LEVEL_3_MIN_KOLS) {
     tierName = t("tierLevel3");
     tierRate = "10%";
     nextGoal = t("maxTierReached");
     progressPercent = 100;
-  } else if (kolCount > 10) {
+  } else if (kolCount >= LEVEL_2_MIN_KOLS) {
     tierName = t("tierLevel2");
     tierRate = "8%";
-    nextGoal = t("goalToLevel3", { count: 101 - kolCount });
-    progressPercent = (kolCount / 100) * 100;
+    nextGoal = t("goalToLevel3", { count: LEVEL_3_MIN_KOLS - kolCount });
+    progressPercent = (kolCount / (LEVEL_3_MIN_KOLS - 1)) * 100;
   }
 
   const handleCopyLink = () => {

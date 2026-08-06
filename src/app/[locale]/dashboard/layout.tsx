@@ -1,12 +1,32 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+
+import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { apiFetch } from "@/lib/api";
+import { supabase } from "@/lib/supabase";
+// next/link + next/navigation 会丢掉当前 locale（导航到 /dashboard 后由
+// middleware 按 cookie/accept-language 重新判定语言，而不是沿用当前页）。
+// @/navigation 的同名导出会自动带上 locale 前缀。
+import { Link, usePathname, useRouter } from "@/navigation";
+
+const NAV_ITEMS = [
+  { href: "/dashboard", labelKey: "overview" },
+  { href: "/dashboard/clients", labelKey: "clients" },
+  { href: "/dashboard/library", labelKey: "library" },
+  { href: "/dashboard/tools/ai-assist", labelKey: "aiAssist" },
+  { href: "/dashboard/publish", labelKey: "publish" },
+  { href: "/dashboard/templates", labelKey: "templates" },
+  { href: "/dashboard/funnel", labelKey: "funnel" },
+  { href: "/dashboard/codes", labelKey: "codes" },
+  { href: "/dashboard/earnings", labelKey: "earnings" },
+  { href: "/dashboard/payouts", labelKey: "payouts" },
+  { href: "/dashboard/settings/stripe", labelKey: "settings" },
+] as const;
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const t = useTranslations("nav");
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
@@ -35,25 +55,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     });
   }, [router]);
 
-  if (loading) return <div className="p-8">Loading...</div>;
+  if (loading) return <div className="p-8">{t("loading")}</div>;
 
-  // Strip the locale prefix so we can compare against the nav links
-  // (they're written without a locale — Link adds it back).
-  const path = pathname.replace(/^\/(en|zh|ar|ru|es)/, "") || "/";
-
-  const navItems = [
-    { href: "/dashboard", label: "Overview" },
-    { href: "/dashboard/clients", label: "Clients" },
-    { href: "/dashboard/library", label: "Library" },
-    { href: "/dashboard/tools/ai-assist", label: "AI Assist" },
-    { href: "/dashboard/publish", label: "Publish" },
-    { href: "/dashboard/templates", label: "Templates" },
-    { href: "/dashboard/funnel", label: "Funnel" },
-    { href: "/dashboard/codes", label: "Codes" },
-    { href: "/dashboard/earnings", label: "Earnings" },
-    { href: "/dashboard/payouts", label: "Payouts" },
-    { href: "/dashboard/settings/stripe", label: "Settings" },
-  ];
+  // @/navigation 的 usePathname 返回的已经是去掉 locale 前缀的路径，
+  // 可直接与 NAV_ITEMS 的 href 比较。
+  const path = pathname || "/";
 
   return (
     <div className="min-h-screen">
@@ -64,9 +70,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               href="/dashboard"
               className="font-bold text-brand-600 mr-4 whitespace-nowrap"
             >
-              Affiliate Portal
+              {t("portalTitle")}
             </Link>
-            {navItems.map((item) => {
+            {NAV_ITEMS.map((item) => {
               const active =
                 item.href === "/dashboard"
                   ? path === "/dashboard"
@@ -82,17 +88,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                       : "text-slate-600 hover:bg-slate-100")
                   }
                 >
-                  {item.label}
+                  {t(item.labelKey)}
                 </Link>
               );
             })}
           </div>
-          <button
-            onClick={() => supabase.auth.signOut().then(() => router.push("/"))}
-            className="text-sm text-slate-500 hover:text-slate-700 whitespace-nowrap"
-          >
-            Log out
-          </button>
+          <div className="flex items-center gap-3">
+            <LocaleSwitcher />
+            <button
+              onClick={() => supabase.auth.signOut().then(() => router.push("/"))}
+              className="text-sm text-slate-500 hover:text-slate-700 whitespace-nowrap"
+            >
+              {t("logout")}
+            </button>
+          </div>
         </div>
       </nav>
       <main className="max-w-7xl mx-auto px-4 py-8">{children}</main>

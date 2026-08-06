@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { Link } from "@/navigation";
+
+import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { supabase } from "@/lib/supabase";
 
 const TURNSTILE_SITE_KEY =
@@ -9,6 +13,7 @@ const TURNSTILE_SITE_KEY =
   (process.env.NODE_ENV !== "production" ? "1x00000000000000000000AA" : "");
 
 export default function LoginPage() {
+  const t = useTranslations("login");
   const router = useRouter();
 
   // Two-step state: email entry → OTP entry
@@ -59,7 +64,7 @@ export default function LoginPage() {
     setError("");
 
     if (!turnstileToken) {
-      setError("Please complete the security check.");
+      setError(t("captchaRequired"));
       return;
     }
 
@@ -106,16 +111,17 @@ export default function LoginPage() {
 
   return (
     <main className="max-w-md mx-auto px-4 py-16">
-      <h1 className="text-2xl font-bold mb-6">{sent ? "Enter Code" : "Log In"}</h1>
+      <div className="flex justify-end mb-6">
+        <LocaleSwitcher />
+      </div>
+      <h1 className="text-2xl font-bold mb-6">{sent ? t("enterCodeTitle") : t("loginTitle")}</h1>
 
       {!sent ? (
         <form onSubmit={sendCode} className="space-y-4">
-          <p className="text-sm text-slate-600">
-            We'll email you a 6-digit sign-in code.
-          </p>
+          <p className="text-sm text-slate-600">{t("introText")}</p>
           <input
             type="email"
-            placeholder="Email"
+            placeholder={t("emailPlaceholder")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -130,22 +136,29 @@ export default function LoginPage() {
 
           <button type="submit" disabled={sending || !turnstileToken}
             className="w-full py-3 bg-brand-500 text-white rounded-xl font-semibold disabled:opacity-50">
-            {sending ? "..." : "Send Code"}
+            {sending ? t("sending") : t("sendCode")}
           </button>
 
           <p className="text-sm text-slate-500 text-center">
-            Don't have an account?{" "}
-            <a href="/register" className="text-brand-500 hover:underline">Apply now</a>
+            {t.rich("noAccountApply", {
+              link: (chunks) => (
+                <Link href="/register" className="text-brand-500 hover:underline">{chunks}</Link>
+              ),
+            })}
           </p>
         </form>
       ) : (
         <form onSubmit={verifyCode} className="space-y-4">
-          <p className="text-sm text-slate-600">Code sent to <span className="font-semibold">{email}</span></p>
+          <p className="text-sm text-slate-600">
+            {t.rich("codeSentTo", {
+              email: () => <span className="font-semibold">{email}</span>,
+            })}
+          </p>
           <input
             type="text"
             inputMode="numeric"
             maxLength={6}
-            placeholder="000000"
+            placeholder={t("codePlaceholder")}
             value={code}
             onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
             required
@@ -154,11 +167,11 @@ export default function LoginPage() {
           {error && <p className="text-red-600 text-sm">{error}</p>}
           <button type="submit" disabled={verifying || code.length !== 6}
             className="w-full py-3 bg-brand-500 text-white rounded-xl font-semibold disabled:opacity-50">
-            {verifying ? "..." : "Verify & Log In"}
+            {verifying ? t("sending") : t("verifyLogin")}
           </button>
           <button type="button" onClick={() => { setSent(false); setError(""); }}
             className="w-full text-sm text-slate-500 hover:underline">
-            Use a different email
+            {t("useDifferentEmail")}
           </button>
         </form>
       )}

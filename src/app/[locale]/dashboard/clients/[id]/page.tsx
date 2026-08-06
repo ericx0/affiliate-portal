@@ -17,6 +17,7 @@ import {
   logContact,
 } from "@/lib/clients";
 import { ArrowLeft, Check, CheckCircle2, Loader2, MessageSquarePlus, Save } from "lucide-react";
+import { useFormat } from "@/lib/format";
 
 interface PageProps {
   params: { id: string };
@@ -24,6 +25,7 @@ interface PageProps {
 
 export default function ClientDetailPage({ params }: PageProps) {
   const t = useTranslations("clientsDetail");
+  const fmt = useFormat();
   const router = useRouter();
   const [client, setClient] = React.useState<KolClient | null>(null);
   const [tasks, setTasks] = React.useState<FollowupTask[]>([]);
@@ -394,7 +396,7 @@ export default function ClientDetailPage({ params }: PageProps) {
                           ? t("directionOutbound")
                           : t("directionInbound")}
                       </span>
-                      <span>{new Date(c.occurredAt).toLocaleString()}</span>
+                      <span>{fmt.dateTime(c.occurredAt)}</span>
                     </div>
                     <div className="text-sm text-slate-800 mt-1">{c.summary}</div>
                   </li>
@@ -422,7 +424,7 @@ export default function ClientDetailPage({ params }: PageProps) {
                         {t(`taskType_${tk.taskType}` as any, { day: tk.day })}
                       </div>
                       <div className="text-xs text-slate-500">
-                        {new Date(tk.dueAt).toLocaleDateString()}
+                        {fmt.date(tk.dueAt)}
                       </div>
                     </div>
                     <button

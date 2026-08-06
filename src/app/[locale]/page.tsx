@@ -1,6 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+
+import LocaleSwitcher from "@/components/LocaleSwitcher";
 import { Link } from "@/navigation";
 
 export default function LandingPage() {
@@ -8,6 +10,9 @@ export default function LandingPage() {
 
   return (
     <main className="max-w-4xl mx-auto px-4 py-16">
+      <div className="flex justify-end mb-6">
+        <LocaleSwitcher />
+      </div>
       <h1 className="text-4xl font-bold text-slate-900 mb-4">
         {t("title")}
       </h1>

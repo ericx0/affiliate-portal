@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
+import { useFormat } from "@/lib/format";
 import { Users, Plus, Sliders, Check, AlertCircle, Loader2 } from "lucide-react";
 
 interface Kol {
@@ -35,6 +36,7 @@ function maskEmail(email: string): string {
 
 export default function AgentKols() {
   const t = useTranslations("agent");
+  const fmt = useFormat();
   const [kols, setKols] = useState<Kol[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -182,9 +184,7 @@ export default function AgentKols() {
                     ${Number(k.total_commission_earned || 0).toFixed(2)}
                   </td>
                   <td className="py-4 px-4 text-right text-xs text-slate-400">
-                    {k.created_at
-                      ? new Date(k.created_at).toLocaleDateString()
-                      : "-"}
+                    {k.created_at ? fmt.date(k.created_at) : "-"}
                   </td>
                   <td className="py-4 px-6 text-right">
                     <button

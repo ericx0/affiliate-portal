@@ -14,6 +14,7 @@ import {
   Loader2,
   Sparkles,
 } from "lucide-react";
+import { useFormat } from "@/lib/format";
 
 /**
  * /dashboard/cases/[id] — Single-case detail + AI rewrite panel.
@@ -27,6 +28,7 @@ import {
 
 export default function CaseDetailPage() {
   const t = useTranslations("caseDetail");
+  const fmt = useFormat();
   const params = useParams<{ id: string }>();
   const id = params?.id ?? "";
 
@@ -91,9 +93,7 @@ export default function CaseDetailPage() {
 
   const cost =
     caseRow.costRangeLowCents && caseRow.costRangeHighCents
-      ? `$${Math.round(caseRow.costRangeLowCents / 100).toLocaleString()} – $${Math.round(
-          caseRow.costRangeHighCents / 100,
-        ).toLocaleString()}`
+      ? `${fmt.currency(caseRow.costRangeLowCents)} – ${fmt.currency(caseRow.costRangeHighCents)}`
       : null;
 
   return (

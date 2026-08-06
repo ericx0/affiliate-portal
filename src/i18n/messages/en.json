@@ -5,6 +5,20 @@
     "registerCta": "Apply Now",
     "loginCta": "Log In"
   },
+  "login": {
+    "loginTitle": "Log In",
+    "enterCodeTitle": "Enter Code",
+    "introText": "We'll email you a 6-digit sign-in code.",
+    "emailPlaceholder": "Email",
+    "sendCode": "Send Code",
+    "sending": "Sending...",
+    "noAccountApply": "Don't have an account? <link>Apply now</link>",
+    "codeSentTo": "Code sent to {email}",
+    "codePlaceholder": "000000",
+    "verifyLogin": "Verify & Log In",
+    "useDifferentEmail": "Use a different email",
+    "captchaRequired": "Please complete the security check."
+  },
   "register": {
     "title": "Join as Affiliate Partner",
     "name": "Your name",
@@ -153,7 +167,11 @@
     "inviteUnavailable": "Invite link unavailable",
     "qrButton": "QR Code",
     "qrModalTitle": "KOL Invite QR Code",
-    "qrModalDesc": "Scan to open your KOL recruitment page"
+    "qrModalDesc": "Scan to open your KOL recruitment page",
+    "updateFailed": "❌ Update failed: {error}",
+    "goalToLevel2": "Recruit {count} more KOLs to reach Level 2 (8% commission)",
+    "goalToLevel3": "Recruit {count} more KOLs to reach Level 3 (10% commission)",
+    "progressCount": "{count} KOLs"
   },
   "codes": {
     "failedToGenerate": "Failed to generate code",
@@ -252,7 +270,8 @@
     "connectedDesc": "Your Stripe account is connected. Use the Stripe dashboard to manage your payouts and transactions.",
     "notConnectedDesc": "Connect your Stripe account to receive automatic payouts directly to your bank account.",
     "connecting": "Connecting...",
-    "openStripeDashboard": "Open Stripe Dashboard"
+    "openStripeDashboard": "Open Stripe Dashboard",
+    "accountLabel": "Account: {accountId}"
   },
   "tax": {
     "errorInvalidFileType": "Invalid file type. Please upload a PDF, PNG, JPEG, or WebP file.",
@@ -280,7 +299,11 @@
     "noFileSelected": "No file selected",
     "uploadHint": "PDF, PNG, JPEG, or WebP. Max 10MB.",
     "submitting": "Submitting...",
-    "submit": "Submit Tax Form"
+    "submit": "Submit Tax Form",
+    "errorUploadFailed": "File upload failed: {message}",
+    "currentForm": "Current form: {formType}",
+    "signedBy": "Signed by {name}",
+    "submittedOn": "Submitted on {date}"
   },
   "dashboardV2": {
     "title": "Promotion Analytics (v2)",
@@ -365,11 +388,6 @@
     "openCta": "Open",
     "byConcernTitle": "By health concern",
     "byConcernDesc": "How your customer book breaks down by topic",
-    "status_lead": "Lead",
-    "status_engaged": "Engaged",
-    "status_qualified": "Qualified",
-    "status_converted": "Converted",
-    "status_inactive": "Inactive",
     "budget_under_10k": "Under $10k",
     "budget_10k_25k": "$10k–25k",
     "budget_25k_50k": "$25k–50k",
@@ -383,7 +401,12 @@
     "concern_wellness": "Wellness",
     "concern_dental": "Dental",
     "concern_cosmetic": "Cosmetic",
-    "concern_general": "General"
+    "concern_general": "General",
+    "statusLead": "Lead",
+    "statusEngaged": "Engaged",
+    "statusQualified": "Qualified",
+    "statusConverted": "Converted",
+    "statusInactive": "Inactive"
   },
   "clientsDetail": {
     "back": "Back",
@@ -607,7 +630,8 @@
     "pendingReviewNote": "Awaiting platform app review",
     "confirmDisconnect": "Disconnect {platform}? Future posts will not publish until you reconnect.",
     "connectedToast": "{platform} connected successfully.",
-    "errorToast": "OAuth failed: {error}"
+    "errorToast": "OAuth failed: {error}",
+    "disclosure": "These connections are used solely to publish content you create in this portal. You can disconnect an account at any time; revoking access on the platform itself also ends the connection."
   },
   "publishNew": {
     "title": "Create + publish",
@@ -721,7 +745,8 @@
     "sendFallback": "Email delivery is offline — copy the rendered text below.",
     "sendErrorGeneric": "Could not send — try again or contact support.",
     "open": "Open",
-    "aiAssistNote": "Use the AI Assist tool to customise the copy for a specific conversation."
+    "aiAssistNote": "Use the AI Assist tool to customise the copy for a specific conversation.",
+    "copied": "Copied"
   },
   "funnel": {
     "title": "Funnel dashboard",
@@ -753,5 +778,48 @@
     "noData": "No data in the selected window.",
     "loading": "Loading funnel…",
     "openPublishHub": "Publish a post"
+  },
+  "kolDetail": {
+    "backToKols": "← Back to KOLs",
+    "suspendConfirm": "Suspend this KOL? They will stop earning commissions.",
+    "notFound": "KOL not found.",
+    "suspend": "Suspend",
+    "activate": "Activate",
+    "commissionRate": "Commission rate",
+    "change": "Change",
+    "earned": "Earned",
+    "paid": "Paid",
+    "newRate": "New rate (%):",
+    "saving": "Saving...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "commissionHistory": "Commission history ({count})",
+    "noCommissions": "No commissions yet.",
+    "type": "Type",
+    "orderAmt": "Order Amt",
+    "rate": "Rate",
+    "commission": "Commission",
+    "status": "Status",
+    "date": "Date"
+  },
+  "nav": {
+    "language": "Language",
+    "portalTitle": "Affiliate Portal",
+    "agentPortalTitle": "Agent Portal",
+    "logout": "Log out",
+    "loading": "Loading…",
+    "overview": "Overview",
+    "clients": "Clients",
+    "library": "Library",
+    "aiAssist": "AI Assist",
+    "publish": "Publish",
+    "templates": "Templates",
+    "funnel": "Funnel",
+    "codes": "Codes",
+    "earnings": "Earnings",
+    "payouts": "Payouts",
+    "settings": "Settings",
+    "kols": "KOLs",
+    "commissions": "Commissions"
   }
 }
