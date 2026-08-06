@@ -20,7 +20,6 @@ import {
   Sparkles,
   CalendarClock,
   Hourglass,
-  Medal,
 } from "lucide-react";
 import { useFormat } from "@/lib/format";
 
@@ -32,19 +31,6 @@ interface StatsData {
   totalApproved: number;
   totalClicks: number;
   activeCodes: number;
-}
-
-// Shape returned by GET /api/affiliate/me/profile (affiliate_get_me RPC).
-// Extended by migration 20260811000001 to expose role + agentLevel +
-// commissionRate so the dashboard header can render a tier card
-// without a second round-trip.
-type AgentLevel = "basic" | "senior" | "regional";
-
-interface ProfileData {
-  status?: string;
-  role?: "kol" | "agent";
-  agentLevel?: AgentLevel | null;
-  commissionRate?: number | null;
 }
 
 // Shape returned by GET /api/affiliate/me/codes entries.
@@ -99,7 +85,6 @@ export default function DashboardOverview() {
   const [copiedCode, setCopiedCode] = useState(false);
 
   const [showQrModal, setShowQrModal] = useState(false);
-  const [profile, setProfile] = useState<ProfileData | null>(null);
 
   // Sub-ID / UTM builder (P1-9) + QR poster download (P1-10)
   const [subId, setSubId] = useState("");
@@ -119,12 +104,10 @@ export default function DashboardOverview() {
       // Account status comes from GET /api/affiliate/me/profile (promoters.status).
       // Fail-open: if the profile call errors or lacks the field, render
       // normally so existing active KOLs are never blocked.
-      const profileRes = await apiFetch<{ data: ProfileData | null }>(
+      const profile = await apiFetch<{ data: { status?: string } | null }>(
         "/api/affiliate/me/profile",
       ).catch(() => null);
-      const profileData = profileRes?.data ?? null;
-      setProfile(profileData);
-      if (profileData?.status === "pending") {
+      if (profile?.data?.status === "pending") {
         setAccountPending(true);
         return;
       }
@@ -259,38 +242,6 @@ export default function DashboardOverview() {
           <p className="text-sm text-slate-500 mt-1">{t("overviewSubtitle")}</p>
         </div>
         <div className="flex items-center gap-3">
-          {/* Agent tier card (only rendered when role=agent). The
-              /me/profile RPC returns agentLevel + commissionRate for
-              agents; for KOLs the fields are null and we hide the card
-              so the header doesn't waste space on a non-applicable badge. */}
-          {profile?.role === "agent" && profile.agentLevel && (
-            <div className="inline-flex items-center gap-3 rounded-2xl border border-slate-100 bg-white px-4 py-2.5 shadow-sm">
-              <Medal
-                className={`h-6 w-6 ${
-                  profile.agentLevel === "regional"
-                    ? "text-yellow-500"
-                    : profile.agentLevel === "senior"
-                    ? "text-slate-400"
-                    : "text-amber-700"
-                }`}
-              />
-              <div className="text-left">
-                <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                  {t("tierCardTitle")}
-                </div>
-                <div className="text-sm font-bold text-slate-900">
-                  {profile.agentLevel === "regional"
-                    ? t("tierGold")
-                    : profile.agentLevel === "senior"
-                    ? t("tierSilver")
-                    : t("tierBronze")}
-                  <span className="ml-2 rounded-md bg-emerald-50 px-1.5 py-0.5 text-xs font-bold text-emerald-700">
-                    {t("tierCommissionLabel")} {profile.commissionRate ?? 5}%
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
           {referralLink && (
             <button
               onClick={() => setShowQrModal(true)}
