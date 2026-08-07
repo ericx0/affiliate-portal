@@ -19,10 +19,17 @@ import {
   X,
 } from "lucide-react";
 
-// 代理阶梯门槛，与 agent.ruleLevel1-3 文案一致：
-// Level 1 = 1-10 KOL (5%)，Level 2 = 11-100 (8%)，Level 3 = 100+ (10%)。
-const LEVEL_2_MIN_KOLS = 11;
-const LEVEL_3_MIN_KOLS = 101;
+// Tier thresholds are managed in DB (affiliate.agent_tiers table) and
+// exposed via /api/affiliate/agent/stats as agentRate (5/8/10%). Frontend
+// reads the same source of truth and maps:
+//   5%  -> basic    (0-10 KOLs, next tier 8% needs 10 KOLs)
+//   8%  -> senior   (11-100 KOLs, next tier 10% needs 100 KOLs)
+//   10% -> regional (100+ KOLs, top tier reached)
+const TIER_RATE_BY_LEVEL: Record<number, { nextRate: number | null; minKols: number }> = {
+  5: { nextRate: 8, minKols: 0 },
+  8: { nextRate: 10, minKols: 10 },
+  10: { nextRate: null, minKols: 100 },
+};
 
 interface AgentStats {
   totalKols: number;
@@ -30,6 +37,7 @@ interface AgentStats {
   totalPaid: number;
   totalPending: number;
   totalApproved: number;
+  agentRate: number;
 }
 
 interface InviteCodeResponse {
@@ -64,6 +72,7 @@ export default function AgentDashboard() {
             totalPaid: 0,
             totalPending: 0,
             totalApproved: 0,
+            agentRate: 5,
           }
         );
 
@@ -78,23 +87,25 @@ export default function AgentDashboard() {
   }, []);
 
   const kolCount = stats?.totalKols || 0;
+  const agentRate = stats?.agentRate ?? 5;
 
-  // Calculate Tier
+  // Tier derived from API-provided agentRate (no hardcoded thresholds).
+  const tier = TIER_RATE_BY_LEVEL[agentRate] ?? TIER_RATE_BY_LEVEL[5];
   let tierName = t("tierBronze");
   let tierRate = "5%";
-  let nextGoal = t("goalToLevel2", { count: LEVEL_2_MIN_KOLS - kolCount });
-  let progressPercent = (kolCount / (LEVEL_2_MIN_KOLS - 1)) * 100;
+  let nextGoal = t("goalToLevel2", { count: 10 - kolCount });
+  let progressPercent = (kolCount / 10) * 100;
 
-  if (kolCount >= LEVEL_3_MIN_KOLS) {
+  if (agentRate >= 10) {
     tierName = t("tierGold");
     tierRate = "10%";
     nextGoal = t("maxTierReached");
     progressPercent = 100;
-  } else if (kolCount >= LEVEL_2_MIN_KOLS) {
+  } else if (agentRate >= 8) {
     tierName = t("tierSilver");
     tierRate = "8%";
-    nextGoal = t("goalToLevel3", { count: LEVEL_3_MIN_KOLS - kolCount });
-    progressPercent = (kolCount / (LEVEL_3_MIN_KOLS - 1)) * 100;
+    nextGoal = t("goalToLevel3", { count: 100 - kolCount });
+    progressPercent = (kolCount / 100) * 100;
   }
 
   const handleCopyLink = () => {
