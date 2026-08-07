@@ -161,8 +161,16 @@ export default function DashboardOverview() {
 
   if (loading) {
     return (
-      <div className="min-h-[400px] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      <div className="space-y-8 max-w-6xl mx-auto pb-16">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900">{t("overviewTitle")}</h1>
+            <p className="text-sm text-slate-500 mt-1">{t("overviewSubtitle")}</p>
+          </div>
+        </div>
+        <div className="min-h-[300px] flex items-center justify-center bg-white rounded-3xl border border-slate-100 shadow-sm">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        </div>
       </div>
     );
   }

@@ -50,9 +50,33 @@ export default function FunnelPage() {
 
   if (loading) {
     return (
-      <div className="min-h-[400px] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-brand-500" />
-        <span className="ml-3 text-sm text-slate-500">{t("loading")}</span>
+      <div className="space-y-6 pb-16">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900">{t("title")}</h1>
+            <p className="text-sm text-slate-500 mt-1">{t("subtitle")}</p>
+          </div>
+          <div className="flex items-center gap-2">
+            {[7, 30, 90].map((d) => (
+              <button
+                key={d}
+                onClick={() => setDays(d)}
+                className={
+                  "px-3 py-1 rounded-lg text-xs font-semibold " +
+                  (days === d ? "bg-brand-500 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200")
+                }
+              >
+                {d}d
+              </button>
+            ))}
+          </div>
+        </div>
+        <Card>
+          <div className="min-h-[300px] flex items-center justify-center">
+            <Loader2 className="w-8 h-8 animate-spin text-brand-500" />
+            <span className="ml-3 text-sm text-slate-500">{t("loading")}</span>
+          </div>
+        </Card>
       </div>
     );
   }
