@@ -116,26 +116,22 @@ export default function DashboardOverview() {
   async function fetchDashboardData() {
     try {
       setLoading(true);
-      // Account status comes from GET /api/affiliate/me/profile (promoters.status).
-      // Fail-open: if the profile call errors or lacks the field, render
-      // normally so existing active KOLs are never blocked.
-      const profileRes = await apiFetch<{ data: ProfileData | null }>(
-        "/api/affiliate/me/profile",
-      ).catch(() => null);
-      const profileData = profileRes?.data ?? null;
-      setProfile(profileData);
-      if (profileData?.status === "pending") {
-        setAccountPending(true);
-        return;
-      }
-
-      const [statsData, codesData, payoutData, stripeData, taxData] = await Promise.all([
+      
+      const [profileRes, statsData, codesData, payoutData, stripeData, taxData] = await Promise.all([
+        apiFetch<{ data: ProfileData | null }>("/api/affiliate/me/profile").catch(() => null),
         apiFetch<StatsData>("/api/affiliate/me/stats").catch(() => null),
         apiFetch<{ data: ReferralCode[] }>("/api/affiliate/me/codes").catch(() => null),
         apiFetch<{ data: Payout[] }>("/api/affiliate/me/payouts").catch(() => null),
         apiFetch<{ data: { connected: boolean; payoutsEnabled: boolean } }>("/api/affiliate/me/stripe-status").catch(() => null),
         apiFetch<{ data: unknown }>("/api/affiliate/me/tax-form").catch(() => null)
       ]);
+
+      const profileData = profileRes?.data ?? null;
+      setProfile(profileData);
+      if (profileData?.status === "pending") {
+        setAccountPending(true);
+        return;
+      }
 
       setStats(statsData);
       setCodes(codesData?.data ?? []);

@@ -54,8 +54,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     });
   }, [router]);
 
-  if (loading) return <div className="p-8">{t("loading")}</div>;
-
   // @/navigation 的 usePathname 返回的已经是去掉 locale 前缀的路径，
   // 可直接与 NAV_ITEMS 的 href 比较。
   const path = pathname || "/";
