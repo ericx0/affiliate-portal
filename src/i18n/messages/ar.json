@@ -95,7 +95,9 @@
     "pendingStripeCta": "إعداد Stripe Connect",
     "pendingTaxCta": "إرسال النموذج الضريبي",
     "noCodeYet": "لا يوجد رمز إحالة بعد",
-    "createCodeCta": "إنشاء رمز"
+    "createCodeCta": "إنشاء رمز",
+    "subIdHelpToggle": "كيفية الاستخدام؟",
+    "subIdHelpText": "أضف معلمات مخصصة إلى رابط الإحالة الخاص بك لتتبع مصدر مبيعاتك. على سبيل المثال، استخدم utm_source=tiktok و sub_id=video_1 لمنشور على TikTok. سيقوم الرابط المُنشأ بتتبع النقرات والتحويلات بشكل منفصل في تقاريرك."
   },
   "disclosure": {
     "message": "هذه صفحة شراكة مدفوع. يكسب الشركاء التابعون عمولات من المشتريات المؤهلة. {entity} تقدم {serviceType} - وليس تشخيصًا أو علاجًا طبيًا."

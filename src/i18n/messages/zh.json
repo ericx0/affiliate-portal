@@ -95,7 +95,9 @@
     "pendingStripeCta": "设置 Stripe Connect",
     "pendingTaxCta": "提交税务表单",
     "noCodeYet": "还没有推广码",
-    "createCodeCta": "去创建推广码"
+    "createCodeCta": "去创建推广码",
+    "subIdHelpToggle": "如何使用？",
+    "subIdHelpText": "通过为推广链接添加自定义参数，您可以精确追踪订单来源。例如，在 TikTok 发视频时，可填写 utm_source=tiktok 和 sub_id=video_1。系统会在报表中为您单独统计该链接的点击和转化数据，助您分析不同渠道的推广效果。"
   },
   "disclosure": {
     "message": "本页面为联盟营销合作伙伴页面。KOL 推广可获得合规返佣。{entity} 仅提供 {serviceType},不提供医疗诊断或治疗。"

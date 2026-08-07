@@ -95,7 +95,9 @@
     "pendingStripeCta": "Configurar Stripe Connect",
     "pendingTaxCta": "Enviar formulario fiscal",
     "noCodeYet": "Aún no tienes código de referido",
-    "createCodeCta": "Crear un código"
+    "createCodeCta": "Crear un código",
+    "subIdHelpToggle": "¿Cómo usar esto?",
+    "subIdHelpText": "Agregue parámetros personalizados a su enlace de referencia para rastrear de dónde provienen sus ventas. Por ejemplo, use utm_source=tiktok y sub_id=video_1 para una publicación de TikTok. El enlace generado rastreará clics y conversiones por separado en sus informes."
   },
   "disclosure": {
     "message": "Esta es una página de asociación remunerada. Los socios afiliados ganan comisiones por compras calificadas. {entity} proporciona {serviceType} - NO diagnóstico ni tratamiento médico."

@@ -95,7 +95,9 @@
     "pendingStripeCta": "Set up Stripe Connect",
     "pendingTaxCta": "Submit tax form",
     "noCodeYet": "No referral code yet",
-    "createCodeCta": "Create a code"
+    "createCodeCta": "Create a code",
+    "subIdHelpToggle": "How to use this?",
+    "subIdHelpText": "Add custom parameters to your referral link to track where your sales are coming from. For example, use utm_source=tiktok and sub_id=video_1 for a TikTok post. The generated link will track clicks and conversions separately in your reports."
   },
   "disclosure": {
     "message": "This is a paid partnership page. Affiliate partners earn commissions from qualifying purchases. {entity} provides {serviceType} - NOT medical diagnosis or treatment."

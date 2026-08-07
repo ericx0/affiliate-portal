@@ -444,6 +444,15 @@ export default function DashboardOverview() {
           <div>
             <h2 className="text-base font-bold text-slate-900">{t("subIdTitle")}</h2>
             <p className="text-xs text-slate-400 mt-1">{t("subIdDesc")}</p>
+            <details className="mt-3 group">
+              <summary className="text-sm font-semibold text-blue-600 cursor-pointer hover:text-blue-700 list-none flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4" />
+                {t("subIdHelpToggle")}
+              </summary>
+              <div className="mt-2 text-sm text-slate-600 bg-blue-50/50 p-4 rounded-xl border border-blue-100 leading-relaxed">
+                {t("subIdHelpText")}
+              </div>
+            </details>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
