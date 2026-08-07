@@ -116,28 +116,33 @@ export default function DashboardOverview() {
   async function fetchDashboardData() {
     try {
       setLoading(true);
-      
-      const [profileRes, statsData, codesData, payoutData, stripeData, taxData] = await Promise.all([
-        apiFetch<{ data: ProfileData | null }>("/api/affiliate/me/profile").catch(() => null),
-        apiFetch<StatsData>("/api/affiliate/me/stats").catch(() => null),
-        apiFetch<{ data: ReferralCode[] }>("/api/affiliate/me/codes").catch(() => null),
-        apiFetch<{ data: Payout[] }>("/api/affiliate/me/payouts").catch(() => null),
-        apiFetch<{ data: { connected: boolean; payoutsEnabled: boolean } }>("/api/affiliate/me/stripe-status").catch(() => null),
-        apiFetch<{ data: unknown }>("/api/affiliate/me/tax-form").catch(() => null)
-      ]);
+      const aggRes = await apiFetch<{
+        data: {
+          profile: ProfileData | null;
+          stats: StatsData;
+          codes: ReferralCode[];
+          payouts: Payout[];
+          stripeStatus: { connected: boolean; payoutsEnabled: boolean };
+          taxForm: unknown;
+        };
+      }>("/api/affiliate/me/dashboard-aggregate").catch(() => null);
 
-      const profileData = profileRes?.data ?? null;
+      if (!aggRes?.data) return;
+
+      const profileData = aggRes.data.profile;
       setProfile(profileData);
       if (profileData?.status === "pending") {
         setAccountPending(true);
         return;
       }
 
-      setStats(statsData);
-      setCodes(codesData?.data ?? []);
-      setPayouts(payoutData?.data ?? []);
-      setStripeReady(stripeData ? stripeData.data.connected && stripeData.data.payoutsEnabled : null);
-      setTaxSubmitted(taxData ? taxData.data != null : null);
+      setStats(aggRes.data.stats);
+      setCodes(aggRes.data.codes);
+      setPayouts(aggRes.data.payouts);
+      setStripeReady(
+        aggRes.data.stripeStatus ? aggRes.data.stripeStatus.connected && aggRes.data.stripeStatus.payoutsEnabled : null
+      );
+      setTaxSubmitted(aggRes.data.taxForm != null);
     } catch (e: any) {
       console.error("Dashboard data load error:", e);
     } finally {
