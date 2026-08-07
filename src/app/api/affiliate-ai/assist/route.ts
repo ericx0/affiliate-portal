@@ -53,18 +53,16 @@ const CONTENT_TYPE_LABELS: Record<string, string> = {
   email:        "email outreach template",
   referral_intro: "referral program introduction",
   service_desc: "service / product description",
-  story:        "Instagram / WeChat story text",
+  story:        "Instagram story text",
 };
 
 const PLATFORM_LABELS: Record<string, string> = {
-  tiktok:       "TikTok",
-  instagram:    "Instagram",
-  wechat:       "WeChat (微信朋友圈)",
-  xiaohongshu:  "小红书 (RED / Xiaohongshu)",
-  youtube:      "YouTube",
-  facebook:     "Facebook",
-  twitter:      "Twitter / X",
-  email:        "Email",
+  tiktok:    "TikTok",
+  instagram: "Instagram",
+  youtube:   "YouTube",
+  facebook:  "Facebook",
+  twitter:   "X / Twitter",
+  email:     "Email",
 };
 
 const SYSTEM_PROMPT = `You are an expert marketing copywriter and social media strategist for LinkChinaMed (LCM) affiliates — KOLs and agents who promote LCM's medical travel coordination services.
@@ -98,9 +96,10 @@ CONTENT GUIDELINES:
 6. NEVER quote exact prices — use ranges and note that LCM provides free consultations.
 7. Adapt tone and format to the platform and content type requested.
 8. Keep short-video scripts concise (60–90 seconds when read aloud).
-9. For 小红书/WeChat: use emojis strategically, warm/personal tone.
-10. For TikTok/Reels: hook in first 3 seconds, trending energy, strong CTA.
-11. For email: professional, empathetic, concise (under 200 words).`;
+9. For Instagram / TikTok: use relevant hashtags, trendy energy, strong CTA.
+10. For Facebook: slightly longer, community-oriented tone.
+11. For email: professional, empathetic, concise (under 200 words).
+12. For YouTube: structured intro-body-CTA format, conversational tone.`;
 
 function buildSystemPrompt(body: RequestBody): string {
   const lang = LOCALE_LANG[body.locale ?? "en"] ?? LOCALE_LANG["en"];

@@ -32,21 +32,21 @@ const CONTENT_TYPES = [
 ];
 
 const PLATFORMS = [
-  { value: "tiktok",       emoji: "🎵", label: "TikTok / 抖音" },
-  { value: "xiaohongshu",  emoji: "📕", label: "小红书" },
-  { value: "instagram",    emoji: "📸", label: "Instagram" },
-  { value: "wechat",       emoji: "💬", label: "微信朋友圈" },
-  { value: "youtube",      emoji: "▶️", label: "YouTube" },
-  { value: "email",        emoji: "📧", label: "Email" },
+  { value: "tiktok",     emoji: "🎵", label: "TikTok" },
+  { value: "instagram",  emoji: "📸", label: "Instagram" },
+  { value: "youtube",    emoji: "▶️", label: "YouTube" },
+  { value: "facebook",   emoji: "👥", label: "Facebook" },
+  { value: "twitter",    emoji: "🐦", label: "X / Twitter" },
+  { value: "email",      emoji: "📧", label: "Email" },
 ];
 
 const QUICK_PROMPTS = [
-  { label: "TikTok开场钩子",   prompt: "帮我写一个能在前3秒抓住观众眼球的TikTok开场脚本，介绍LinkChinaMed的医疗旅行协调服务，要有冲击力。" },
-  { label: "小红书种草笔记",   prompt: "帮我写一篇小红书风格的种草笔记，介绍如何通过LinkChinaMed安排在中国的医疗检查，语气真实亲切，加上合适的emoji和话题标签。" },
-  { label: "推广链接介绍语",   prompt: "帮我写一段简短的推广链接介绍语，解释我的专属优惠码能给朋友带来什么好处，以及他们如何通过LinkChinaMed获得在中国就医的帮助。" },
-  { label: "微信朋友圈文案",   prompt: "帮我写一条微信朋友圈的推广文案，分享LinkChinaMed的服务，语气要像真实的个人分享，不要太硬广。" },
-  { label: "邮件推广模板",     prompt: "帮我写一封英文推广邮件，面向海外华人群体，介绍LinkChinaMed如何帮他们安排父母在中国的就医协调，要专业但温馨。" },
-  { label: "IVF试管婴儿文案", prompt: "帮我写一个关于LinkChinaMed生育/试管婴儿协调服务的推广内容，面向海外有生育需求的华人夫妇，强调专业、省心、性价比。" },
+  { label: "TikTok Hook",          prompt: "Write a powerful TikTok hook (first 3 seconds) for LinkChinaMed's medical travel coordination service. It should grab attention immediately and make overseas Chinese audiences curious." },
+  { label: "Instagram Caption",    prompt: "Write an engaging Instagram caption promoting LinkChinaMed's medical coordination services. Include relevant hashtags and a clear CTA with my referral link." },
+  { label: "YouTube Intro Script", prompt: "Write a 60-second YouTube intro script explaining how LinkChinaMed helps overseas patients access top hospitals in China with full coordination support." },
+  { label: "Referral Link Post",   prompt: "Write a short social media post explaining how my referral link works and what benefit my followers get when they use LinkChinaMed's services." },
+  { label: "Email Outreach",       prompt: "Write a professional email outreach template (under 200 words) to overseas Chinese communities explaining how LinkChinaMed simplifies medical care in China for their parents or family." },
+  { label: "IVF / Fertility Ad",   prompt: "Write a Facebook ad copy targeting overseas Chinese couples interested in IVF or fertility treatments in China through LinkChinaMed. Emphasize professionalism, cost savings, and full coordination support." },
 ];
 
 export default function AiAssistPage() {
