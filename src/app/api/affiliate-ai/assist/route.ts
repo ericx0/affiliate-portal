@@ -104,18 +104,18 @@ function buildSystemPrompt(clientContext?: RequestBody["clientContext"]) {
   return SYSTEM_PROMPT + contextBlock;
 }
 
-async function callOpenAI(messages: ChatMessage[], apiKey: string): Promise<ReadableStream<Uint8Array>> {
-  // Use the stream=true chat completions endpoint; convert the
-  // node-fetch-style response into a Web ReadableStream so the route
-  // can return it directly to the browser as SSE.
-  const res = await fetch("https://api.openai.com/v1/chat/completions", {
+async function callGroq(messages: ChatMessage[], apiKey: string): Promise<ReadableStream<Uint8Array>> {
+  // Groq is OpenAI-compatible — only the base URL and model name differ.
+  // Using llama-3.3-70b-versatile: strong multilingual (EN/ZH) reasoning,
+  // fast inference, and included in the free tier.
+  const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: process.env.OPENAI_MODEL ?? "gpt-4o-mini",
+      model: process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile",
       temperature: 0.4,
       max_tokens: 900,
       stream: true,
@@ -181,14 +181,14 @@ async function callOpenAI(messages: ChatMessage[], apiKey: string): Promise<Read
 }
 
 export async function POST(req: NextRequest) {
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) {
     return NextResponse.json(
       {
         error: {
           code: "AI_DISABLED",
           message:
-            "AI assist is not configured on this environment. Set OPENAI_API_KEY in the affiliate-portal Vercel project.",
+            "AI assist is not configured on this environment. Set GROQ_API_KEY in the affiliate-portal Vercel project.",
         },
       },
       { status: 503 },
@@ -245,7 +245,7 @@ export async function POST(req: NextRequest) {
   ];
 
   try {
-    const stream = await callOpenAI(messages, apiKey);
+    const stream = await callGroq(messages, apiKey);
     return new Response(stream, {
       headers: {
         "Content-Type": "text/event-stream; charset=utf-8",
