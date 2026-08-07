@@ -164,6 +164,10 @@ export default function RegisterPage() {
       </div>
       <h1 className="text-2xl font-bold mb-6">{t("title")}</h1>
 
+      <div className="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+        本邮箱将作为您的联盟营销账号。每个邮箱只能绑定一个角色(代理或 KOL),如您已是另一角色,请使用另一个邮箱。
+      </div>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <input type="text" placeholder={t("name")} value={name}
           onChange={(e) => setName(e.target.value)} required
