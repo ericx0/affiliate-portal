@@ -615,6 +615,7 @@
   "publishHub": {
     "title": "Публикация контента",
     "subtitle": "Подключите аккаунты, создавайте посты, планируйте публикации и отслеживайте охват — всё в одном месте.",
+    "open": "Открыть",
     "accountsTitle": "1. Подключить аккаунты",
     "accountsDesc": "Свяжите Instagram, TikTok, Facebook, YouTube, LinkedIn и X через OAuth. Токены хранятся в зашифрованном виде.",
     "newTitle": "2. Создать + опубликовать",
@@ -626,8 +627,9 @@
     "tipBody": "Мультиплатформенная публикация экономит время, но проверяйте тон под каждую площадку: LinkedIn любит глубину, X/TikTok — короткие hook-и."
   },
   "publishAccounts": {
-    "title": "Подключённые аккаунты",
+    "title": "Подключить социальные аккаунты",
     "subtitle": "Управление OAuth-связями Instagram, TikTok, Facebook, YouTube, LinkedIn и X.",
+    "back": "Назад к публикациям",
     "statusConnected": "Подключён",
     "statusExpiring": "Скоро истечёт",
     "statusExpired": "Истёк — повторите авторизацию",

@@ -615,6 +615,7 @@
   "publishHub": {
     "title": "نشر المحتوى",
     "subtitle": "اربط حساباتك، صُغ المحتوى، جدول النشر، وتابع التفاعل — من مكان واحد.",
+    "open": "فتح",
     "accountsTitle": "1. ربط الحسابات",
     "accountsDesc": "اربط Instagram وTikTok وFacebook وYouTube وLinkedIn وX عبر OAuth. التوكنات مشفّرة.",
     "newTitle": "2. إنشاء + نشر",
@@ -626,8 +627,9 @@
     "tipBody": "النشر على عدة منصات يوفر الوقت، لكن راجع نبرة كل منصة قبل الإرسال — LinkedIn يكافئ العمق، X/TikTok يكافئان العناوين الجذابة."
   },
   "publishAccounts": {
-    "title": "الحسابات المرتبطة",
+    "title": "ربط حسابات التواصل الاجتماعي",
     "subtitle": "إدارة اتصالات OAuth لـ Instagram وTikTok وFacebook وYouTube وLinkedIn وX.",
+    "back": "العودة إلى النشر",
     "statusConnected": "متصل",
     "statusExpiring": "ستنتهي قريبًا",
     "statusExpired": "منتهية — أعد الترخيص",

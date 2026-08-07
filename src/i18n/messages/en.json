@@ -615,6 +615,7 @@
   "publishHub": {
     "title": "Content Publishing",
     "subtitle": "Connect your social accounts, draft posts, schedule publishing, and track engagement — all from one place.",
+    "open": "Open",
     "accountsTitle": "1. Connect accounts",
     "accountsDesc": "Link Instagram, TikTok, Facebook, YouTube, LinkedIn and X with OAuth. Tokens are encrypted at rest.",
     "newTitle": "2. Create + publish",
@@ -626,8 +627,9 @@
     "tipBody": "Multi-platform publishing saves time but review each platform's tone before publishing — LinkedIn rewards depth, X/TikTok reward punchy hooks."
   },
   "publishAccounts": {
-    "title": "Connected accounts",
+    "title": "Connect social accounts",
     "subtitle": "Manage OAuth connections for Instagram, TikTok, Facebook, YouTube, LinkedIn and X.",
+    "back": "Back to Publish",
     "statusConnected": "Connected",
     "statusExpiring": "Expiring soon",
     "statusExpired": "Expired — re-authorise",

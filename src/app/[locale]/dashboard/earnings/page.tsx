@@ -78,8 +78,18 @@ export default function EarningsPage() {
       apiFetch<{ data: TaxDoc[] }>("/api/affiliate/me/tax-docs")
         .then((d) => setTaxDocs(d.data ?? []))
         .catch(() => setTaxDocs([]));
-      apiFetch<Projection>("/api/affiliate/me/commission-projection?days=30")
-        .then((p) => setProjection(p))
+      apiFetch<any>("/api/affiliate/me/commission-projection?days=30")
+        .then((p) => {
+          if (p) {
+            setProjection({
+              dailyAvgCents: p.avg_daily_commission_cents || 0,
+              projected30Cents: p.projection_30d_cents || 0,
+              trend: (p.daily_series || []).map((d: any) => d.commission_cents || 0)
+            });
+          } else {
+            setProjection(null);
+          }
+        })
         .catch(() => setProjection(null));
       setLoading(false);
     })();

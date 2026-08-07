@@ -35,6 +35,7 @@ export default function PublishHubPage() {
           icon={<Plug className="w-6 h-6" />}
           title={t("accountsTitle")}
           desc={t("accountsDesc")}
+          openLabel={t("open")}
           tone="emerald"
         />
         <HubCard
@@ -42,6 +43,7 @@ export default function PublishHubPage() {
           icon={<Plus className="w-6 h-6" />}
           title={t("newTitle")}
           desc={t("newDesc")}
+          openLabel={t("open")}
           tone="blue"
         />
         <HubCard
@@ -49,6 +51,7 @@ export default function PublishHubPage() {
           icon={<History className="w-6 h-6" />}
           title={t("historyTitle")}
           desc={t("historyDesc")}
+          openLabel={t("open")}
           tone="slate"
         />
       </div>
@@ -74,12 +77,14 @@ function HubCard({
   icon,
   title,
   desc,
+  openLabel,
   tone,
 }: {
   href: string;
   icon: React.ReactNode;
   title: string;
   desc: string;
+  openLabel: string;
   tone: "emerald" | "blue" | "slate";
 }) {
   const bg = {
@@ -96,7 +101,7 @@ function HubCard({
       <div className="text-base font-bold text-slate-900">{title}</div>
       <div className="text-xs text-slate-500 mt-1 leading-relaxed flex-1">{desc}</div>
       <div className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-600">
-        <span>Open</span>
+        <span>{openLabel}</span>
         <ExternalLink className="w-3 h-3" />
       </div>
     </Link>

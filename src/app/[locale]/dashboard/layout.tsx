@@ -45,7 +45,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         // to email if it fails).
         const session = data.user.id;
         if (typeof session === "string") {
-          apiFetch("/api/affiliate/auth/sync", {
+          apiFetch("/api/affiliate/auth/register/sync", {
             method: "POST",
             body: {},
           }).catch(() => {});

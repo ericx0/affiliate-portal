@@ -615,6 +615,7 @@
   "publishHub": {
     "title": "Publicación de contenido",
     "subtitle": "Conecta tus cuentas, redacta contenido, programa publicaciones y mide el engagement — todo desde un solo lugar.",
+    "open": "Abrir",
     "accountsTitle": "1. Conectar cuentas",
     "accountsDesc": "Vincula Instagram, TikTok, Facebook, YouTube, LinkedIn y X con OAuth. Los tokens se cifran en reposo.",
     "newTitle": "2. Crear + publicar",
@@ -626,8 +627,9 @@
     "tipBody": "La publicación multiplataforma ahorra tiempo pero revisa el tono de cada plataforma antes de enviar — LinkedIn premia la profundidad, X/TikTok premian los hooks cortos."
   },
   "publishAccounts": {
-    "title": "Cuentas conectadas",
+    "title": "Conectar redes sociales",
     "subtitle": "Gestiona las conexiones OAuth de Instagram, TikTok, Facebook, YouTube, LinkedIn y X.",
+    "back": "Volver a Publicar",
     "statusConnected": "Conectado",
     "statusExpiring": "Caduca pronto",
     "statusExpired": "Caducada — reautoriza",

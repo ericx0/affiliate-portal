@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import {
@@ -17,6 +18,7 @@ import {
 import { useFormat } from "@/lib/format";
 import { Card, Pill } from "@/components/ui/Card";
 import {
+  ArrowLeft,
   CheckCircle2,
   AlertTriangle,
   Hourglass,
@@ -113,6 +115,16 @@ export default function AccountsPage() {
 
   return (
     <div className="space-y-6 pb-16">
+      <div className="flex items-start gap-4">
+        <Link
+          href="/dashboard/publish"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-colors"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          {t("back")}
+        </Link>
+      </div>
+
       <div>
         <h1 className="text-2xl font-bold text-slate-900">{t("title")}</h1>
         <p className="text-sm text-slate-500 mt-1">{t("subtitle")}</p>
