@@ -19,7 +19,6 @@ const NAV_ITEMS = [
   { href: "/dashboard/publish", labelKey: "publish" },
   { href: "/dashboard/templates", labelKey: "templates" },
   { href: "/dashboard/funnel", labelKey: "funnel" },
-  { href: "/dashboard/codes", labelKey: "codes" },
   { href: "/dashboard/earnings", labelKey: "earnings" },
   { href: "/dashboard/payouts", labelKey: "payouts" },
   { href: "/dashboard/settings/stripe", labelKey: "settings" },

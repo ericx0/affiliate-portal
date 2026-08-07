@@ -129,31 +129,18 @@ export default function DashboardOverview() {
         return;
       }
 
-      const statsData = await apiFetch<StatsData>(
-        "/api/affiliate/me/stats",
-      ).catch(() => null);
+      const [statsData, codesData, payoutData, stripeData, taxData] = await Promise.all([
+        apiFetch<StatsData>("/api/affiliate/me/stats").catch(() => null),
+        apiFetch<{ data: ReferralCode[] }>("/api/affiliate/me/codes").catch(() => null),
+        apiFetch<{ data: Payout[] }>("/api/affiliate/me/payouts").catch(() => null),
+        apiFetch<{ data: { connected: boolean; payoutsEnabled: boolean } }>("/api/affiliate/me/stripe-status").catch(() => null),
+        apiFetch<{ data: unknown }>("/api/affiliate/me/tax-form").catch(() => null)
+      ]);
+
       setStats(statsData);
-
-      const codesData = await apiFetch<{ data: ReferralCode[] }>(
-        "/api/affiliate/me/codes",
-      ).catch(() => null);
       setCodes(codesData?.data ?? []);
-
-      const payoutData = await apiFetch<{ data: Payout[] }>(
-        "/api/affiliate/me/payouts",
-      ).catch(() => null);
       setPayouts(payoutData?.data ?? []);
-
-      const stripeData = await apiFetch<{
-        data: { connected: boolean; payoutsEnabled: boolean };
-      }>("/api/affiliate/me/stripe-status").catch(() => null);
-      setStripeReady(
-        stripeData ? stripeData.data.connected && stripeData.data.payoutsEnabled : null,
-      );
-
-      const taxData = await apiFetch<{ data: unknown }>(
-        "/api/affiliate/me/tax-form",
-      ).catch(() => null);
+      setStripeReady(stripeData ? stripeData.data.connected && stripeData.data.payoutsEnabled : null);
       setTaxSubmitted(taxData ? taxData.data != null : null);
     } catch (e: any) {
       console.error("Dashboard data load error:", e);
