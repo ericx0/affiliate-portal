@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Card, SectionTitle, Pill } from "@/components/ui/Card";
 import {
   AlertCircle,
@@ -49,6 +49,7 @@ const DISCLAIMER_KEY = "__disclaimer__";
 
 export default function AiAssistPage() {
   const t = useTranslations("aiAssist");
+  const locale = useLocale();
 
   const [clientContext, setClientContext] = React.useState<ClientContext>({});
   const [profileText, setProfileText] = React.useState("");
@@ -111,6 +112,7 @@ export default function AiAssistPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          locale,
           clientContext,
           messages: [
             ...(profileText

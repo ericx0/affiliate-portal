@@ -35,6 +35,7 @@ interface ChatMessage {
 
 interface RequestBody {
   messages: ChatMessage[];
+  locale?: string;
   // Optional client context the KOL already filled in (name, age range,
   // health concerns, country). We embed it into the system prompt so the
   // model personalizes the recommendations.
@@ -88,7 +89,16 @@ OUTPUT FORMAT (strict JSON when the caller asked for structured output, otherwis
 
 TONE: warm, plain English (or the caller's locale), avoid jargon. The KOL will forward this to their customer; the KOL is not a clinician.`;
 
-function buildSystemPrompt(clientContext?: RequestBody["clientContext"]) {
+// Map Next.js locale codes to a language instruction for the model.
+const LOCALE_LANG: Record<string, string> = {
+  zh: "Respond entirely in Simplified Chinese (简体中文). Use natural, warm Chinese suitable for customer communication.",
+  en: "Respond entirely in English.",
+  ar: "Respond entirely in Arabic (العربية).",
+  es: "Respond entirely in Spanish (Español).",
+  ru: "Respond entirely in Russian (Русский).",
+};
+
+function buildSystemPrompt(clientContext?: RequestBody["clientContext"], locale?: string) {
   const ctx = clientContext ?? {};
   const ctxLines: string[] = [];
   if (ctx.displayName) ctxLines.push(`Customer display name: ${ctx.displayName}`);
@@ -101,7 +111,8 @@ function buildSystemPrompt(clientContext?: RequestBody["clientContext"]) {
   const contextBlock = ctxLines.length
     ? `\n\nCUSTOMER CONTEXT (filled by the KOL — do not invent beyond this):\n${ctxLines.join("\n")}`
     : "";
-  return SYSTEM_PROMPT + contextBlock;
+  const langInstruction = LOCALE_LANG[locale ?? "en"] ?? LOCALE_LANG["en"];
+  return SYSTEM_PROMPT + contextBlock + `\n\nLANGUAGE: ${langInstruction}`;
 }
 
 async function callGroq(messages: ChatMessage[], apiKey: string): Promise<ReadableStream<Uint8Array>> {
@@ -240,7 +251,7 @@ export async function POST(req: NextRequest) {
   }
 
   const messages: ChatMessage[] = [
-    { role: "system", content: buildSystemPrompt(body.clientContext) },
+    { role: "system", content: buildSystemPrompt(body.clientContext, body.locale) },
     ...body.messages.slice(-20), // cap conversation history
   ];
 
