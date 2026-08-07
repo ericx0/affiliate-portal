@@ -20,7 +20,6 @@ import {
   Sparkles,
   CalendarClock,
   Hourglass,
-  Medal,
 } from "lucide-react";
 import { useFormat } from "@/lib/format";
 
@@ -255,38 +254,6 @@ export default function DashboardOverview() {
           <p className="text-sm text-slate-500 mt-1">{t("overviewSubtitle")}</p>
         </div>
         <div className="flex items-center gap-3">
-          {/* Agent tier card (only rendered when role=agent). The
-              /me/profile RPC returns agentLevel + commissionRate for
-              agents; for KOLs the fields are null and we hide the card
-              so the header doesn't waste space on a non-applicable badge. */}
-          {profile?.role === "agent" && profile.agentLevel && (
-            <div className="inline-flex items-center gap-3 rounded-2xl border border-slate-100 bg-white px-4 py-2.5 shadow-sm">
-              <Medal
-                className={`h-6 w-6 ${
-                  profile.agentLevel === "regional"
-                    ? "text-yellow-500"
-                    : profile.agentLevel === "senior"
-                    ? "text-slate-400"
-                    : "text-amber-700"
-                }`}
-              />
-              <div className="text-left">
-                <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-                  {t("tierCardTitle")}
-                </div>
-                <div className="text-sm font-bold text-slate-900">
-                  {profile.agentLevel === "regional"
-                    ? t("tierGold")
-                    : profile.agentLevel === "senior"
-                    ? t("tierSilver")
-                    : t("tierBronze")}
-                  <span className="ml-2 rounded-md bg-emerald-50 px-1.5 py-0.5 text-xs font-bold text-emerald-700">
-                    {t("tierCommissionLabel")} {profile.commissionRate ?? 5}%
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
           {referralLink && (
             <button
               onClick={() => setShowQrModal(true)}
