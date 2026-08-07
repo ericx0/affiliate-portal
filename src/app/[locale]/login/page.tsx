@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Link } from "@/navigation";
 
 import LocaleSwitcher from "@/components/LocaleSwitcher";
+import { apiFetch } from "@/lib/api";
 import { supabase } from "@/lib/supabase";
 
 const TURNSTILE_SITE_KEY =
@@ -94,13 +95,21 @@ export default function LoginPage() {
         type: "email",
       });
       if (verifyErr) throw verifyErr;
-      // Redirect to the original target (middleware set ?redirect=) or /agent.
-      // agent/layout verifies role=agent via /agent/stats (200 stays, 403 KOL
-      // redirects to /dashboard). Validate the target is a safe internal path
+      // Redirect to the original target (middleware set ?redirect=) or to the
+      // role-specific dashboard. Validate the target is a safe internal path
       // (starts with "/", not "//host") to avoid open-redirect.
       const params = new URLSearchParams(window.location.search);
       const target = params.get("redirect");
-      const safeTarget = target && target.startsWith("/") && !target.startsWith("//") ? target : "/agent";
+      let fallback = "/kol/dashboard";
+      try {
+        const agg = await apiFetch<{ data?: { profile?: { role?: "kol" | "agent" } } }>(
+          "/api/affiliate/me/dashboard-aggregate"
+        );
+        if (agg?.data?.profile?.role === "agent") fallback = "/agent/dashboard";
+      } catch {
+        // Keep kol default if profile lookup fails.
+      }
+      const safeTarget = target && target.startsWith("/") && !target.startsWith("//") ? target : fallback;
       router.push(safeTarget);
     } catch (e: any) {
       setError(e.message);
