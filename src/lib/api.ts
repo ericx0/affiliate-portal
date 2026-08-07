@@ -8,6 +8,20 @@ export type ApiFetchOptions = Omit<RequestInit, "body"> & {
   noAuth?: boolean;
 };
 
+let cachedSessionPromise: ReturnType<typeof supabase.auth.getSession> | null = null;
+let cachedSessionTime = 0;
+
+function getCachedSession() {
+  const now = Date.now();
+  // Cache the session promise for 2 seconds to collapse concurrent calls
+  if (cachedSessionPromise && now - cachedSessionTime < 2000) {
+    return cachedSessionPromise;
+  }
+  cachedSessionPromise = supabase.auth.getSession();
+  cachedSessionTime = now;
+  return cachedSessionPromise;
+}
+
 /**
  * Thin wrapper around fetch that:
  *  - prefixes the configured NEXT_PUBLIC_AFFILIATE_API_URL
@@ -29,7 +43,7 @@ export async function apiFetch<T = unknown>(
   }
 
   if (!noAuth) {
-    const { data } = await supabase.auth.getSession();
+    const { data } = await getCachedSession();
     const token = data.session?.access_token;
     if (token) {
       finalHeaders["Authorization"] = `Bearer ${token}`;
