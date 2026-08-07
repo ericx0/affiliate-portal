@@ -21,7 +21,7 @@ import {
 import { useFormat } from "@/lib/format";
 
 /**
- * /dashboard/funnel — T4 cross-platform UTM funnel dashboard.
+ * /kol/dashboard/funnel — T4 cross-platform UTM funnel dashboard.
  *
  *   - Summary cards (clicks / sign-ups / orders / commission)
  *   - Per-platform breakdown
@@ -87,7 +87,7 @@ export default function FunnelPage() {
         <h1 className="text-2xl font-bold text-slate-900">{t("title")}</h1>
         <p className="text-sm text-slate-500">{t("noData")}</p>
         <Link
-          href="/dashboard/publish/new"
+          href="/kol/dashboard/publish/new"
           className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold hover:bg-brand-600"
         >
           <Send className="w-4 h-4" />

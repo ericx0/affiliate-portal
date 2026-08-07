@@ -34,7 +34,7 @@ import { useFormat } from "@/lib/format";
 type Tab = "assets" | "scripts" | "cases";
 
 /**
- * /dashboard/library — combined hub for the three sub-libraries:
+ * /kol/dashboard/library — combined hub for the three sub-libraries:
  *   Assets  — videos / images / copy, filtered by product + language.
  *   Scripts — sales talk-tracks (cold outreach, objection, follow-up, intro)
  *             with one-click copy.
@@ -315,7 +315,7 @@ function CaseCard({ caseItem }: { caseItem: LibraryCase }) {
       ? `${fmt.currency(caseItem.costRangeLowCents)} – ${fmt.currency(caseItem.costRangeHighCents)}`
       : null;
   return (
-    <Link href={`/dashboard/cases/${caseItem.id}`} className="block">
+    <Link href={`/kol/dashboard/cases/${caseItem.id}`} className="block">
       <Card className="flex flex-col hover:border-brand-300 transition-colors cursor-pointer">
         <div className="flex items-center gap-2 mb-2 flex-wrap">
           <Pill tone="blue">{caseItem.treatmentCategory}</Pill>

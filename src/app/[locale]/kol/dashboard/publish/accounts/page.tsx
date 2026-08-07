@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 
 /**
- * /dashboard/publish/accounts — Connected platforms grid.
+ * /kol/dashboard/publish/accounts — Connected platforms grid.
  *
  * Shows all 6 platforms. Each card surfaces:
  *   - connection status (with icon)
@@ -117,7 +117,7 @@ export default function AccountsPage() {
     <div className="space-y-6 pb-16">
       <div className="flex items-start gap-4">
         <Link
-          href="/dashboard/publish"
+          href="/kol/dashboard/publish"
           className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />

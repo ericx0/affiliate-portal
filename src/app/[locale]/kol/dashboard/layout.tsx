@@ -12,16 +12,16 @@ import { supabase } from "@/lib/supabase";
 import { Link, usePathname, useRouter } from "@/navigation";
 
 const NAV_ITEMS = [
-  { href: "/dashboard", labelKey: "overview" },
-  { href: "/dashboard/clients", labelKey: "clients" },
-  { href: "/dashboard/library", labelKey: "library" },
-  { href: "/dashboard/tools/ai-assist", labelKey: "aiAssist" },
-  { href: "/dashboard/publish", labelKey: "publish" },
-  { href: "/dashboard/templates", labelKey: "templates" },
-  { href: "/dashboard/funnel", labelKey: "funnel" },
-  { href: "/dashboard/earnings", labelKey: "earnings" },
-  { href: "/dashboard/payouts", labelKey: "payouts" },
-  { href: "/dashboard/settings/stripe", labelKey: "settings" },
+  { href: "/kol/dashboard", labelKey: "overview" },
+  { href: "/kol/dashboard/clients", labelKey: "clients" },
+  { href: "/kol/dashboard/library", labelKey: "library" },
+  { href: "/kol/dashboard/tools/ai-assist", labelKey: "aiAssist" },
+  { href: "/kol/dashboard/publish", labelKey: "publish" },
+  { href: "/kol/dashboard/templates", labelKey: "templates" },
+  { href: "/kol/dashboard/funnel", labelKey: "funnel" },
+  { href: "/kol/dashboard/earnings", labelKey: "earnings" },
+  { href: "/kol/dashboard/payouts", labelKey: "payouts" },
+  { href: "/kol/dashboard/settings/stripe", labelKey: "settings" },
 ] as const;
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
@@ -64,15 +64,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex gap-1 sm:gap-2 items-center overflow-x-auto">
             <Link
-              href="/dashboard"
+              href="/kol/dashboard"
               className="font-bold text-brand-600 mr-4 whitespace-nowrap"
             >
               {t("portalTitle")}
             </Link>
             {NAV_ITEMS.map((item) => {
               const active =
-                item.href === "/dashboard"
-                  ? path === "/dashboard"
+                item.href === "/kol/dashboard"
+                  ? path === "/kol/dashboard"
                   : path === item.href || path.startsWith(item.href + "/");
               return (
                 <Link

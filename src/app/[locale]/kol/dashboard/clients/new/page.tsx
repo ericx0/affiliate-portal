@@ -14,7 +14,7 @@ import {
 import { ArrowLeft, CheckCircle2, Loader2, Send, UserPlus } from "lucide-react";
 
 /**
- * /dashboard/clients/new
+ * /kol/dashboard/clients/new
  *
  * Two modes:
  *  - "proxy" : KOL pre-fills the registration form on behalf of a customer
@@ -121,7 +121,7 @@ export default function NewClientPage() {
             </p>
             <div className="flex gap-2 mt-4">
               <Link
-                href={done.id && !done.id.startsWith("local-") ? `/dashboard/clients/${done.id}` : "/dashboard/clients"}
+                href={done.id && !done.id.startsWith("local-") ? `/kol/dashboard/clients/${done.id}` : "/kol/dashboard/clients"}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-brand-500 text-white text-sm font-semibold rounded-xl hover:bg-brand-600"
               >
                 {done.mode === "proxy" ? t("openClient") : t("backToList")}
@@ -152,7 +152,7 @@ export default function NewClientPage() {
     <div className="space-y-6 pb-16 max-w-3xl">
       <div className="flex items-center justify-between">
         <Link
-          href="/dashboard/clients"
+          href="/kol/dashboard/clients"
           className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -376,7 +376,7 @@ export default function NewClientPage() {
             {mode === "proxy" ? t("submitProxy") : t("submitLead")}
           </button>
           <Link
-            href="/dashboard/clients"
+            href="/kol/dashboard/clients"
             className="px-5 py-2.5 border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-50"
           >
             {t("cancel")}

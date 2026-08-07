@@ -159,7 +159,7 @@ export default function ClientDetailPage({ params }: PageProps) {
     return (
       <Card>
         <div className="text-sm text-slate-500">{t("notFound")}</div>
-        <Link href="/dashboard/clients" className="text-brand-600 text-sm mt-3 inline-block">
+        <Link href="/kol/dashboard/clients" className="text-brand-600 text-sm mt-3 inline-block">
           ← {t("back")}
         </Link>
       </Card>
@@ -173,7 +173,7 @@ export default function ClientDetailPage({ params }: PageProps) {
     <div className="space-y-6 pb-16">
       <div className="flex items-center justify-between gap-4">
         <Link
-          href="/dashboard/clients"
+          href="/kol/dashboard/clients"
           className="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -456,7 +456,7 @@ export default function ClientDetailPage({ params }: PageProps) {
           <Card>
             <SectionTitle title={t("aiAssistTitle")} description={t("aiAssistDesc")} />
             <Link
-              href={`/dashboard/tools/ai-assist?clientId=${params.id}`}
+              href={`/kol/dashboard/tools/ai-assist?clientId=${params.id}`}
               className="inline-flex items-center gap-2 px-3 py-2 bg-brand-500 text-white text-xs font-semibold rounded-lg hover:bg-brand-600"
             >
               {t("openAiAssist")}

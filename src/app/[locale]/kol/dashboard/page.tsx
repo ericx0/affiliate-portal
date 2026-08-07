@@ -125,7 +125,7 @@ export default function DashboardOverview() {
           stripeStatus: { connected: boolean; payoutsEnabled: boolean };
           taxForm: unknown;
         };
-      }>("/api/affiliate/me/dashboard-aggregate").catch(() => null);
+      }>("/api/affiliate/me/kol/dashboard-aggregate").catch(() => null);
 
       if (!aggRes?.data) return;
 
@@ -193,14 +193,14 @@ export default function DashboardOverview() {
           <p className="text-sm text-slate-500 leading-relaxed">{t("pendingDesc")}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
             <Link
-              href="/dashboard/settings/stripe"
+              href="/kol/dashboard/settings/stripe"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors"
             >
               {t("pendingStripeCta")}
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              href="/dashboard/settings/tax"
+              href="/kol/dashboard/settings/tax"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-xl text-sm font-semibold transition-colors"
             >
               {t("pendingTaxCta")}
@@ -376,7 +376,7 @@ export default function DashboardOverview() {
           <div className="flex flex-col sm:flex-row gap-3 pt-1">
             {stripeReady === false && (
               <Link
-                href="/dashboard/settings/stripe"
+                href="/kol/dashboard/settings/stripe"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 border border-blue-200 rounded-xl text-sm font-semibold hover:bg-blue-100 transition-colors"
               >
                 {t("setupStripeCta")}
@@ -385,7 +385,7 @@ export default function DashboardOverview() {
             )}
             {taxSubmitted === false && (
               <Link
-                href="/dashboard/settings/tax"
+                href="/kol/dashboard/settings/tax"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl text-sm font-semibold hover:bg-amber-100 transition-colors"
               >
                 {t("submitTaxCta")}
@@ -411,7 +411,7 @@ export default function DashboardOverview() {
         ) : (
           <div className="bg-slate-50 p-4 pl-5 rounded-2xl border border-slate-200 flex items-center justify-between gap-4">
             <span className="text-sm text-slate-500">{t("noCodeYet")}</span>
-            <Link href="/dashboard/codes" className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm flex-shrink-0">
+            <Link href="/kol/dashboard/codes" className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors shadow-sm flex-shrink-0">
               {t("createCodeCta")} <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

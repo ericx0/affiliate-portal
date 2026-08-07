@@ -63,14 +63,14 @@ export default function ClientsListPage() {
         </div>
         <div className="flex items-center gap-2">
           <Link
-            href="/dashboard/clients/new"
+            href="/kol/dashboard/clients/new"
             className="inline-flex items-center gap-2 px-4 py-2 bg-brand-500 text-white text-sm font-semibold rounded-xl hover:bg-brand-600"
           >
             <UserPlus className="w-4 h-4" />
             {t("proxyRegisterCta")}
           </Link>
           <Link
-            href="/dashboard/clients/new"
+            href="/kol/dashboard/clients/new"
             className="inline-flex items-center gap-2 px-4 py-2 border border-slate-200 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-50"
           >
             <Plus className="w-4 h-4" />
@@ -190,7 +190,7 @@ export default function ClientsListPage() {
                     </td>
                     <td className="py-3 px-4">
                       <Link
-                        href={`/dashboard/clients/${c.id}`}
+                        href={`/kol/dashboard/clients/${c.id}`}
                         className="text-brand-600 hover:text-brand-700 text-xs font-semibold"
                       >
                         {t("openCta")}

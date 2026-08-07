@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 /**
- * /dashboard/publish — Landing page that links to the three sub-pages
+ * /kol/dashboard/publish — Landing page that links to the three sub-pages
  * (accounts / new / history). Acts as a "command center" so the KOL
  * can see at-a-glance what's connected, what's queued, and what's
  * already live.
@@ -31,7 +31,7 @@ export default function PublishHubPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <HubCard
-          href="/dashboard/publish/accounts"
+          href="/kol/dashboard/publish/accounts"
           icon={<Plug className="w-6 h-6" />}
           title={t("accountsTitle")}
           desc={t("accountsDesc")}
@@ -39,7 +39,7 @@ export default function PublishHubPage() {
           tone="emerald"
         />
         <HubCard
-          href="/dashboard/publish/new"
+          href="/kol/dashboard/publish/new"
           icon={<Plus className="w-6 h-6" />}
           title={t("newTitle")}
           desc={t("newDesc")}
@@ -47,7 +47,7 @@ export default function PublishHubPage() {
           tone="blue"
         />
         <HubCard
-          href="/dashboard/publish/history"
+          href="/kol/dashboard/publish/history"
           icon={<History className="w-6 h-6" />}
           title={t("historyTitle")}
           desc={t("historyDesc")}

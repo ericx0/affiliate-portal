@@ -17,7 +17,7 @@ import {
 import { useFormat } from "@/lib/format";
 
 /**
- * /dashboard/cases/[id] — Single-case detail + AI rewrite panel.
+ * /kol/dashboard/cases/[id] — Single-case detail + AI rewrite panel.
  *
  * The case is loaded from /api/affiliate/cases/:id (published-only,
  * service-role read). The "AI rewrite for my platform" button opens
@@ -83,7 +83,7 @@ export default function CaseDetailPage() {
     return (
       <div className="text-center py-16">
         <p className="text-sm text-slate-500">{error ?? t("notFound")}</p>
-        <Link href="/dashboard/library" className="text-brand-600 text-sm mt-3 inline-flex items-center gap-1">
+        <Link href="/kol/dashboard/library" className="text-brand-600 text-sm mt-3 inline-flex items-center gap-1">
           <ArrowLeft className="w-4 h-4" />
           {t("back")}
         </Link>
@@ -99,7 +99,7 @@ export default function CaseDetailPage() {
   return (
     <div className="space-y-6 pb-16 max-w-4xl">
       <Link
-        href="/dashboard/library"
+        href="/kol/dashboard/library"
         className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700"
       >
         <ArrowLeft className="w-4 h-4" />

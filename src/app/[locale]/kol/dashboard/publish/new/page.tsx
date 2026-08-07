@@ -23,7 +23,7 @@ import {
 } from "lucide-react";
 
 /**
- * /dashboard/publish/new — Compose + publish (or schedule) a post
+ * /kol/dashboard/publish/new — Compose + publish (or schedule) a post
  * to one or more connected platforms.
  *
  * UX:
@@ -136,7 +136,7 @@ export default function NewPublishPage() {
           : t("successSchedule", { count: results.length }),
       );
       setTimeout(() => {
-        router.push(action === "now" ? "/dashboard/publish/history" : "/dashboard/publish/scheduled");
+        router.push(action === "now" ? "/kol/dashboard/publish/history" : "/kol/dashboard/publish/scheduled");
       }, 1500);
     } catch (e) {
       setError((e as Error).message);
@@ -159,7 +159,7 @@ export default function NewPublishPage() {
         <h1 className="text-2xl font-bold text-slate-900">{t("title")}</h1>
         <p className="text-sm text-slate-500">{t("noAccounts")}</p>
         <a
-          href="/dashboard/publish/accounts"
+          href="/kol/dashboard/publish/accounts"
           className="inline-flex items-center justify-center px-4 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold hover:bg-brand-600"
         >
           {t("ctaConnect")}

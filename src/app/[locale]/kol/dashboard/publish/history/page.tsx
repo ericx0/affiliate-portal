@@ -25,7 +25,7 @@ import {
 import { useFormat } from "@/lib/format";
 
 /**
- * /dashboard/publish/history — Published + scheduled posts.
+ * /kol/dashboard/publish/history — Published + scheduled posts.
  *
  * Filters: platform / status / range. Each row shows the body preview,
  * status, engagement metrics (likes / shares / comments / clicks),
@@ -85,7 +85,7 @@ export default function HistoryPage() {
           <p className="text-sm text-slate-500 mt-1">{t("subtitle")}</p>
         </div>
         <a
-          href="/dashboard/publish/new"
+          href="/kol/dashboard/publish/new"
           className="inline-flex items-center gap-2 px-4 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold hover:bg-brand-600"
         >
           <Send className="w-4 h-4" />

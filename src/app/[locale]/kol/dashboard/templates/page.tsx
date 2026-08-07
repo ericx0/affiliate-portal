@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/Card";
 import { ExternalLink, Mail } from "lucide-react";
 
 /**
- * /dashboard/templates — landing page for the templates hub. Currently
+ * /kol/dashboard/templates — landing page for the templates hub. Currently
  * only email/DM templates (T3) ship; future batches can add landing
  * pages, ad scripts, video storyboards, etc.
  */
@@ -22,7 +22,7 @@ export default function TemplatesHubPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <HubCard
-          href="/dashboard/templates/email"
+          href="/kol/dashboard/templates/email"
           icon={<Mail className="w-6 h-6" />}
           title={t("title")}
           desc={t("subtitle")}
