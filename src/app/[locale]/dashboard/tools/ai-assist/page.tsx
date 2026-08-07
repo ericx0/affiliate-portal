@@ -1,33 +1,18 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
-import { Card, SectionTitle, Pill } from "@/components/ui/Card";
 import {
-  AlertCircle,
   Bot,
+  Copy,
+  Check,
   Loader2,
   Send,
-  ShieldCheck,
   Sparkles,
   User,
+  Wand2,
+  RefreshCw,
 } from "lucide-react";
-
-/**
- * /dashboard/tools/ai-assist
- *
- * Streaming chat UI for the KOL AI customer-consultation assistant.
- * Composes three inputs from the KOL:
- *   - free-form case description (the customer's story)
- *   - structured client profile (auto-filled from ?clientId=…)
- *   - prior conversation turns (carried across renders)
- *
- * Streams the model's reply via fetch + ReadableStream so we don't
- * depend on a vendor SDK. The assistant's reply is rendered with a
- * persistent footer disclaimer so the medical boundary is always
- * visible (not just the last message).
- */
 
 interface ChatMessage {
   id: string;
@@ -37,50 +22,44 @@ interface ChatMessage {
   error?: string | null;
 }
 
-interface ClientContext {
-  displayName?: string;
-  ageRange?: string;
-  countryCode?: string;
-  healthConcerns?: string[];
-  budgetBracket?: string;
-}
+const CONTENT_TYPES = [
+  { value: "short_video",    emoji: "🎬", label: "短视频脚本" },
+  { value: "social_post",    emoji: "📱", label: "社交帖子" },
+  { value: "email",          emoji: "📧", label: "邮件模板" },
+  { value: "referral_intro", emoji: "🔗", label: "推广介绍" },
+  { value: "service_desc",   emoji: "💎", label: "服务说明" },
+  { value: "story",          emoji: "✨", label: "Story / 朋友圈" },
+];
 
-const DISCLAIMER_KEY = "__disclaimer__";
+const PLATFORMS = [
+  { value: "tiktok",       emoji: "🎵", label: "TikTok / 抖音" },
+  { value: "xiaohongshu",  emoji: "📕", label: "小红书" },
+  { value: "instagram",    emoji: "📸", label: "Instagram" },
+  { value: "wechat",       emoji: "💬", label: "微信朋友圈" },
+  { value: "youtube",      emoji: "▶️", label: "YouTube" },
+  { value: "email",        emoji: "📧", label: "Email" },
+];
+
+const QUICK_PROMPTS = [
+  { label: "TikTok开场钩子",   prompt: "帮我写一个能在前3秒抓住观众眼球的TikTok开场脚本，介绍LinkChinaMed的医疗旅行协调服务，要有冲击力。" },
+  { label: "小红书种草笔记",   prompt: "帮我写一篇小红书风格的种草笔记，介绍如何通过LinkChinaMed安排在中国的医疗检查，语气真实亲切，加上合适的emoji和话题标签。" },
+  { label: "推广链接介绍语",   prompt: "帮我写一段简短的推广链接介绍语，解释我的专属优惠码能给朋友带来什么好处，以及他们如何通过LinkChinaMed获得在中国就医的帮助。" },
+  { label: "微信朋友圈文案",   prompt: "帮我写一条微信朋友圈的推广文案，分享LinkChinaMed的服务，语气要像真实的个人分享，不要太硬广。" },
+  { label: "邮件推广模板",     prompt: "帮我写一封英文推广邮件，面向海外华人群体，介绍LinkChinaMed如何帮他们安排父母在中国的就医协调，要专业但温馨。" },
+  { label: "IVF试管婴儿文案", prompt: "帮我写一个关于LinkChinaMed生育/试管婴儿协调服务的推广内容，面向海外有生育需求的华人夫妇，强调专业、省心、性价比。" },
+];
 
 export default function AiAssistPage() {
-  const t = useTranslations("aiAssist");
   const locale = useLocale();
 
-  const [clientContext, setClientContext] = React.useState<ClientContext>({});
-  const [profileText, setProfileText] = React.useState("");
+  const [contentType, setContentType] = React.useState("short_video");
+  const [platform, setPlatform] = React.useState("tiktok");
+  const [context, setContext] = React.useState("");
   const [messages, setMessages] = React.useState<ChatMessage[]>([]);
   const [input, setInput] = React.useState("");
   const [streaming, setStreaming] = React.useState(false);
+  const [copiedId, setCopiedId] = React.useState<string | null>(null);
   const scrollRef = React.useRef<HTMLDivElement>(null);
-
-  // If ?clientId=X is passed, hydrate clientContext from the local
-  // store. We don't have a GET endpoint yet, so we read from local
-  // state the list page would have populated (best-effort).
-  React.useEffect(() => {
-    if (typeof window === "undefined") return;
-    const params = new URLSearchParams(window.location.search);
-    const clientId = params.get("clientId");
-    if (!clientId) return;
-    const cached = window.localStorage.getItem(`kol-client-${clientId}`);
-    if (!cached) return;
-    try {
-      const parsed = JSON.parse(cached);
-      setClientContext({
-        displayName: parsed.displayName,
-        ageRange: parsed.ageRange,
-        countryCode: parsed.countryCode,
-        healthConcerns: parsed.healthConcerns ?? [],
-        budgetBracket: parsed.budgetBracket,
-      });
-    } catch {
-      // ignore — empty context is fine.
-    }
-  }, []);
 
   React.useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -91,21 +70,14 @@ export default function AiAssistPage() {
     const text = input.trim();
     if (!text || streaming) return;
 
-    const userMsg: ChatMessage = {
-      id: `u-${Date.now()}`,
-      role: "user",
-      content: text,
-    };
+    const userMsg: ChatMessage = { id: `u-${Date.now()}`, role: "user", content: text };
     const nextMessages = [...messages, userMsg];
     setMessages(nextMessages);
     setInput("");
     setStreaming(true);
 
     const assistantId = `a-${Date.now()}`;
-    setMessages((prev) => [
-      ...prev,
-      { id: assistantId, role: "assistant", content: "", streaming: true },
-    ]);
+    setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "", streaming: true }]);
 
     try {
       const res = await fetch("/api/affiliate-ai/assist", {
@@ -113,13 +85,10 @@ export default function AiAssistPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           locale,
-          clientContext,
-          messages: [
-            ...(profileText
-              ? [{ role: "user" as const, content: `Customer profile: ${profileText}` }]
-              : []),
-            ...nextMessages.map((m) => ({ role: m.role, content: m.content })),
-          ],
+          contentType,
+          platform,
+          context: context.trim() || undefined,
+          messages: nextMessages.map((m) => ({ role: m.role, content: m.content })),
         }),
       });
 
@@ -128,16 +97,7 @@ export default function AiAssistPage() {
         setMessages((prev) =>
           prev.map((m) =>
             m.id === assistantId
-              ? {
-                  ...m,
-                  streaming: false,
-                  error: err?.error?.message ?? "AI request failed",
-                  content:
-                    (m.content || "") +
-                    (m.content ? "\n\n" : "") +
-                    "⚠️ " +
-                    (err?.error?.message ?? "AI request failed"),
-                }
+              ? { ...m, streaming: false, error: err?.error?.message, content: "⚠️ " + (err?.error?.message ?? "请求失败") }
               : m,
           ),
         );
@@ -163,175 +123,148 @@ export default function AiAssistPage() {
             const parsed = JSON.parse(payload);
             if (parsed.delta) {
               setMessages((prev) =>
-                prev.map((m) =>
-                  m.id === assistantId
-                    ? { ...m, content: m.content + parsed.delta }
-                    : m,
-                ),
-              );
-            }
-            if (parsed.error) {
-              setMessages((prev) =>
-                prev.map((m) =>
-                  m.id === assistantId
-                    ? { ...m, error: parsed.error, streaming: false }
-                    : m,
-                ),
+                prev.map((m) => m.id === assistantId ? { ...m, content: m.content + parsed.delta } : m),
               );
             }
             if (parsed.done) {
               setMessages((prev) =>
-                prev.map((m) =>
-                  m.id === assistantId ? { ...m, streaming: false } : m,
-                ),
+                prev.map((m) => m.id === assistantId ? { ...m, streaming: false } : m),
               );
             }
-          } catch {
-            // skip malformed event
-          }
+            if (parsed.error) {
+              setMessages((prev) =>
+                prev.map((m) => m.id === assistantId ? { ...m, streaming: false, error: parsed.error } : m),
+              );
+            }
+          } catch { /* skip */ }
         }
       }
     } catch (err: any) {
       setMessages((prev) =>
         prev.map((m) =>
           m.id === assistantId
-            ? {
-                ...m,
-                streaming: false,
-                error: err?.message ?? "Network error",
-                content: m.content + "\n\n⚠️ " + (err?.message ?? "Network error"),
-              }
+            ? { ...m, streaming: false, error: err?.message, content: "⚠️ " + (err?.message ?? "网络错误") }
             : m,
         ),
       );
     } finally {
       setStreaming(false);
-      void DISCLAIMER_KEY; // keep key referenced for future use
     }
   }
 
-  function handleReset() {
-    setMessages([]);
-    setInput("");
-    setProfileText("");
-    setClientContext({});
+  function handleCopy(id: string, content: string) {
+    navigator.clipboard.writeText(content);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 2000);
   }
 
   return (
-    <div className="space-y-6 pb-16">
+    <div className="space-y-6 pb-16 max-w-6xl mx-auto">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <Sparkles className="w-6 h-6 text-brand-500" />
-            {t("title")}
+            <Wand2 className="w-6 h-6 text-brand-500" />
+            AI 营销文案助手
           </h1>
-          <p className="text-sm text-slate-500 mt-1">{t("subtitle")}</p>
+          <p className="text-sm text-slate-500 mt-1">帮你快速生成各平台推广文案，一键复制直接发布</p>
         </div>
         <button
-          onClick={handleReset}
-          className="self-start text-xs text-slate-500 hover:text-slate-700 underline"
+          onClick={() => { setMessages([]); setInput(""); setContext(""); }}
+          className="self-start flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-700"
         >
-          {t("reset")}
+          <RefreshCw className="w-3.5 h-3.5" /> 清空对话
         </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Context panel */}
-        <div className="lg:col-span-1 space-y-4">
-          <Card>
-            <SectionTitle title={t("contextTitle")} description={t("contextDesc")} />
-            <div className="space-y-3 text-sm">
-              <Row label={t("fieldName")} value={clientContext.displayName ?? "—"} />
-              <Row label={t("fieldAge")} value={clientContext.ageRange ?? "—"} />
-              <Row label={t("fieldCountry")} value={clientContext.countryCode ?? "—"} />
-              <Row
-                label={t("fieldConcerns")}
-                value={
-                  clientContext.healthConcerns?.length
-                    ? clientContext.healthConcerns.join(", ")
-                    : "—"
-                }
-              />
-              <Row label={t("fieldBudget")} value={clientContext.budgetBracket ?? "—"} />
+        {/* Settings Panel */}
+        <div className="lg:col-span-1 space-y-5">
+          {/* Content type */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 space-y-3">
+            <div className="text-sm font-bold text-slate-800">📝 内容类型</div>
+            <div className="grid grid-cols-2 gap-2">
+              {CONTENT_TYPES.map((ct) => (
+                <button
+                  key={ct.value}
+                  onClick={() => setContentType(ct.value)}
+                  className={
+                    "flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-colors " +
+                    (contentType === ct.value
+                      ? "bg-brand-500 text-white border-brand-500"
+                      : "bg-white text-slate-600 border-slate-200 hover:border-brand-300 hover:bg-brand-50")
+                  }
+                >
+                  <span>{ct.emoji}</span> {ct.label}
+                </button>
+              ))}
             </div>
-            <div className="mt-4">
-              <span className="block text-xs font-semibold text-slate-700 mb-1.5">
-                {t("contextOverride")}
-              </span>
-              <textarea
-                value={profileText}
-                onChange={(e) => setProfileText(e.target.value)}
-                rows={3}
-                placeholder={t("contextOverridePlaceholder")}
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs"
-              />
+          </div>
+
+          {/* Platform */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 space-y-3">
+            <div className="text-sm font-bold text-slate-800">📡 发布平台</div>
+            <div className="grid grid-cols-2 gap-2">
+              {PLATFORMS.map((p) => (
+                <button
+                  key={p.value}
+                  onClick={() => setPlatform(p.value)}
+                  className={
+                    "flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-colors " +
+                    (platform === p.value
+                      ? "bg-brand-500 text-white border-brand-500"
+                      : "bg-white text-slate-600 border-slate-200 hover:border-brand-300 hover:bg-brand-50")
+                  }
+                >
+                  <span>{p.emoji}</span> {p.label}
+                </button>
+              ))}
             </div>
-          </Card>
+          </div>
 
-          <Card>
-            <SectionTitle title={t("guardrailsTitle")} description={t("guardrailsDesc")} />
-            <ul className="text-xs text-slate-600 space-y-2">
-              <li className="flex items-start gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                <span>{t("guardrail1")}</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                <span>{t("guardrail2")}</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
-                <span>{t("guardrail3")}</span>
-              </li>
-            </ul>
-          </Card>
-
-          <Card>
-            <SectionTitle title={t("handoffTitle")} description={t("handoffDesc")} />
-            <Link
-              href="/dashboard/clients/new"
-              className="inline-flex items-center gap-2 px-3 py-2 bg-brand-500 text-white text-xs font-semibold rounded-lg hover:bg-brand-600"
-            >
-              {t("handoffCta")}
-            </Link>
-          </Card>
+          {/* Extra context */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 space-y-3">
+            <div className="text-sm font-bold text-slate-800">💡 补充说明（选填）</div>
+            <textarea
+              value={context}
+              onChange={(e) => setContext(e.target.value)}
+              rows={3}
+              placeholder="例如：目标受众是30-45岁海外华人；重点推肿瘤科服务；需要加入我的优惠码 REF123…"
+              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs resize-none focus:outline-none focus:ring-2 focus:ring-brand-300"
+            />
+          </div>
         </div>
 
-        {/* Chat panel */}
-        <Card className="lg:col-span-2 flex flex-col" padded={false}>
-          <div
-            ref={scrollRef}
-            className="flex-1 overflow-y-auto p-6 space-y-4 min-h-[400px] max-h-[600px]"
-          >
+        {/* Chat Panel */}
+        <div className="lg:col-span-2 flex flex-col bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+          {/* Messages */}
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4 min-h-[420px] max-h-[580px]">
             {messages.length === 0 ? (
-              <div className="text-center py-10">
-                <Bot className="w-10 h-10 text-brand-400 mx-auto" />
-                <p className="text-sm text-slate-500 mt-3">{t("emptyTitle")}</p>
-                <p className="text-xs text-slate-400 mt-1">{t("emptyDesc")}</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-5 text-left">
-                  <SuggestionChip
-                    label={t("suggestion1")}
-                    onClick={() => setInput(t("suggestion1Prompt"))}
-                  />
-                  <SuggestionChip
-                    label={t("suggestion2")}
-                    onClick={() => setInput(t("suggestion2Prompt"))}
-                  />
-                  <SuggestionChip
-                    label={t("suggestion3")}
-                    onClick={() => setInput(t("suggestion3Prompt"))}
-                  />
-                  <SuggestionChip
-                    label={t("suggestion4")}
-                    onClick={() => setInput(t("suggestion4Prompt"))}
-                  />
+              <div className="space-y-5">
+                <div className="text-center py-6">
+                  <Sparkles className="w-10 h-10 text-brand-400 mx-auto" />
+                  <p className="text-sm font-semibold text-slate-700 mt-3">快速开始</p>
+                  <p className="text-xs text-slate-400 mt-1">选择左边的类型和平台，或者直接点击下方模板</p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {QUICK_PROMPTS.map((qp) => (
+                    <button
+                      key={qp.label}
+                      onClick={() => setInput(qp.prompt)}
+                      className="text-left p-3 rounded-xl border border-slate-200 hover:border-brand-300 hover:bg-brand-50 text-xs text-slate-700 transition-colors"
+                    >
+                      <span className="font-semibold text-brand-600 block mb-0.5">{qp.label}</span>
+                      <span className="text-slate-400 line-clamp-2">{qp.prompt.slice(0, 50)}…</span>
+                    </button>
+                  ))}
                 </div>
               </div>
             ) : (
-              messages.map((m) => <MessageBubble key={m.id} message={m} />)
+              messages.map((m) => <MessageBubble key={m.id} message={m} onCopy={handleCopy} copiedId={copiedId} />)
             )}
           </div>
 
+          {/* Input */}
           <form
             onSubmit={handleSend}
             className="border-t border-slate-100 p-4 flex items-end gap-2 bg-slate-50"
@@ -339,85 +272,78 @@ export default function AiAssistPage() {
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
-              placeholder={t("inputPlaceholder")}
+              onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
+              placeholder="描述你需要的文案，或直接告诉 AI 你要推广什么服务、面向哪些受众…"
               rows={2}
-              className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm resize-none"
+              className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand-300"
               disabled={streaming}
             />
             <button
               type="submit"
               disabled={streaming || !input.trim()}
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-brand-500 text-white text-sm font-semibold rounded-xl hover:bg-brand-600 disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-brand-500 text-white text-sm font-semibold rounded-xl hover:bg-brand-600 disabled:opacity-50 transition-colors"
             >
               {streaming ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-              {t("send")}
+              发送
             </button>
           </form>
-          <div className="px-4 py-2 bg-amber-50 border-t border-amber-100 text-[11px] text-amber-800 leading-relaxed">
-            <AlertCircle className="inline w-3 h-3 mr-1 -mt-0.5" />
-            {t("footerDisclaimer")}
+          <div className="px-4 py-2 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-400 leading-relaxed">
+            ⚠️ AI 生成内容仅供参考，请在发布前检查事实准确性。宣传时请确保遵守各平台规则及当地广告法规。
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex justify-between gap-2 text-xs">
-      <span className="text-slate-500 font-semibold">{label}</span>
-      <span className="text-slate-800 text-right">{value}</span>
-    </div>
-  );
-}
-
-function MessageBubble({ message }: { message: ChatMessage }) {
+function MessageBubble({
+  message,
+  onCopy,
+  copiedId,
+}: {
+  message: ChatMessage;
+  onCopy: (id: string, content: string) => void;
+  copiedId: string | null;
+}) {
   const isUser = message.role === "user";
   return (
-    <div className={"flex items-start gap-3 " + (isUser ? "flex-row-reverse text-right" : "")}>
+    <div className={"flex items-start gap-3 " + (isUser ? "flex-row-reverse" : "")}>
       <div
         className={
           "w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 " +
-          (isUser ? "bg-brand-100 text-brand-700" : "bg-slate-100 text-slate-700")
+          (isUser ? "bg-brand-100 text-brand-700" : "bg-slate-100 text-slate-600")
         }
       >
         {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
       </div>
-      <div
-        className={
-          "max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap " +
-          (isUser
-            ? "bg-brand-500 text-white"
-            : message.error
+      <div className={"group relative max-w-[82%] " + (isUser ? "items-end" : "items-start")}>
+        <div
+          className={
+            "rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap " +
+            (isUser
+              ? "bg-brand-500 text-white"
+              : message.error
               ? "bg-rose-50 border border-rose-200 text-rose-900"
               : "bg-white border border-slate-200 text-slate-800")
-        }
-      >
-        {message.content}
-        {message.streaming ? <span className="inline-block w-1.5 h-3 bg-slate-400 ml-1 animate-pulse" /> : null}
+          }
+        >
+          {message.content}
+          {message.streaming ? <span className="inline-block w-1.5 h-3 bg-slate-400 ml-1 animate-pulse rounded-sm" /> : null}
+        </div>
+        {/* Copy button for AI messages */}
+        {!isUser && !message.streaming && message.content && !message.error && (
+          <button
+            onClick={() => onCopy(message.id, message.content)}
+            className="absolute -bottom-7 left-0 flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            {copiedId === message.id ? (
+              <><Check className="w-3 h-3 text-emerald-500" /> 已复制</>
+            ) : (
+              <><Copy className="w-3 h-3" /> 复制文案</>
+            )}
+          </button>
+        )}
       </div>
     </div>
-  );
-}
-
-function SuggestionChip({ label, onClick }: { label: string; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="text-left p-3 rounded-xl border border-slate-200 hover:border-brand-300 hover:bg-brand-50 text-xs text-slate-700 transition-colors"
-    >
-      <Pill tone="emerald">
-        <Sparkles className="w-3 h-3" />
-        {label}
-      </Pill>
-    </button>
   );
 }
