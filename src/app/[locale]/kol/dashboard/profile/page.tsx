@@ -62,9 +62,22 @@ export default function ProfilePage() {
     setSaved(false);
     setSaveError(null);
     try {
+      // Email is intentionally excluded: kol-auth matches identity by
+      // auth_user_id/email — backend UpdateMeSchema is .strict() and
+      // rejects unknown keys. Send only the 10 whitelisted fields.
       const d = await apiFetch<{ data: Profile }>("/api/affiliate/me", {
         method: "PATCH",
-        body: profile,
+        body: {
+          name: profile.name,
+          countryCode: profile.countryCode,
+          primaryPlatform: profile.primaryPlatform,
+          primaryPlatformUrl: profile.primaryPlatformUrl,
+          bio: profile.bio,
+          phone: profile.phone,
+          socialAccounts: profile.socialAccounts,
+          preferredLocale: profile.preferredLocale,
+          avatarUrl: profile.avatarUrl,
+        },
       });
       setProfile(normalizeProfile(d.data));
       setSaved(true);
