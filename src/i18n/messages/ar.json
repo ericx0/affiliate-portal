@@ -203,6 +203,9 @@
     "copied": "تم النسخ",
     "copyLink": "نسخ الرابط",
     "qr": "QR",
+    "downloadQr": "تنزيل رمز QR",
+    "downloadingQr": "جارٍ تجهيز رمز QR…",
+    "downloadQrFailed": "فشل تنزيل رمز QR",
     "pendingNotice": "حسابك قيد المراجعة. يمكنك إنشاء رموز الإحالة بعد الموافقة."
   },
   "earnings": {

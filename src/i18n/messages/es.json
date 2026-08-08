@@ -203,6 +203,9 @@
     "copied": "Copiado",
     "copyLink": "Copiar enlace",
     "qr": "QR",
+    "downloadQr": "Descargar QR",
+    "downloadingQr": "Preparando QR…",
+    "downloadQrFailed": "No se pudo descargar el QR",
     "pendingNotice": "Tu cuenta está en revisión. Podrás crear códigos de referido cuando sea aprobada."
   },
   "earnings": {

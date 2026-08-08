@@ -53,6 +53,32 @@ export default function CodesPage() {
     setTimeout(() => setCopied(null), 1500);
   };
 
+  const [downloadingQr, setDownloadingQr] = useState<string | null>(null);
+  const [qrError, setQrError] = useState<string | null>(null);
+  const handleDownloadQr = async (codeId: string) => {
+    setDownloadingQr(codeId);
+    setQrError(null);
+    try {
+      const res = await fetch(`/api/affiliate/me/codes/${codeId}/qr`, {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `qr-${codeId}.png`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setQrError(err instanceof Error ? err.message : t("downloadQrFailed"));
+    } finally {
+      setDownloadingQr(null);
+    }
+  };
+
   const handleGenerate = async () => {
     setGenerating(true);
     setGenerateError(null);
@@ -91,6 +117,10 @@ export default function CodesPage() {
 
       {generateError && (
         <p className="text-sm text-rose-600 mb-4">{generateError}</p>
+      )}
+
+      {qrError && (
+        <p className="text-sm text-rose-600 mb-4">{qrError}</p>
       )}
 
       <p className="text-sm text-slate-600 mb-4">
@@ -135,8 +165,12 @@ export default function CodesPage() {
                     >
                       {copied === c.code ? t("copied") : t("copyLink")}
                     </button>
-                    <button className="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200">
-                      {t("qr")}
+                    <button
+                      onClick={() => handleDownloadQr(c.id)}
+                      disabled={downloadingQr === c.id}
+                      className="px-3 py-1 text-xs bg-slate-100 rounded hover:bg-slate-200 disabled:opacity-50"
+                    >
+                      {downloadingQr === c.id ? t("downloadingQr") : t("downloadQr")}
                     </button>
                   </td>
                 </tr>

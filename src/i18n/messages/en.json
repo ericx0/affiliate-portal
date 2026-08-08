@@ -203,6 +203,9 @@
     "copied": "Copied",
     "copyLink": "Copy Link",
     "qr": "QR",
+    "downloadQr": "Download QR",
+    "downloadingQr": "Preparing QR…",
+    "downloadQrFailed": "Failed to download QR",
     "pendingNotice": "Your account is under review. You can create referral codes once it is approved."
   },
   "earnings": {
