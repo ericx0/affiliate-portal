@@ -262,7 +262,21 @@
     "platformUrlLabel": "平台链接",
     "saving": "保存中...",
     "saveChanges": "保存修改",
-    "saved": "已保存"
+    "saved": "已保存",
+    "bioLabel": "简介",
+    "bioPlaceholder": "介绍一下自己",
+    "bioHelp": "最多 500 个字符。",
+    "phoneLabel": "电话",
+    "phonePlaceholder": "+86 138-0000-0000",
+    "socialAccountsLabel": "社交账号",
+    "socialAccountsAdd": "添加账号",
+    "socialAccountsRemove": "移除",
+    "socialAccountsPlatformPlaceholder": "平台",
+    "socialAccountsHandlePlaceholder": "账号或链接",
+    "preferredLocaleLabel": "首选语言",
+    "preferredLocaleHelp": "选择通信语言。",
+    "avatarUrlLabel": "头像 URL",
+    "avatarUrlHelp": "请输入公开图片 URL。"
   },
   "stripe": {
     "errorLoadFailed": "加载 Stripe 状态失败",

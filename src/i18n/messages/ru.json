@@ -262,7 +262,21 @@
     "platformUrlLabel": "URL платформы",
     "saving": "Сохранение...",
     "saveChanges": "Сохранить изменения",
-    "saved": "Сохранено"
+    "saved": "Сохранено",
+    "bioLabel": "О себе",
+    "bioPlaceholder": "Расскажите о себе",
+    "bioHelp": "Максимум 500 символов.",
+    "phoneLabel": "Телефон",
+    "phonePlaceholder": "+7 999-123-4567",
+    "socialAccountsLabel": "Социальные аккаунты",
+    "socialAccountsAdd": "Добавить аккаунт",
+    "socialAccountsRemove": "Удалить",
+    "socialAccountsPlatformPlaceholder": "Платформа",
+    "socialAccountsHandlePlaceholder": "Имя или URL",
+    "preferredLocaleLabel": "Предпочтительный язык",
+    "preferredLocaleHelp": "Выберите язык для общения.",
+    "avatarUrlLabel": "URL аватара",
+    "avatarUrlHelp": "Используйте общедоступный URL изображения."
   },
   "stripe": {
     "errorLoadFailed": "Не удалось загрузить статус Stripe",

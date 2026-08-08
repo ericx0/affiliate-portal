@@ -262,7 +262,21 @@
     "platformUrlLabel": "URL de la plataforma",
     "saving": "Guardando...",
     "saveChanges": "Guardar cambios",
-    "saved": "Guardado"
+    "saved": "Guardado",
+    "bioLabel": "Biografía",
+    "bioPlaceholder": "Cuéntanos sobre ti",
+    "bioHelp": "Máximo 500 caracteres.",
+    "phoneLabel": "Teléfono",
+    "phonePlaceholder": "+34 600-123-456",
+    "socialAccountsLabel": "Cuentas sociales",
+    "socialAccountsAdd": "Añadir cuenta",
+    "socialAccountsRemove": "Eliminar",
+    "socialAccountsPlatformPlaceholder": "Plataforma",
+    "socialAccountsHandlePlaceholder": "Usuario o URL",
+    "preferredLocaleLabel": "Idioma preferido",
+    "preferredLocaleHelp": "Elige el idioma de comunicación.",
+    "avatarUrlLabel": "URL del avatar",
+    "avatarUrlHelp": "Usa una URL pública de imagen."
   },
   "stripe": {
     "errorLoadFailed": "Error al cargar el estado de Stripe",

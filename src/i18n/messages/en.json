@@ -262,7 +262,21 @@
     "platformUrlLabel": "Platform URL",
     "saving": "Saving...",
     "saveChanges": "Save Changes",
-    "saved": "Saved"
+    "saved": "Saved",
+    "bioLabel": "Bio",
+    "bioPlaceholder": "Tell us about yourself",
+    "bioHelp": "Maximum 500 characters.",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "+1 555-1234",
+    "socialAccountsLabel": "Social accounts",
+    "socialAccountsAdd": "Add account",
+    "socialAccountsRemove": "Remove",
+    "socialAccountsPlatformPlaceholder": "Platform",
+    "socialAccountsHandlePlaceholder": "Handle or URL",
+    "preferredLocaleLabel": "Preferred language",
+    "preferredLocaleHelp": "Choose the language for communications.",
+    "avatarUrlLabel": "Avatar URL",
+    "avatarUrlHelp": "Use a public image URL."
   },
   "stripe": {
     "errorLoadFailed": "Failed to load Stripe status",

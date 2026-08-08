@@ -262,7 +262,21 @@
     "platformUrlLabel": "رابط المنصة",
     "saving": "جارٍ الحفظ...",
     "saveChanges": "حفظ التغييرات",
-    "saved": "تم الحفظ"
+    "saved": "تم الحفظ",
+    "bioLabel": "نبذة",
+    "bioPlaceholder": "أخبرنا عن نفسك",
+    "bioHelp": "500 حرف كحد أقصى.",
+    "phoneLabel": "الهاتف",
+    "phonePlaceholder": "+971 50-123-4567",
+    "socialAccountsLabel": "الحسابات الاجتماعية",
+    "socialAccountsAdd": "إضافة حساب",
+    "socialAccountsRemove": "إزالة",
+    "socialAccountsPlatformPlaceholder": "المنصة",
+    "socialAccountsHandlePlaceholder": "المعرّف أو الرابط",
+    "preferredLocaleLabel": "اللغة المفضلة",
+    "preferredLocaleHelp": "اختر لغة التواصل.",
+    "avatarUrlLabel": "رابط الصورة الشخصية",
+    "avatarUrlHelp": "استخدم رابط صورة عام."
   },
   "stripe": {
     "errorLoadFailed": "تعذّر تحميل حالة Stripe",
