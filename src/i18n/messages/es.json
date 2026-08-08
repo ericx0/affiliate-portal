@@ -97,7 +97,16 @@
     "noCodeYet": "Aún no tienes código de referido",
     "createCodeCta": "Crear un código",
     "subIdHelpToggle": "¿Cómo usar esto?",
-    "subIdHelpText": "Agregue parámetros personalizados a su enlace de referencia para rastrear de dónde provienen sus ventas. Por ejemplo, use utm_source=tiktok y sub_id=video_1 para una publicación de TikTok. El enlace generado rastreará clics y conversiones por separado en sus informes."
+    "subIdHelpText": "Agregue parámetros personalizados a su enlace de referencia para rastrear de dónde provienen sus ventas. Por ejemplo, use utm_source=tiktok y sub_id=video_1 para una publicación de TikTok. El enlace generado rastreará clics y conversiones por separado en sus informes.",
+    "trendChart": "Tendencia de tráfico",
+    "conversionFunnel": "Embudo de conversión",
+    "topKols": "Mejores KOL",
+    "range30d": "30 días",
+    "range90d": "90 días",
+    "chartClicks": "Clics",
+    "chartSignups": "Registros",
+    "chartOrders": "Pedidos",
+    "chartEmpty": "Aún no hay datos para este periodo: comparte tu enlace de referido para empezar."
   },
   "disclosure": {
     "message": "Esta es una página de asociación remunerada. Los socios afiliados ganan comisiones por compras calificadas. {entity} proporciona {serviceType} - NO diagnóstico ni tratamiento médico."

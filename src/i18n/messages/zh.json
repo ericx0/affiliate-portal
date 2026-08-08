@@ -97,7 +97,16 @@
     "noCodeYet": "还没有推广码",
     "createCodeCta": "去创建推广码",
     "subIdHelpToggle": "如何使用？",
-    "subIdHelpText": "通过为推广链接添加自定义参数，您可以精确追踪订单来源。例如，在 TikTok 发视频时，可填写 utm_source=tiktok 和 sub_id=video_1。系统会在报表中为您单独统计该链接的点击和转化数据，助您分析不同渠道的推广效果。"
+    "subIdHelpText": "通过为推广链接添加自定义参数，您可以精确追踪订单来源。例如，在 TikTok 发视频时，可填写 utm_source=tiktok 和 sub_id=video_1。系统会在报表中为您单独统计该链接的点击和转化数据，助您分析不同渠道的推广效果。",
+    "trendChart": "流量趋势",
+    "conversionFunnel": "转化漏斗",
+    "topKols": "KOL 排行榜",
+    "range30d": "30 天",
+    "range90d": "90 天",
+    "chartClicks": "点击量",
+    "chartSignups": "注册数",
+    "chartOrders": "订单数",
+    "chartEmpty": "该时间段暂无数据 —— 分享你的推广链接即可开始。"
   },
   "disclosure": {
     "message": "本页面为联盟营销合作伙伴页面。KOL 推广可获得合规返佣。{entity} 仅提供 {serviceType},不提供医疗诊断或治疗。"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
@@ -67,6 +68,22 @@ interface Payout {
 }
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://linkchinamed.com";
+
+// recharts is ~100KB and only ever renders client-side. Loading it on
+// demand keeps it out of the dashboard's initial bundle.
+const chartPlaceholder = () => (
+  <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
+    <div className="h-[300px] rounded-2xl bg-slate-50 animate-pulse" />
+  </div>
+);
+const TrendChart = dynamic(() => import("@/components/dashboard/TrendChart"), {
+  ssr: false,
+  loading: chartPlaceholder,
+});
+const ConversionFunnel = dynamic(
+  () => import("@/components/dashboard/ConversionFunnel"),
+  { ssr: false, loading: chartPlaceholder }
+);
 
 // Business rule (affiliate-service jobs/monthly-payout-batch.ts): the payout
 // batch runs on the 14th of each month; balances below $50 roll over.
@@ -307,6 +324,11 @@ export default function DashboardOverview() {
             <div className="text-2xl font-bold text-slate-900 mt-1">${fmtUsd(stats?.totalPaid)}</div>
           </div>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <TrendChart range="30d" />
+        <ConversionFunnel />
       </div>
 
       {/* Automatic monthly payout via Stripe Connect (replaces the manual

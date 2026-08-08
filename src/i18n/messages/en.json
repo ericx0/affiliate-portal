@@ -97,7 +97,16 @@
     "noCodeYet": "No referral code yet",
     "createCodeCta": "Create a code",
     "subIdHelpToggle": "How to use this?",
-    "subIdHelpText": "Add custom parameters to your referral link to track where your sales are coming from. For example, use utm_source=tiktok and sub_id=video_1 for a TikTok post. The generated link will track clicks and conversions separately in your reports."
+    "subIdHelpText": "Add custom parameters to your referral link to track where your sales are coming from. For example, use utm_source=tiktok and sub_id=video_1 for a TikTok post. The generated link will track clicks and conversions separately in your reports.",
+    "trendChart": "Traffic Trend",
+    "conversionFunnel": "Conversion Funnel",
+    "topKols": "Top KOLs",
+    "range30d": "30 days",
+    "range90d": "90 days",
+    "chartClicks": "Clicks",
+    "chartSignups": "Sign-ups",
+    "chartOrders": "Orders",
+    "chartEmpty": "No data for this period yet — share your referral link to get started."
   },
   "disclosure": {
     "message": "This is a paid partnership page. Affiliate partners earn commissions from qualifying purchases. {entity} provides {serviceType} - NOT medical diagnosis or treatment."

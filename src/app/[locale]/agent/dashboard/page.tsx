@@ -45,6 +45,18 @@ interface InviteCodeResponse {
   invite_link: string;
 }
 
+// GET /api/affiliate/agent/kols. Money fields are NUMERIC(12,2) DOLLARS
+// (affiliate.commissions.commission_amount / promoters.total_commission_earned),
+// NOT cents — do not divide by 100 here.
+interface TeamKol {
+  id: string;
+  name: string;
+  gmv_total: number;
+  total_commission_earned: number;
+}
+
+const TOP_KOL_LIMIT = 20;
+
 export default function AgentDashboard() {
   const t = useTranslations("agent");
   // Reuse the dashboard QR poster brand/copy keys for the invite QR modal.
@@ -54,6 +66,7 @@ export default function AgentDashboard() {
   const [invite, setInvite] = useState<InviteCodeResponse | null>(null);
   const [copied, setCopied] = useState(false);
   const [showQrModal, setShowQrModal] = useState(false);
+  const [topKols, setTopKols] = useState<TeamKol[]>([]);
   const qrWrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -80,6 +93,20 @@ export default function AgentDashboard() {
           "/api/affiliate/agent/invite-code"
         ).catch(() => null);
         setInvite(inviteData);
+
+        // Top KOLs: the endpoint orders by created_at, so rank client-side.
+        const team = await apiFetch<{ data: TeamKol[] }>(
+          "/api/affiliate/agent/kols"
+        ).catch(() => null);
+        setTopKols(
+          [...(team?.data ?? [])]
+            .sort(
+              (a, b) =>
+                Number(b.total_commission_earned ?? 0) -
+                Number(a.total_commission_earned ?? 0)
+            )
+            .slice(0, TOP_KOL_LIMIT)
+        );
       } finally {
         setLoading(false);
       }
@@ -267,6 +294,41 @@ export default function AgentDashboard() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Top KOL leaderboard (Task 3.1) — ranked by commission earned. */}
+      <div className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm space-y-6">
+        <h2 className="text-lg font-bold text-slate-900">{tDash("topKols")}</h2>
+        {topKols.length === 0 ? (
+          <div className="text-center py-12 text-slate-400 text-sm">
+            {t("emptyTitle")}
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-slate-100 text-xs text-slate-400 uppercase font-semibold">
+                <tr>
+                  <th scope="col" className="py-3 px-4">{t("thKol")}</th>
+                  <th scope="col" className="py-3 px-4">{t("thGmv")}</th>
+                  <th scope="col" className="py-3 px-4">{t("thCommissionEarned")}</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {topKols.map((kol) => (
+                  <tr key={kol.id} className="hover:bg-slate-50">
+                    <td className="py-4 px-4 font-medium text-slate-900">{kol.name}</td>
+                    <td className="py-4 px-4 text-slate-600">
+                      ${Number(kol.gmv_total ?? 0).toFixed(2)}
+                    </td>
+                    <td className="py-4 px-4 font-bold text-emerald-600">
+                      ${Number(kol.total_commission_earned ?? 0).toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Rules Banner */}
