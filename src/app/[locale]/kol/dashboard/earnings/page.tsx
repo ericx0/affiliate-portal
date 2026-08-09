@@ -12,8 +12,9 @@ interface Earning {
   id: string;
   date: string;
   amountCents: number;
-  status: "pending" | "approved" | "paid" | "reversed";
+  status: "cooling_down" | "pending" | "approved" | "paid" | "refunded" | "reversed" | "voided" | "disputed";
   referredOrderId: string;
+  orderStatus?: string;
   timeline: { label: string; at: string | null }[];
 }
 
@@ -253,10 +254,14 @@ export default function EarningsPage() {
             className="px-3 py-2 border border-slate-200 rounded-xl text-sm bg-white"
           >
             <option value="all">{t("filterAllStatuses")}</option>
+            <option value="cooling_down">{t("statusCoolingDown")}</option>
             <option value="pending">{t("statusPending")}</option>
             <option value="approved">{t("statusApproved")}</option>
             <option value="paid">{t("statusPaid")}</option>
+            <option value="refunded">{t("statusRefunded")}</option>
             <option value="reversed">{t("statusReversed")}</option>
+            <option value="voided">{t("statusVoided")}</option>
+            <option value="disputed">{t("statusDisputed")}</option>
           </select>
           <select
             value={monthFilter}
@@ -291,6 +296,7 @@ export default function EarningsPage() {
                   <th className="px-4 py-3">{t("thDate")}</th>
                   <th className="px-4 py-3">{t("thOrder")}</th>
                   <th className="px-4 py-3">{t("thStatus")}</th>
+                  <th className="px-4 py-3">{t("thOrderStatus")}</th>
                   <th className="px-4 py-3 text-right">{t("thAmount")}</th>
                   <th className="px-4 py-3">{t("thTimeline")}</th>
                 </tr>
@@ -307,13 +313,16 @@ export default function EarningsPage() {
                         className={
                           e.status === "paid"
                             ? "text-emerald-600 font-medium"
-                            : e.status === "reversed"
+                            : e.status === "reversed" || e.status === "refunded" || e.status === "voided" || e.status === "disputed"
                               ? "text-rose-600 font-medium"
                               : "text-slate-600"
                         }
                       >
                         {e.status}
                       </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <OrderStatusPill status={e.orderStatus} t={t} />
                     </td>
                     <td className="px-4 py-3 text-right font-mono">
                       ${(e.amountCents / 100).toFixed(2)}
@@ -386,4 +395,27 @@ function PayoutHistoryTable() {
       </table>
     </div>
   );
+}
+
+function OrderStatusPill({
+  status,
+  t,
+}: {
+  status?: string;
+  t: ReturnType<typeof useTranslations>;
+}) {
+  if (!status) return <span className="text-xs text-slate-400">—</span>;
+  const map: Record<string, { label: string; cls: string }> = {
+    pending: { label: t("orderPending"), cls: "bg-blue-50 text-blue-700" },
+    processing: { label: t("orderProcessing"), cls: "bg-blue-50 text-blue-700" },
+    completed: { label: t("orderCompleted"), cls: "bg-emerald-50 text-emerald-700" },
+    failed: { label: t("orderFailed"), cls: "bg-rose-50 text-rose-700" },
+    quoted: { label: t("orderQuoted"), cls: "bg-blue-50 text-blue-700" },
+    payment_pending: { label: t("orderPaymentPending"), cls: "bg-amber-50 text-amber-700" },
+    paid: { label: t("orderPaid"), cls: "bg-emerald-50 text-emerald-700" },
+    in_progress: { label: t("orderInProgress"), cls: "bg-blue-50 text-blue-700" },
+    cancelled: { label: t("orderCancelled"), cls: "bg-slate-100 text-slate-600" },
+  };
+  const v = map[status] ?? { label: status, cls: "bg-slate-100 text-slate-600" };
+  return <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${v.cls}`}>{v.label}</span>;
 }

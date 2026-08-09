@@ -236,7 +236,21 @@
     "thTimeline": "Timeline",
     "payoutHistory": "Payout History",
     "payoutHistoryDesc": "Every Stripe transfer sent to your bank",
-    "badge": "Stripe"
+    "badge": "Stripe",
+    "statusRefunded": "Refunded",
+    "statusVoided": "Voided",
+    "statusCoolingDown": "Cooling down",
+    "statusDisputed": "Disputed (chargeback)",
+    "thOrderStatus": "Order status",
+    "orderPending": "Pending",
+    "orderProcessing": "Processing",
+    "orderCompleted": "Completed",
+    "orderFailed": "Failed",
+    "orderQuoted": "Quoted",
+    "orderPaymentPending": "Payment pending",
+    "orderPaid": "Paid",
+    "orderInProgress": "In progress",
+    "orderCancelled": "Cancelled"
   },
   "payouts": {
     "title": "Payouts",

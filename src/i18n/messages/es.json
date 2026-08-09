@@ -236,7 +236,21 @@
     "thTimeline": "Seguimiento",
     "payoutHistory": "Historial de pagos",
     "payoutHistoryDesc": "Cada transferencia de Stripe enviada a tu banco",
-    "badge": "Stripe"
+    "badge": "Stripe",
+    "statusRefunded": "Reembolsado",
+    "statusVoided": "Anulado",
+    "statusCoolingDown": "Período de espera",
+    "statusDisputed": "En disputa (contracargo)",
+    "thOrderStatus": "Estado del pedido",
+    "orderPending": "Pendiente",
+    "orderProcessing": "En proceso",
+    "orderCompleted": "Completado",
+    "orderFailed": "Fallido",
+    "orderQuoted": "Cotizado",
+    "orderPaymentPending": "Pago pendiente",
+    "orderPaid": "Pagado",
+    "orderInProgress": "En curso",
+    "orderCancelled": "Cancelado"
   },
   "payouts": {
     "title": "Pagos",

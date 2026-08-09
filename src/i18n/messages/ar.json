@@ -236,7 +236,21 @@
     "thTimeline": "الجدول الزمني",
     "payoutHistory": "سجل المدفوعات",
     "payoutHistoryDesc": "كل تحويلات Stripe إلى حسابك البنكي",
-    "badge": "Stripe"
+    "badge": "Stripe",
+    "statusRefunded": "مسترد",
+    "statusVoided": "ملغي",
+    "statusCoolingDown": "فترة تهدئة",
+    "statusDisputed": "متنازع عليه (استرداد)",
+    "thOrderStatus": "حالة الطلب",
+    "orderPending": "قيد الانتظار",
+    "orderProcessing": "قيد المعالجة",
+    "orderCompleted": "مكتمل",
+    "orderFailed": "فشل",
+    "orderQuoted": "تم تقديم عرض",
+    "orderPaymentPending": "في انتظار الدفع",
+    "orderPaid": "مدفوع",
+    "orderInProgress": "قيد التنفيذ",
+    "orderCancelled": "ملغي"
   },
   "payouts": {
     "title": "المدفوعات",

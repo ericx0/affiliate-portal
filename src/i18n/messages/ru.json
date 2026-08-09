@@ -236,7 +236,21 @@
     "thTimeline": "Хронология",
     "payoutHistory": "История выплат",
     "payoutHistoryDesc": "Все переводы Stripe на ваш банковский счёт",
-    "badge": "Stripe"
+    "badge": "Stripe",
+    "statusRefunded": "Возвращено",
+    "statusVoided": "Аннулировано",
+    "statusCoolingDown": "Период охлаждения",
+    "statusDisputed": "Оспаривается (chargeback)",
+    "thOrderStatus": "Статус заказа",
+    "orderPending": "В ожидании",
+    "orderProcessing": "В обработке",
+    "orderCompleted": "Завершено",
+    "orderFailed": "Ошибка",
+    "orderQuoted": "Предложение отправлено",
+    "orderPaymentPending": "Ожидание оплаты",
+    "orderPaid": "Оплачено",
+    "orderInProgress": "В процессе",
+    "orderCancelled": "Отменено"
   },
   "payouts": {
     "title": "Выплаты",

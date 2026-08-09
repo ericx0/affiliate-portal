@@ -236,7 +236,21 @@
     "thTimeline": "时间线",
     "payoutHistory": "付款记录",
     "payoutHistoryDesc": "所有已转入你银行的 Stripe 付款",
-    "badge": "Stripe"
+    "badge": "Stripe",
+    "statusRefunded": "已退款",
+    "statusVoided": "已作废",
+    "statusCoolingDown": "冷静期",
+    "statusDisputed": "纠纷冻结",
+    "thOrderStatus": "订单状态",
+    "orderPending": "待处理",
+    "orderProcessing": "处理中",
+    "orderCompleted": "完结",
+    "orderFailed": "失败",
+    "orderQuoted": "已报价",
+    "orderPaymentPending": "待支付",
+    "orderPaid": "已支付",
+    "orderInProgress": "进行中",
+    "orderCancelled": "已取消"
   },
   "payouts": {
     "title": "提现记录",
