@@ -70,9 +70,12 @@ export default function LoginPage() {
     }
 
     try {
-      const apiBase = process.env.NEXT_PUBLIC_AFFILIATE_API_URL || "";
+      // Pre-check lives on Supabase Edge Functions, not the Vercel Express
+      // service — the Vercel URL was unreachable in production and Cloudflare
+      // routes /functions/v1/* to Supabase natively.
+      const fnBase = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
       const checkRes = await fetch(
-        `${apiBase}/api/affiliate/auth/check-email?email=${encodeURIComponent(email)}`,
+        `${fnBase}/functions/v1/check-email?email=${encodeURIComponent(email)}`,
         { headers: { "X-Turnstile-Token": turnstileToken } }
       );
       if (checkRes.status === 429) {
