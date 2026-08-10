@@ -17,7 +17,11 @@
     "codePlaceholder": "000000",
     "verifyLogin": "Verificar e iniciar sesión",
     "useDifferentEmail": "Usar otro correo",
-    "captchaRequired": "Por favor completa la verificación de seguridad."
+    "captchaRequired": "Por favor completa la verificación de seguridad.",
+    "checkFailed": "No se pudo verificar el correo electrónico. Inténtalo de nuevo.",
+    "notRegisteredKol": "No se encontró una cuenta de KOL para este correo. Regístrate primero con el código de invitación de tu agente.",
+    "rateLimited": "Demasiadas solicitudes. Espera un minuto y vuelve a intentarlo.",
+    "registeredAsAgent": "Este correo está registrado como Agente. Usa agent.linkchinamed.com para iniciar sesión."
   },
   "register": {
     "title": "Únete como Socio Afiliado",
@@ -97,7 +101,16 @@
     "noCodeYet": "Aún no tienes código de referido",
     "createCodeCta": "Crear un código",
     "subIdHelpToggle": "¿Cómo usar esto?",
-    "subIdHelpText": "Agregue parámetros personalizados a su enlace de referencia para rastrear de dónde provienen sus ventas. Por ejemplo, use utm_source=tiktok y sub_id=video_1 para una publicación de TikTok. El enlace generado rastreará clics y conversiones por separado en sus informes."
+    "subIdHelpText": "Agregue parámetros personalizados a su enlace de referencia para rastrear de dónde provienen sus ventas. Por ejemplo, use utm_source=tiktok y sub_id=video_1 para una publicación de TikTok. El enlace generado rastreará clics y conversiones por separado en sus informes.",
+    "trendChart": "Tendencia de tráfico",
+    "conversionFunnel": "Embudo de conversión",
+    "topKols": "Mejores KOL",
+    "range30d": "30 días",
+    "range90d": "90 días",
+    "chartClicks": "Clics",
+    "chartSignups": "Registros",
+    "chartOrders": "Pedidos",
+    "chartEmpty": "Aún no hay datos para este periodo: comparte tu enlace de referido para empezar."
   },
   "disclosure": {
     "message": "Esta es una página de asociación remunerada. Los socios afiliados ganan comisiones por compras calificadas. {entity} proporciona {serviceType} - NO diagnóstico ni tratamiento médico."
@@ -203,6 +216,9 @@
     "copied": "Copiado",
     "copyLink": "Copiar enlace",
     "qr": "QR",
+    "downloadQr": "Descargar QR",
+    "downloadingQr": "Preparando QR…",
+    "downloadQrFailed": "No se pudo descargar el QR",
     "pendingNotice": "Tu cuenta está en revisión. Podrás crear códigos de referido cuando sea aprobada."
   },
   "earnings": {
@@ -224,7 +240,21 @@
     "thTimeline": "Seguimiento",
     "payoutHistory": "Historial de pagos",
     "payoutHistoryDesc": "Cada transferencia de Stripe enviada a tu banco",
-    "badge": "Stripe"
+    "badge": "Stripe",
+    "statusRefunded": "Reembolsado",
+    "statusVoided": "Anulado",
+    "statusCoolingDown": "Período de espera",
+    "statusDisputed": "En disputa (contracargo)",
+    "thOrderStatus": "Estado del pedido",
+    "orderPending": "Pendiente",
+    "orderProcessing": "En proceso",
+    "orderCompleted": "Completado",
+    "orderFailed": "Fallido",
+    "orderQuoted": "Cotizado",
+    "orderPaymentPending": "Pago pendiente",
+    "orderPaid": "Pagado",
+    "orderInProgress": "En curso",
+    "orderCancelled": "Cancelado"
   },
   "payouts": {
     "title": "Pagos",
@@ -262,7 +292,21 @@
     "platformUrlLabel": "URL de la plataforma",
     "saving": "Guardando...",
     "saveChanges": "Guardar cambios",
-    "saved": "Guardado"
+    "saved": "Guardado",
+    "bioLabel": "Biografía",
+    "bioPlaceholder": "Cuéntanos sobre ti",
+    "bioHelp": "Máximo 500 caracteres.",
+    "phoneLabel": "Teléfono",
+    "phonePlaceholder": "+34 600-123-456",
+    "socialAccountsLabel": "Cuentas sociales",
+    "socialAccountsAdd": "Añadir cuenta",
+    "socialAccountsRemove": "Eliminar",
+    "socialAccountsPlatformPlaceholder": "Plataforma",
+    "socialAccountsHandlePlaceholder": "Usuario o URL",
+    "preferredLocaleLabel": "Idioma preferido",
+    "preferredLocaleHelp": "Elige el idioma de comunicación.",
+    "avatarUrlLabel": "URL del avatar",
+    "avatarUrlHelp": "Usa una URL pública de imagen."
   },
   "stripe": {
     "errorLoadFailed": "Error al cargar el estado de Stripe",

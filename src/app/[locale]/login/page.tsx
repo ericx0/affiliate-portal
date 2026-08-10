@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Link } from "@/navigation";
 
 import LocaleSwitcher from "@/components/LocaleSwitcher";
+import { apiFetch } from "@/lib/api";
 import { supabase } from "@/lib/supabase";
 
 const TURNSTILE_SITE_KEY =
@@ -68,6 +69,41 @@ export default function LoginPage() {
       return;
     }
 
+    try {
+      // Pre-check lives on Supabase Edge Functions, not the Vercel Express
+      // service — the Vercel URL was unreachable in production and Cloudflare
+      // routes /functions/v1/* to Supabase natively.
+      const fnBase = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+      const checkRes = await fetch(
+        `${fnBase}/functions/v1/check-email?email=${encodeURIComponent(email)}`,
+        { headers: { "X-Turnstile-Token": turnstileToken } }
+      );
+      if (checkRes.status === 429) {
+        setError(t("rateLimited"));
+        return;
+      }
+      if (!checkRes.ok) {
+        setError(t("checkFailed"));
+        return;
+      }
+      const checkData = (await checkRes.json()) as {
+        exists: boolean;
+        role: "kol" | "agent" | null;
+        registered: boolean;
+      };
+      if (!checkData.exists) {
+        setError(t("notRegisteredKol"));
+        return;
+      }
+      if (checkData.role === "agent") {
+        setError(t("registeredAsAgent"));
+        return;
+      }
+    } catch {
+      setError(t("checkFailed"));
+      return;
+    }
+
     setSending(true);
     try {
       const { error: otpErr } = await supabase.auth.signInWithOtp({
@@ -94,13 +130,21 @@ export default function LoginPage() {
         type: "email",
       });
       if (verifyErr) throw verifyErr;
-      // Redirect to the original target (middleware set ?redirect=) or /agent.
-      // agent/layout verifies role=agent via /agent/stats (200 stays, 403 KOL
-      // redirects to /dashboard). Validate the target is a safe internal path
+      // Redirect to the original target (middleware set ?redirect=) or to the
+      // role-specific dashboard. Validate the target is a safe internal path
       // (starts with "/", not "//host") to avoid open-redirect.
       const params = new URLSearchParams(window.location.search);
       const target = params.get("redirect");
-      const safeTarget = target && target.startsWith("/") && !target.startsWith("//") ? target : "/agent";
+      let fallback = "/kol/dashboard";
+      try {
+        const agg = await apiFetch<{ data?: { profile?: { role?: "kol" | "agent" } } }>(
+          "/api/affiliate/me/dashboard-aggregate"
+        );
+        if (agg?.data?.profile?.role === "agent") fallback = "/agent/dashboard";
+      } catch {
+        // Keep kol default if profile lookup fails.
+      }
+      const safeTarget = target && target.startsWith("/") && !target.startsWith("//") ? target : fallback;
       router.push(safeTarget);
     } catch (e: any) {
       setError(e.message);

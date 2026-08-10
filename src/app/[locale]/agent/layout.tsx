@@ -37,7 +37,7 @@ export default function AgentLayout({ children }: { children: React.ReactNode })
         setLoading(false);
       } catch {
         // Not an agent (or unauthorized) -> KOL dashboard.
-        router.push("/dashboard");
+        router.push("/kol/dashboard");
       }
     })();
   }, [router]);
@@ -52,7 +52,7 @@ export default function AgentLayout({ children }: { children: React.ReactNode })
             <Link href="/agent" className="font-bold">{t("agentPortalTitle")}</Link>
             <Link href="/agent/kols">{t("kols")}</Link>
             <Link href="/agent/commissions">{t("commissions")}</Link>
-            <Link href="/dashboard/settings/stripe">{t("settings")}</Link>
+            <Link href="/agent/dashboard/settings/stripe">{t("settings")}</Link>
           </div>
           <div className="flex items-center gap-3">
             <LocaleSwitcher />

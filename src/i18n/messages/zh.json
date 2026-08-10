@@ -17,7 +17,11 @@
     "codePlaceholder": "000000",
     "verifyLogin": "验证并登录",
     "useDifferentEmail": "使用其他邮箱",
-    "captchaRequired": "请完成安全验证。"
+    "captchaRequired": "请完成安全验证。",
+    "checkFailed": "邮箱验证失败,请重试。",
+    "notRegisteredKol": "未找到此邮箱对应的 KOL 账号。请先通过 Agent 邀请码注册。",
+    "rateLimited": "请求过于频繁,请稍后再试。",
+    "registeredAsAgent": "此邮箱已注册为 Agent。请前往 agent.linkchinamed.com 登录。"
   },
   "register": {
     "title": "加入联盟营销合作伙伴",
@@ -97,7 +101,16 @@
     "noCodeYet": "还没有推广码",
     "createCodeCta": "去创建推广码",
     "subIdHelpToggle": "如何使用？",
-    "subIdHelpText": "通过为推广链接添加自定义参数，您可以精确追踪订单来源。例如，在 TikTok 发视频时，可填写 utm_source=tiktok 和 sub_id=video_1。系统会在报表中为您单独统计该链接的点击和转化数据，助您分析不同渠道的推广效果。"
+    "subIdHelpText": "通过为推广链接添加自定义参数，您可以精确追踪订单来源。例如，在 TikTok 发视频时，可填写 utm_source=tiktok 和 sub_id=video_1。系统会在报表中为您单独统计该链接的点击和转化数据，助您分析不同渠道的推广效果。",
+    "trendChart": "流量趋势",
+    "conversionFunnel": "转化漏斗",
+    "topKols": "KOL 排行榜",
+    "range30d": "30 天",
+    "range90d": "90 天",
+    "chartClicks": "点击量",
+    "chartSignups": "注册数",
+    "chartOrders": "订单数",
+    "chartEmpty": "该时间段暂无数据 —— 分享你的推广链接即可开始。"
   },
   "disclosure": {
     "message": "本页面为联盟营销合作伙伴页面。KOL 推广可获得合规返佣。{entity} 仅提供 {serviceType},不提供医疗诊断或治疗。"
@@ -203,6 +216,9 @@
     "copied": "已复制",
     "copyLink": "复制链接",
     "qr": "二维码",
+    "downloadQr": "下载二维码",
+    "downloadingQr": "正在生成二维码…",
+    "downloadQrFailed": "下载二维码失败",
     "pendingNotice": "账号正在审核中，审核通过后才能创建推广码。"
   },
   "earnings": {
@@ -224,7 +240,21 @@
     "thTimeline": "时间线",
     "payoutHistory": "付款记录",
     "payoutHistoryDesc": "所有已转入你银行的 Stripe 付款",
-    "badge": "Stripe"
+    "badge": "Stripe",
+    "statusRefunded": "已退款",
+    "statusVoided": "已作废",
+    "statusCoolingDown": "冷静期",
+    "statusDisputed": "纠纷冻结",
+    "thOrderStatus": "订单状态",
+    "orderPending": "待处理",
+    "orderProcessing": "处理中",
+    "orderCompleted": "完结",
+    "orderFailed": "失败",
+    "orderQuoted": "已报价",
+    "orderPaymentPending": "待支付",
+    "orderPaid": "已支付",
+    "orderInProgress": "进行中",
+    "orderCancelled": "已取消"
   },
   "payouts": {
     "title": "提现记录",
@@ -262,7 +292,21 @@
     "platformUrlLabel": "平台链接",
     "saving": "保存中...",
     "saveChanges": "保存修改",
-    "saved": "已保存"
+    "saved": "已保存",
+    "bioLabel": "简介",
+    "bioPlaceholder": "介绍一下自己",
+    "bioHelp": "最多 500 个字符。",
+    "phoneLabel": "电话",
+    "phonePlaceholder": "+86 138-0000-0000",
+    "socialAccountsLabel": "社交账号",
+    "socialAccountsAdd": "添加账号",
+    "socialAccountsRemove": "移除",
+    "socialAccountsPlatformPlaceholder": "平台",
+    "socialAccountsHandlePlaceholder": "账号或链接",
+    "preferredLocaleLabel": "首选语言",
+    "preferredLocaleHelp": "选择通信语言。",
+    "avatarUrlLabel": "头像 URL",
+    "avatarUrlHelp": "请输入公开图片 URL。"
   },
   "stripe": {
     "errorLoadFailed": "加载 Stripe 状态失败",

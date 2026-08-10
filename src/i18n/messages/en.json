@@ -17,7 +17,11 @@
     "codePlaceholder": "000000",
     "verifyLogin": "Verify & Log In",
     "useDifferentEmail": "Use a different email",
-    "captchaRequired": "Please complete the security check."
+    "captchaRequired": "Please complete the security check.",
+    "checkFailed": "Unable to verify email. Please try again.",
+    "notRegisteredKol": "No KOL account found for this email. Please register via your Agent's invite code first.",
+    "rateLimited": "Too many requests. Please wait a minute and try again.",
+    "registeredAsAgent": "This email is registered as an Agent. Please use agent.linkchinamed.com to log in."
   },
   "register": {
     "title": "Join as Affiliate Partner",
@@ -97,7 +101,16 @@
     "noCodeYet": "No referral code yet",
     "createCodeCta": "Create a code",
     "subIdHelpToggle": "How to use this?",
-    "subIdHelpText": "Add custom parameters to your referral link to track where your sales are coming from. For example, use utm_source=tiktok and sub_id=video_1 for a TikTok post. The generated link will track clicks and conversions separately in your reports."
+    "subIdHelpText": "Add custom parameters to your referral link to track where your sales are coming from. For example, use utm_source=tiktok and sub_id=video_1 for a TikTok post. The generated link will track clicks and conversions separately in your reports.",
+    "trendChart": "Traffic Trend",
+    "conversionFunnel": "Conversion Funnel",
+    "topKols": "Top KOLs",
+    "range30d": "30 days",
+    "range90d": "90 days",
+    "chartClicks": "Clicks",
+    "chartSignups": "Sign-ups",
+    "chartOrders": "Orders",
+    "chartEmpty": "No data for this period yet — share your referral link to get started."
   },
   "disclosure": {
     "message": "This is a paid partnership page. Affiliate partners earn commissions from qualifying purchases. {entity} provides {serviceType} - NOT medical diagnosis or treatment."
@@ -203,6 +216,9 @@
     "copied": "Copied",
     "copyLink": "Copy Link",
     "qr": "QR",
+    "downloadQr": "Download QR",
+    "downloadingQr": "Preparing QR…",
+    "downloadQrFailed": "Failed to download QR",
     "pendingNotice": "Your account is under review. You can create referral codes once it is approved."
   },
   "earnings": {
@@ -224,7 +240,21 @@
     "thTimeline": "Timeline",
     "payoutHistory": "Payout History",
     "payoutHistoryDesc": "Every Stripe transfer sent to your bank",
-    "badge": "Stripe"
+    "badge": "Stripe",
+    "statusRefunded": "Refunded",
+    "statusVoided": "Voided",
+    "statusCoolingDown": "Cooling down",
+    "statusDisputed": "Disputed (chargeback)",
+    "thOrderStatus": "Order status",
+    "orderPending": "Pending",
+    "orderProcessing": "Processing",
+    "orderCompleted": "Completed",
+    "orderFailed": "Failed",
+    "orderQuoted": "Quoted",
+    "orderPaymentPending": "Payment pending",
+    "orderPaid": "Paid",
+    "orderInProgress": "In progress",
+    "orderCancelled": "Cancelled"
   },
   "payouts": {
     "title": "Payouts",
@@ -262,7 +292,21 @@
     "platformUrlLabel": "Platform URL",
     "saving": "Saving...",
     "saveChanges": "Save Changes",
-    "saved": "Saved"
+    "saved": "Saved",
+    "bioLabel": "Bio",
+    "bioPlaceholder": "Tell us about yourself",
+    "bioHelp": "Maximum 500 characters.",
+    "phoneLabel": "Phone",
+    "phonePlaceholder": "+1 555-1234",
+    "socialAccountsLabel": "Social accounts",
+    "socialAccountsAdd": "Add account",
+    "socialAccountsRemove": "Remove",
+    "socialAccountsPlatformPlaceholder": "Platform",
+    "socialAccountsHandlePlaceholder": "Handle or URL",
+    "preferredLocaleLabel": "Preferred language",
+    "preferredLocaleHelp": "Choose the language for communications.",
+    "avatarUrlLabel": "Avatar URL",
+    "avatarUrlHelp": "Use a public image URL."
   },
   "stripe": {
     "errorLoadFailed": "Failed to load Stripe status",

@@ -17,7 +17,11 @@
     "codePlaceholder": "000000",
     "verifyLogin": "Проверить и войти",
     "useDifferentEmail": "Использовать другой адрес",
-    "captchaRequired": "Пожалуйста, пройдите проверку безопасности."
+    "captchaRequired": "Пожалуйста, пройдите проверку безопасности.",
+    "checkFailed": "Не удалось проверить электронную почту. Попробуйте снова.",
+    "notRegisteredKol": "Для этого адреса электронной почты не найдена учётная запись KOL. Сначала зарегистрируйтесь по пригласительному коду вашего агента.",
+    "rateLimited": "Слишком много запросов. Подождите минуту и повторите попытку.",
+    "registeredAsAgent": "Этот адрес зарегистрирован как агент. Войдите через agent.linkchinamed.com."
   },
   "register": {
     "title": "Стать партнёром",
@@ -97,7 +101,16 @@
     "noCodeYet": "Реферального кода пока нет",
     "createCodeCta": "Создать код",
     "subIdHelpToggle": "Как это использовать?",
-    "subIdHelpText": "Добавьте пользовательские параметры к вашей реферальной ссылке, чтобы отслеживать, откуда приходят ваши продажи. Например, используйте utm_source=tiktok и sub_id=video_1 для публикации в TikTok. Сгенерированная ссылка будет отдельно отслеживать клики и конверсии в ваших отчетах."
+    "subIdHelpText": "Добавьте пользовательские параметры к вашей реферальной ссылке, чтобы отслеживать, откуда приходят ваши продажи. Например, используйте utm_source=tiktok и sub_id=video_1 для публикации в TikTok. Сгенерированная ссылка будет отдельно отслеживать клики и конверсии в ваших отчетах.",
+    "trendChart": "Динамика трафика",
+    "conversionFunnel": "Воронка конверсии",
+    "topKols": "Лучшие KOL",
+    "range30d": "30 дней",
+    "range90d": "90 дней",
+    "chartClicks": "Клики",
+    "chartSignups": "Регистрации",
+    "chartOrders": "Заказы",
+    "chartEmpty": "За этот период пока нет данных — поделитесь реферальной ссылкой, чтобы начать."
   },
   "disclosure": {
     "message": "Это страница платного партнёрства. Партнёры зарабатывают комиссии за соответствующие покупки. {entity} предоставляет {serviceType} - а не медицинскую диагностику или лечение."
@@ -203,6 +216,9 @@
     "copied": "Скопировано",
     "copyLink": "Копировать ссылку",
     "qr": "QR",
+    "downloadQr": "Скачать QR-код",
+    "downloadingQr": "Подготовка QR-кода…",
+    "downloadQrFailed": "Не удалось скачать QR-код",
     "pendingNotice": "Ваш аккаунт на проверке. Создавать реферальные коды можно будет после одобрения."
   },
   "earnings": {
@@ -224,7 +240,21 @@
     "thTimeline": "Хронология",
     "payoutHistory": "История выплат",
     "payoutHistoryDesc": "Все переводы Stripe на ваш банковский счёт",
-    "badge": "Stripe"
+    "badge": "Stripe",
+    "statusRefunded": "Возвращено",
+    "statusVoided": "Аннулировано",
+    "statusCoolingDown": "Период охлаждения",
+    "statusDisputed": "Оспаривается (chargeback)",
+    "thOrderStatus": "Статус заказа",
+    "orderPending": "В ожидании",
+    "orderProcessing": "В обработке",
+    "orderCompleted": "Завершено",
+    "orderFailed": "Ошибка",
+    "orderQuoted": "Предложение отправлено",
+    "orderPaymentPending": "Ожидание оплаты",
+    "orderPaid": "Оплачено",
+    "orderInProgress": "В процессе",
+    "orderCancelled": "Отменено"
   },
   "payouts": {
     "title": "Выплаты",
@@ -262,7 +292,21 @@
     "platformUrlLabel": "URL платформы",
     "saving": "Сохранение...",
     "saveChanges": "Сохранить изменения",
-    "saved": "Сохранено"
+    "saved": "Сохранено",
+    "bioLabel": "О себе",
+    "bioPlaceholder": "Расскажите о себе",
+    "bioHelp": "Максимум 500 символов.",
+    "phoneLabel": "Телефон",
+    "phonePlaceholder": "+7 999-123-4567",
+    "socialAccountsLabel": "Социальные аккаунты",
+    "socialAccountsAdd": "Добавить аккаунт",
+    "socialAccountsRemove": "Удалить",
+    "socialAccountsPlatformPlaceholder": "Платформа",
+    "socialAccountsHandlePlaceholder": "Имя или URL",
+    "preferredLocaleLabel": "Предпочтительный язык",
+    "preferredLocaleHelp": "Выберите язык для общения.",
+    "avatarUrlLabel": "URL аватара",
+    "avatarUrlHelp": "Используйте общедоступный URL изображения."
   },
   "stripe": {
     "errorLoadFailed": "Не удалось загрузить статус Stripe",

@@ -17,7 +17,11 @@
     "codePlaceholder": "000000",
     "verifyLogin": "تحقق وتسجيل الدخول",
     "useDifferentEmail": "استخدام بريد إلكتروني آخر",
-    "captchaRequired": "يرجى إكمال التحقق الأمني."
+    "captchaRequired": "يرجى إكمال التحقق الأمني.",
+    "checkFailed": "تعذر التحقق من البريد الإلكتروني. حاول مرة أخرى.",
+    "notRegisteredKol": "لم يتم العثور على حساب KOL لهذا البريد الإلكتروني. يرجى التسجيل أولاً عبر رمز دعوة الوكيل.",
+    "rateLimited": "الكثير من الطلبات. يرجى الانتظار دقيقة والمحاولة مرة أخرى.",
+    "registeredAsAgent": "هذا البريد مسجل كوكيل. يرجى استخدام agent.linkchinamed.com لتسجيل الدخول."
   },
   "register": {
     "title": "انضم كشريك تابع",
@@ -97,7 +101,16 @@
     "noCodeYet": "لا يوجد رمز إحالة بعد",
     "createCodeCta": "إنشاء رمز",
     "subIdHelpToggle": "كيفية الاستخدام؟",
-    "subIdHelpText": "أضف معلمات مخصصة إلى رابط الإحالة الخاص بك لتتبع مصدر مبيعاتك. على سبيل المثال، استخدم utm_source=tiktok و sub_id=video_1 لمنشور على TikTok. سيقوم الرابط المُنشأ بتتبع النقرات والتحويلات بشكل منفصل في تقاريرك."
+    "subIdHelpText": "أضف معلمات مخصصة إلى رابط الإحالة الخاص بك لتتبع مصدر مبيعاتك. على سبيل المثال، استخدم utm_source=tiktok و sub_id=video_1 لمنشور على TikTok. سيقوم الرابط المُنشأ بتتبع النقرات والتحويلات بشكل منفصل في تقاريرك.",
+    "trendChart": "اتجاه الزيارات",
+    "conversionFunnel": "مسار التحويل",
+    "topKols": "أفضل صنّاع المحتوى",
+    "range30d": "٣٠ يومًا",
+    "range90d": "٩٠ يومًا",
+    "chartClicks": "النقرات",
+    "chartSignups": "التسجيلات",
+    "chartOrders": "الطلبات",
+    "chartEmpty": "لا توجد بيانات لهذه الفترة بعد — شارك رابط الإحالة الخاص بك للبدء."
   },
   "disclosure": {
     "message": "هذه صفحة شراكة مدفوع. يكسب الشركاء التابعون عمولات من المشتريات المؤهلة. {entity} تقدم {serviceType} - وليس تشخيصًا أو علاجًا طبيًا."
@@ -203,6 +216,9 @@
     "copied": "تم النسخ",
     "copyLink": "نسخ الرابط",
     "qr": "QR",
+    "downloadQr": "تنزيل رمز QR",
+    "downloadingQr": "جارٍ تجهيز رمز QR…",
+    "downloadQrFailed": "فشل تنزيل رمز QR",
     "pendingNotice": "حسابك قيد المراجعة. يمكنك إنشاء رموز الإحالة بعد الموافقة."
   },
   "earnings": {
@@ -224,7 +240,21 @@
     "thTimeline": "الجدول الزمني",
     "payoutHistory": "سجل المدفوعات",
     "payoutHistoryDesc": "كل تحويلات Stripe إلى حسابك البنكي",
-    "badge": "Stripe"
+    "badge": "Stripe",
+    "statusRefunded": "مسترد",
+    "statusVoided": "ملغي",
+    "statusCoolingDown": "فترة تهدئة",
+    "statusDisputed": "متنازع عليه (استرداد)",
+    "thOrderStatus": "حالة الطلب",
+    "orderPending": "قيد الانتظار",
+    "orderProcessing": "قيد المعالجة",
+    "orderCompleted": "مكتمل",
+    "orderFailed": "فشل",
+    "orderQuoted": "تم تقديم عرض",
+    "orderPaymentPending": "في انتظار الدفع",
+    "orderPaid": "مدفوع",
+    "orderInProgress": "قيد التنفيذ",
+    "orderCancelled": "ملغي"
   },
   "payouts": {
     "title": "المدفوعات",
@@ -262,7 +292,21 @@
     "platformUrlLabel": "رابط المنصة",
     "saving": "جارٍ الحفظ...",
     "saveChanges": "حفظ التغييرات",
-    "saved": "تم الحفظ"
+    "saved": "تم الحفظ",
+    "bioLabel": "نبذة",
+    "bioPlaceholder": "أخبرنا عن نفسك",
+    "bioHelp": "500 حرف كحد أقصى.",
+    "phoneLabel": "الهاتف",
+    "phonePlaceholder": "+971 50-123-4567",
+    "socialAccountsLabel": "الحسابات الاجتماعية",
+    "socialAccountsAdd": "إضافة حساب",
+    "socialAccountsRemove": "إزالة",
+    "socialAccountsPlatformPlaceholder": "المنصة",
+    "socialAccountsHandlePlaceholder": "المعرّف أو الرابط",
+    "preferredLocaleLabel": "اللغة المفضلة",
+    "preferredLocaleHelp": "اختر لغة التواصل.",
+    "avatarUrlLabel": "رابط الصورة الشخصية",
+    "avatarUrlHelp": "استخدم رابط صورة عام."
   },
   "stripe": {
     "errorLoadFailed": "تعذّر تحميل حالة Stripe",
