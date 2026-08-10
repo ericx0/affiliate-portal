@@ -69,6 +69,37 @@ export default function LoginPage() {
       return;
     }
 
+    try {
+      const checkRes = await fetch(
+        `/api/affiliate/auth/check-email?email=${encodeURIComponent(email)}`,
+        { headers: { "X-Turnstile-Token": turnstileToken } }
+      );
+      if (checkRes.status === 429) {
+        setError(t("rateLimited"));
+        return;
+      }
+      if (!checkRes.ok) {
+        setError(t("checkFailed"));
+        return;
+      }
+      const checkData = (await checkRes.json()) as {
+        exists: boolean;
+        role: "kol" | "agent" | null;
+        registered: boolean;
+      };
+      if (!checkData.exists) {
+        setError(t("notRegisteredKol"));
+        return;
+      }
+      if (checkData.role === "agent") {
+        setError(t("registeredAsAgent"));
+        return;
+      }
+    } catch {
+      setError(t("checkFailed"));
+      return;
+    }
+
     setSending(true);
     try {
       const { error: otpErr } = await supabase.auth.signInWithOtp({
