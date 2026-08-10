@@ -17,7 +17,11 @@
     "codePlaceholder": "000000",
     "verifyLogin": "Verificar e iniciar sesión",
     "useDifferentEmail": "Usar otro correo",
-    "captchaRequired": "Por favor completa la verificación de seguridad."
+    "captchaRequired": "Por favor completa la verificación de seguridad.",
+    "checkFailed": "No se pudo verificar el correo electrónico. Inténtalo de nuevo.",
+    "notRegisteredKol": "No se encontró una cuenta de KOL para este correo. Regístrate primero con el código de invitación de tu agente.",
+    "rateLimited": "Demasiadas solicitudes. Espera un minuto y vuelve a intentarlo.",
+    "registeredAsAgent": "Este correo está registrado como Agente. Usa agent.linkchinamed.com para iniciar sesión."
   },
   "register": {
     "title": "Únete como Socio Afiliado",
