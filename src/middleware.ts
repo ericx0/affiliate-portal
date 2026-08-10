@@ -9,10 +9,11 @@ const intlMiddleware = createMiddleware({
   localePrefix: "always",
 });
 
-// Protected area: /<locale>/kol[/...] /<locale>/agent[/...]
+// Protected area: /<locale>/kol[/...] (agent/* paths redirect to agent.linkchinamed.com,
+// so they are intentionally NOT protected here — the new domain handles its own auth).
 // Built from the locales list so every locale (en/zh/ar/ru/es) is guarded.
 const PROTECTED = new RegExp(
-  `^/(${locales.join("|")})/(kol|agent)(?:/|$)`,
+  `^/(${locales.join("|")})/kol(?:/|$)`,
 );
 
 export async function middleware(request: NextRequest) {

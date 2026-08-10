@@ -28,3 +28,7 @@ coverage/
 .turbo/
 *.tsbuildinfo
 .vercel
+
+# Test reports
+playwright-report/
+test-results/
