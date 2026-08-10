@@ -70,8 +70,9 @@ export default function LoginPage() {
     }
 
     try {
+      const apiBase = process.env.NEXT_PUBLIC_AFFILIATE_API_URL || "";
       const checkRes = await fetch(
-        `/api/affiliate/auth/check-email?email=${encodeURIComponent(email)}`,
+        `${apiBase}/api/affiliate/auth/check-email?email=${encodeURIComponent(email)}`,
         { headers: { "X-Turnstile-Token": turnstileToken } }
       );
       if (checkRes.status === 429) {
