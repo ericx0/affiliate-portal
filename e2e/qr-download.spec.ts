@@ -7,12 +7,20 @@ import { test, expect } from "@playwright/test";
  * full-lifecycle.spec.ts — register through the portal, fetch the
  * first code via admin), then exercises GET /api/affiliate/me/codes/:id/qr
  * and asserts the response is a PNG image.
+ *
+ * REQUIRES:
+ *   - ADMIN_JWT env var (admin portal session token)
+ *   - NEXT_PUBLIC_AFFILIATE_API_URL env var (default empty string for local)
+ * Skipped automatically when ADMIN_JWT is missing — the test only runs in CI
+ * with secrets configured.
  */
 
 const API_BASE = process.env.NEXT_PUBLIC_AFFILIATE_API_URL || "";
 const ADMIN_HEADERS = { Authorization: `Bearer ${process.env.ADMIN_JWT}` };
+const HAS_ADMIN_JWT = Boolean(process.env.ADMIN_JWT);
 
 test.describe("Referral code QR download", () => {
+  test.skip(!HAS_ADMIN_JWT, "ADMIN_JWT env var not set — see test file header");
   test("GET /me/codes/:codeId/qr returns a PNG image", async ({ page, request }) => {
     // ── Bootstrap: register a fresh KOL via the portal ──
     await page.goto("/en/register");
