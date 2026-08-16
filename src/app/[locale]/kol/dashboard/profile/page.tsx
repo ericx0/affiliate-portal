@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { apiFetch } from "@/lib/api";
+import ChangePasswordForm from "@/components/account/ChangePasswordForm";
+import SessionsList from "@/components/account/SessionsList";
+import DeleteAccountDialog from "@/components/account/DeleteAccountDialog";
 
 interface Profile {
   name: string;
@@ -120,6 +123,24 @@ export default function ProfilePage() {
         <div><label className="block text-xs text-slate-500 mb-1">{t("avatarUrlLabel")}</label><input type="url" value={profile.avatarUrl} onChange={(e) => setProfile({ ...profile, avatarUrl: e.target.value })} className="w-full p-3 border rounded-xl" />{profile.avatarUrl && <img src={profile.avatarUrl} alt={t("avatarUrlLabel")} className="mt-2 h-16 w-16 rounded-full object-cover" />}<p className="text-[11px] text-slate-400 mt-1">{t("avatarUrlHelp")}</p></div>
         <div className="flex items-center gap-3"><button type="submit" disabled={saving} className="px-4 py-2 bg-brand-500 text-white rounded-xl font-semibold disabled:opacity-50">{saving ? t("saving") : t("saveChanges")}</button>{saved && <span className="text-green-600 text-sm">{t("saved")}</span>}{saveError && <span className="text-rose-600 text-sm">{saveError}</span>}</div>
       </form>
+
+      <section className="bg-white p-6 rounded-xl border max-w-xl mt-6">
+        <h2 className="text-lg font-semibold mb-1">{t("accountSecurityTitle")}</h2>
+        <p className="text-xs text-slate-500 mb-4">{t("accountSecuritySubtitle")}</p>
+        <h3 className="text-sm font-semibold text-slate-700 mb-2">{t("accountChangePasswordTitle")}</h3>
+        <ChangePasswordForm />
+      </section>
+
+      <section className="bg-white p-6 rounded-xl border max-w-xl mt-6">
+        <h3 className="text-sm font-semibold text-slate-700 mb-3">{t("accountSessionsTitle")}</h3>
+        <SessionsList />
+      </section>
+
+      <section className="bg-white p-6 rounded-xl border max-w-xl mt-6">
+        <h3 className="text-sm font-semibold text-rose-700 mb-2">{t("accountDangerTitle")}</h3>
+        <p className="text-xs text-slate-500 mb-3">{t("accountDeleteDescription")}</p>
+        <DeleteAccountDialog />
+      </section>
     </div>
   );
 }

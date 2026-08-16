@@ -314,7 +314,80 @@
     "preferredLocaleLabel": "Preferred language",
     "preferredLocaleHelp": "Choose the language for communications.",
     "avatarUrlLabel": "Avatar URL",
-    "avatarUrlHelp": "Use a public image URL."
+    "avatarUrlHelp": "Use a public image URL.",
+    "accountSecurityTitle": "Security",
+    "accountSecuritySubtitle": "Manage your password and active sessions.",
+    "accountChangePasswordTitle": "Change password",
+    "accountSessionsTitle": "Active sessions",
+    "accountDangerTitle": "Danger zone",
+    "accountDeleteDescription": "Permanently delete your account and all associated data. This cannot be undone."
+  },
+  "account": {
+    "title": "Account Settings",
+    "subtitle": "Manage your profile and security",
+    "section": {
+      "profile": "Profile",
+      "security": "Security",
+      "sessions": "Active Sessions",
+      "danger": "Danger Zone"
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "currentPlaceholder": "Current password",
+      "newPlaceholder": "New password",
+      "confirmPlaceholder": "Confirm new password",
+      "submit": "Update password",
+      "submitting": "Updating...",
+      "success": "Password updated.",
+      "errorCurrent": "Current password is incorrect.",
+      "errorMismatch": "New passwords don't match.",
+      "errorWeak": "Password must be at least 8 characters.",
+      "errorGeneric": "Failed to update password."
+    },
+    "sessions": {
+      "title": "Active Sessions",
+      "current": "This device",
+      "signOutOthers": "Sign out other sessions",
+      "signOutOthersConfirm": "Sign out all other devices?",
+      "success": "Other sessions signed out.",
+      "errorGeneric": "Failed to sign out other sessions."
+    },
+    "deleteAccount": {
+      "title": "Delete Account",
+      "description": "Permanently delete your account and all associated data. This cannot be undone.",
+      "button": "Delete account",
+      "confirmTitle": "Are you absolutely sure?",
+      "confirmBody": "This will permanently delete your account. Type your email to confirm.",
+      "emailPlaceholder": "Type your email",
+      "confirmButton": "Yes, delete my account",
+      "errorMismatch": "Email doesn't match.",
+      "success": "Account deletion requested. You will be signed out.",
+      "errorGeneric": "Failed to delete account."
+    }
+  },
+  "forgotPassword": {
+    "title": "Forgot Password",
+    "subtitle": "Enter your email and we'll send a reset link",
+    "emailPlaceholder": "Email",
+    "submit": "Send reset link",
+    "submitting": "Sending...",
+    "successTitle": "Check your email",
+    "successBody": "If an account exists for that email, we've sent a password reset link. The link expires in 30 minutes.",
+    "backToLogin": "Back to sign in",
+    "errorGeneric": "Failed to send reset email."
+  },
+  "resetPassword": {
+    "title": "Set New Password",
+    "subtitle": "Enter your new password below",
+    "newPlaceholder": "New password",
+    "confirmPlaceholder": "Confirm new password",
+    "submit": "Update password",
+    "submitting": "Updating...",
+    "success": "Password updated. Redirecting...",
+    "errorMismatch": "Passwords don't match.",
+    "errorWeak": "Password must be at least 8 characters.",
+    "errorExpired": "Reset link has expired. Please request a new one.",
+    "errorGeneric": "Failed to reset password."
   },
   "stripe": {
     "errorLoadFailed": "Failed to load Stripe status",

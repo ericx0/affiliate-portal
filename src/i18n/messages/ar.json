@@ -314,7 +314,80 @@
     "preferredLocaleLabel": "اللغة المفضلة",
     "preferredLocaleHelp": "اختر لغة التواصل.",
     "avatarUrlLabel": "رابط الصورة الشخصية",
-    "avatarUrlHelp": "استخدم رابط صورة عام."
+    "avatarUrlHelp": "استخدم رابط صورة عام.",
+    "accountSecurityTitle": "الأمان",
+    "accountSecuritySubtitle": "إدارة كلمة المرور والجلسات النشطة.",
+    "accountChangePasswordTitle": "تغيير كلمة المرور",
+    "accountSessionsTitle": "الجلسات النشطة",
+    "accountDangerTitle": "منطقة الخطر",
+    "accountDeleteDescription": "حذف حسابك نهائياً مع جميع البيانات المرتبطة. لا يمكن التراجع."
+  },
+  "account": {
+    "title": "إعدادات الحساب",
+    "subtitle": "إدارة ملفك الشخصي وإعدادات الأمان",
+    "section": {
+      "profile": "الملف الشخصي",
+      "security": "الأمان",
+      "sessions": "الجلسات النشطة",
+      "danger": "منطقة الخطر"
+    },
+    "changePassword": {
+      "title": "تغيير كلمة المرور",
+      "currentPlaceholder": "كلمة المرور الحالية",
+      "newPlaceholder": "كلمة المرور الجديدة",
+      "confirmPlaceholder": "تأكيد كلمة المرور الجديدة",
+      "submit": "تحديث كلمة المرور",
+      "submitting": "جارٍ التحديث…",
+      "success": "تم تحديث كلمة المرور.",
+      "errorCurrent": "كلمة المرور الحالية غير صحيحة.",
+      "errorMismatch": "كلمتا المرور الجديدتان غير متطابقتين.",
+      "errorWeak": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
+      "errorGeneric": "فشل تحديث كلمة المرور."
+    },
+    "sessions": {
+      "title": "الجلسات النشطة",
+      "current": "هذا الجهاز",
+      "signOutOthers": "تسجيل الخروج من الأجهزة الأخرى",
+      "signOutOthersConfirm": "تسجيل الخروج من جميع الأجهزة الأخرى؟",
+      "success": "تم تسجيل الخروج من الأجهزة الأخرى.",
+      "errorGeneric": "فشل تسجيل الخروج من الأجهزة الأخرى."
+    },
+    "deleteAccount": {
+      "title": "حذف الحساب",
+      "description": "حذف حسابك نهائياً مع جميع البيانات المرتبطة. لا يمكن التراجع.",
+      "button": "حذف الحساب",
+      "confirmTitle": "هل أنت متأكد تماماً؟",
+      "confirmBody": "سيؤدي ذلك إلى حذف حسابك نهائياً. اكتب بريدك الإلكتروني للتأكيد.",
+      "emailPlaceholder": "اكتب بريدك الإلكتروني",
+      "confirmButton": "نعم، احذف حسابي",
+      "errorMismatch": "البريد الإلكتروني غير مطابق.",
+      "success": "تم تقديم طلب الحذف. سيتم تسجيل خروجك.",
+      "errorGeneric": "فشل حذف الحساب."
+    }
+  },
+  "forgotPassword": {
+    "title": "نسيت كلمة المرور",
+    "subtitle": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين",
+    "emailPlaceholder": "البريد الإلكتروني",
+    "submit": "إرسال رابط إعادة التعيين",
+    "submitting": "جارٍ الإرسال…",
+    "successTitle": "تحقق من بريدك الإلكتروني",
+    "successBody": "إذا كان هناك حساب مرتبط بهذا البريد، فقد أرسلنا رابط إعادة تعيين كلمة المرور. ينتهي الرابط خلال 30 دقيقة.",
+    "backToLogin": "العودة إلى تسجيل الدخول",
+    "errorGeneric": "فشل إرسال بريد إعادة التعيين."
+  },
+  "resetPassword": {
+    "title": "تعيين كلمة مرور جديدة",
+    "subtitle": "أدخل كلمة المرور الجديدة أدناه",
+    "newPlaceholder": "كلمة المرور الجديدة",
+    "confirmPlaceholder": "تأكيد كلمة المرور الجديدة",
+    "submit": "تحديث كلمة المرور",
+    "submitting": "جارٍ التحديث…",
+    "success": "تم تحديث كلمة المرور. جارٍ التحويل…",
+    "errorMismatch": "كلمتا المرور غير متطابقتين.",
+    "errorWeak": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل.",
+    "errorExpired": "انتهت صلاحية رابط إعادة التعيين. يرجى طلب رابط جديد.",
+    "errorGeneric": "فشلت إعادة تعيين كلمة المرور."
   },
   "stripe": {
     "errorLoadFailed": "تعذّر تحميل حالة Stripe",

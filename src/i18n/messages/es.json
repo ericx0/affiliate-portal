@@ -314,7 +314,80 @@
     "preferredLocaleLabel": "Idioma preferido",
     "preferredLocaleHelp": "Elige el idioma de comunicación.",
     "avatarUrlLabel": "URL del avatar",
-    "avatarUrlHelp": "Usa una URL pública de imagen."
+    "avatarUrlHelp": "Usa una URL pública de imagen.",
+    "accountSecurityTitle": "Seguridad",
+    "accountSecuritySubtitle": "Gestiona tu contraseña y las sesiones activas.",
+    "accountChangePasswordTitle": "Cambiar contraseña",
+    "accountSessionsTitle": "Sesiones activas",
+    "accountDangerTitle": "Zona de peligro",
+    "accountDeleteDescription": "Eliminación permanente de tu cuenta y todos los datos asociados. Esta acción no se puede deshacer."
+  },
+  "account": {
+    "title": "Ajustes de la cuenta",
+    "subtitle": "Gestiona tu perfil y la seguridad",
+    "section": {
+      "profile": "Perfil",
+      "security": "Seguridad",
+      "sessions": "Sesiones activas",
+      "danger": "Zona de peligro"
+    },
+    "changePassword": {
+      "title": "Cambiar contraseña",
+      "currentPlaceholder": "Contraseña actual",
+      "newPlaceholder": "Nueva contraseña",
+      "confirmPlaceholder": "Confirma la nueva contraseña",
+      "submit": "Actualizar contraseña",
+      "submitting": "Actualizando...",
+      "success": "Contraseña actualizada.",
+      "errorCurrent": "La contraseña actual es incorrecta.",
+      "errorMismatch": "Las nuevas contraseñas no coinciden.",
+      "errorWeak": "La contraseña debe tener al menos 8 caracteres.",
+      "errorGeneric": "No se pudo actualizar la contraseña."
+    },
+    "sessions": {
+      "title": "Sesiones activas",
+      "current": "Este dispositivo",
+      "signOutOthers": "Cerrar sesión en otros dispositivos",
+      "signOutOthersConfirm": "¿Cerrar sesión en todos los demás dispositivos?",
+      "success": "Sesiones en otros dispositivos cerradas.",
+      "errorGeneric": "No se pudieron cerrar las otras sesiones."
+    },
+    "deleteAccount": {
+      "title": "Eliminar cuenta",
+      "description": "Eliminación permanente de tu cuenta y todos los datos asociados. Esta acción no se puede deshacer.",
+      "button": "Eliminar cuenta",
+      "confirmTitle": "¿Estás absolutamente seguro?",
+      "confirmBody": "Esto eliminará tu cuenta de forma permanente. Escribe tu correo para confirmar.",
+      "emailPlaceholder": "Escribe tu correo",
+      "confirmButton": "Sí, eliminar mi cuenta",
+      "errorMismatch": "El correo no coincide.",
+      "success": "Eliminación solicitada. Se cerrará tu sesión.",
+      "errorGeneric": "No se pudo eliminar la cuenta."
+    }
+  },
+  "forgotPassword": {
+    "title": "Olvidé mi contraseña",
+    "subtitle": "Introduce tu correo y te enviaremos un enlace para restablecerla",
+    "emailPlaceholder": "Correo electrónico",
+    "submit": "Enviar enlace",
+    "submitting": "Enviando...",
+    "successTitle": "Revisa tu correo",
+    "successBody": "Si existe una cuenta con ese correo, hemos enviado un enlace para restablecer la contraseña. El enlace caduca en 30 minutos.",
+    "backToLogin": "Volver a iniciar sesión",
+    "errorGeneric": "No se pudo enviar el correo de restablecimiento."
+  },
+  "resetPassword": {
+    "title": "Establecer nueva contraseña",
+    "subtitle": "Introduce tu nueva contraseña a continuación",
+    "newPlaceholder": "Nueva contraseña",
+    "confirmPlaceholder": "Confirma la nueva contraseña",
+    "submit": "Actualizar contraseña",
+    "submitting": "Actualizando...",
+    "success": "Contraseña actualizada. Redirigiendo...",
+    "errorMismatch": "Las contraseñas no coinciden.",
+    "errorWeak": "La contraseña debe tener al menos 8 caracteres.",
+    "errorExpired": "El enlace ha caducado. Por favor, solicita uno nuevo.",
+    "errorGeneric": "No se pudo restablecer la contraseña."
   },
   "stripe": {
     "errorLoadFailed": "Error al cargar el estado de Stripe",

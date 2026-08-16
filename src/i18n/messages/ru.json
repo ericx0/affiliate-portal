@@ -314,7 +314,80 @@
     "preferredLocaleLabel": "Предпочтительный язык",
     "preferredLocaleHelp": "Выберите язык для общения.",
     "avatarUrlLabel": "URL аватара",
-    "avatarUrlHelp": "Используйте общедоступный URL изображения."
+    "avatarUrlHelp": "Используйте общедоступный URL изображения.",
+    "accountSecurityTitle": "Безопасность",
+    "accountSecuritySubtitle": "Управление паролем и активными сеансами.",
+    "accountChangePasswordTitle": "Сменить пароль",
+    "accountSessionsTitle": "Активные сеансы",
+    "accountDangerTitle": "Опасная зона",
+    "accountDeleteDescription": "Полное удаление аккаунта и всех связанных данных без возможности восстановления."
+  },
+  "account": {
+    "title": "Настройки аккаунта",
+    "subtitle": "Управление профилем и безопасностью",
+    "section": {
+      "profile": "Профиль",
+      "security": "Безопасность",
+      "sessions": "Активные сеансы",
+      "danger": "Опасная зона"
+    },
+    "changePassword": {
+      "title": "Сменить пароль",
+      "currentPlaceholder": "Текущий пароль",
+      "newPlaceholder": "Новый пароль",
+      "confirmPlaceholder": "Подтвердите новый пароль",
+      "submit": "Обновить пароль",
+      "submitting": "Обновление…",
+      "success": "Пароль обновлён.",
+      "errorCurrent": "Текущий пароль неверен.",
+      "errorMismatch": "Новые пароли не совпадают.",
+      "errorWeak": "Пароль должен содержать не менее 8 символов.",
+      "errorGeneric": "Не удалось обновить пароль."
+    },
+    "sessions": {
+      "title": "Активные сеансы",
+      "current": "Это устройство",
+      "signOutOthers": "Завершить другие сеансы",
+      "signOutOthersConfirm": "Завершить все остальные сеансы?",
+      "success": "Другие сеансы завершены.",
+      "errorGeneric": "Не удалось завершить другие сеансы."
+    },
+    "deleteAccount": {
+      "title": "Удалить аккаунт",
+      "description": "Полное удаление аккаунта и всех связанных данных без возможности восстановления.",
+      "button": "Удалить аккаунт",
+      "confirmTitle": "Вы абсолютно уверены?",
+      "confirmBody": "Это приведёт к полному удалению вашего аккаунта. Введите email для подтверждения.",
+      "emailPlaceholder": "Введите ваш email",
+      "confirmButton": "Да, удалить аккаунт",
+      "errorMismatch": "Email не совпадает.",
+      "success": "Запрос на удаление отправлен. Вы будете выведены из системы.",
+      "errorGeneric": "Не удалось удалить аккаунт."
+    }
+  },
+  "forgotPassword": {
+    "title": "Забыли пароль",
+    "subtitle": "Введите email, и мы отправим ссылку для сброса",
+    "emailPlaceholder": "Эл. почта",
+    "submit": "Отправить ссылку",
+    "submitting": "Отправка…",
+    "successTitle": "Проверьте почту",
+    "successBody": "Если аккаунт с таким email существует, мы отправили ссылку для сброса пароля. Ссылка действительна 30 минут.",
+    "backToLogin": "Вернуться ко входу",
+    "errorGeneric": "Не удалось отправить письмо для сброса."
+  },
+  "resetPassword": {
+    "title": "Установить новый пароль",
+    "subtitle": "Введите новый пароль ниже",
+    "newPlaceholder": "Новый пароль",
+    "confirmPlaceholder": "Подтвердите новый пароль",
+    "submit": "Обновить пароль",
+    "submitting": "Обновление…",
+    "success": "Пароль обновлён. Перенаправление…",
+    "errorMismatch": "Пароли не совпадают.",
+    "errorWeak": "Пароль должен содержать не менее 8 символов.",
+    "errorExpired": "Срок действия ссылки истёк. Пожалуйста, запросите новую.",
+    "errorGeneric": "Не удалось сбросить пароль."
   },
   "stripe": {
     "errorLoadFailed": "Не удалось загрузить статус Stripe",
