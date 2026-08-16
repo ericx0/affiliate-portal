@@ -10,6 +10,7 @@
     "enterCodeTitle": "输入验证码",
     "introText": "我们会用邮件给您发送 6 位登录验证码。",
     "emailPlaceholder": "邮箱",
+    "passwordPlaceholder": "密码",
     "sendCode": "发送验证码",
     "sending": "发送中…",
     "noAccountApply": "还没有账号？<link>立即申请</link>",
@@ -21,7 +22,14 @@
     "checkFailed": "邮箱验证失败,请重试。",
     "notRegisteredKol": "未找到此邮箱对应的 KOL 账号。请先通过 Agent 邀请码注册。",
     "rateLimited": "请求过于频繁,请稍后再试。",
-    "registeredAsAgent": "此邮箱已注册为 Agent。请前往 agent.linkchinamed.com 登录。"
+    "registeredAsAgent": "此邮箱已注册为 Agent。请前往 agent.linkchinamed.com 登录。",
+    "subtitle": "KOL Partners Agent 登录",
+    "tabOtp": "邮箱验证码",
+    "tabPassword": "密码登录",
+    "signIn": "登录",
+    "signingIn": "登录中…",
+    "passwordErrorInvalid": "邮箱或密码错误。",
+    "passwordErrorGeneric": "登录失败,请稍后再试。"
   },
   "register": {
     "title": "加入联盟营销合作伙伴",

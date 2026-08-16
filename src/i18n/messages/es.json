@@ -10,6 +10,7 @@
     "enterCodeTitle": "Ingresar código",
     "introText": "Te enviaremos por correo un código de acceso de 6 dígitos.",
     "emailPlaceholder": "Correo electrónico",
+    "passwordPlaceholder": "Contraseña",
     "sendCode": "Enviar código",
     "sending": "Enviando…",
     "noAccountApply": "¿No tienes cuenta? <link>Solicita ahora</link>",
@@ -21,7 +22,14 @@
     "checkFailed": "No se pudo verificar el correo electrónico. Inténtalo de nuevo.",
     "notRegisteredKol": "No se encontró una cuenta de KOL para este correo. Regístrate primero con el código de invitación de tu agente.",
     "rateLimited": "Demasiadas solicitudes. Espera un minuto y vuelve a intentarlo.",
-    "registeredAsAgent": "Este correo está registrado como Agente. Usa agent.linkchinamed.com para iniciar sesión."
+    "registeredAsAgent": "Este correo está registrado como Agente. Usa agent.linkchinamed.com para iniciar sesión.",
+    "subtitle": "Acceso para agentes socios KOL",
+    "tabOtp": "Código por correo",
+    "tabPassword": "Contraseña",
+    "signIn": "Iniciar sesión",
+    "signingIn": "Iniciando sesión…",
+    "passwordErrorInvalid": "Correo o contraseña inválidos.",
+    "passwordErrorGeneric": "No se pudo iniciar sesión. Inténtalo de nuevo."
   },
   "register": {
     "title": "Únete como Socio Afiliado",

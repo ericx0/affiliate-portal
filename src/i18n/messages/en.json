@@ -10,6 +10,7 @@
     "enterCodeTitle": "Enter Code",
     "introText": "We'll email you a 6-digit sign-in code.",
     "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
     "sendCode": "Send Code",
     "sending": "Sending...",
     "noAccountApply": "Don't have an account? <link>Apply now</link>",
@@ -21,7 +22,14 @@
     "checkFailed": "Unable to verify email. Please try again.",
     "notRegisteredKol": "No KOL account found for this email. Please register via your Agent's invite code first.",
     "rateLimited": "Too many requests. Please wait a minute and try again.",
-    "registeredAsAgent": "This email is registered as an Agent. Please use agent.linkchinamed.com to log in."
+    "registeredAsAgent": "This email is registered as an Agent. Please use agent.linkchinamed.com to log in.",
+    "subtitle": "KOL Partners Agent Sign In",
+    "tabOtp": "Email Code",
+    "tabPassword": "Password",
+    "signIn": "Sign In",
+    "signingIn": "Signing in…",
+    "passwordErrorInvalid": "Invalid email or password.",
+    "passwordErrorGeneric": "Sign-in failed. Please try again."
   },
   "register": {
     "title": "Join as Affiliate Partner",
