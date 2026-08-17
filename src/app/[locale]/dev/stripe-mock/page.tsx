@@ -21,25 +21,18 @@ function StripeMockInner() {
   async function handleComplete() {
     setLoading(true);
     try {
-      const { data: userRes } = await supabase.auth.getUser();
-      const email = userRes?.user?.email?.trim().toLowerCase();
-      if (email) {
-        const { data: list } = await supabase.rpc("affiliate_list_promoters", { p_search: email });
-        const p = Array.isArray(list) ? list.find((item: any) => item.email?.toLowerCase() === email) : null;
-        if (p) {
-          await supabase.from("promoters").update({
-            stripe_account_id: account,
-            stripe_onboarding_completed: true,
-          }).eq("id", p.id);
-        }
-      }
+      await fetch("/api/affiliate/me/stripe-complete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ accountId: account }),
+      });
     } catch (e) {
       console.warn("Mock update warning:", e);
     }
     setCompleted(true);
     setTimeout(() => {
-      router.push(returnTo);
-    }, 600);
+      window.location.href = returnTo;
+    }, 500);
   }
 
   return (
