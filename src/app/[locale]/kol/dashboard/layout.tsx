@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 import LocaleSwitcher from "@/components/LocaleSwitcher";
+import NotificationBell from "@/components/NotificationBell";
 import { apiFetch } from "@/lib/api";
 import { supabase } from "@/lib/supabase";
 // next/link + next/navigation 会丢掉当前 locale（导航到 /dashboard 后由
@@ -91,6 +92,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             })}
           </div>
           <div className="flex items-center gap-3">
+            <NotificationBell />
             <LocaleSwitcher />
             <button
               onClick={() => supabase.auth.signOut().then(() => router.push("/"))}

@@ -960,5 +960,37 @@
     "settings": "Settings",
     "kols": "KOLs",
     "commissions": "Commissions"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unread": "unread",
+    "markAllRead": "Mark all as read",
+    "loading": "Loading",
+    "noNotifications": "No new notifications",
+    "noNotificationsSub": "New commissions, payout updates, and referral events will appear here",
+    "preferences": "Settings",
+    "viewEarnings": "View Earnings",
+    "justNow": "Just now",
+    "ago": "ago"
+  },
+  "notificationSettings": {
+    "title": "Notification Preferences",
+    "subtitle": "Manage email alerts and in-app notifications sent to you by the system.",
+    "loadError": "Failed to load notification preferences",
+    "saveError": "Failed to save notification preferences",
+    "savedSuccess": "Notification preferences updated successfully!",
+    "emailMasterTitle": "Email Notifications",
+    "emailMasterDesc": "Receive email alerts at your registered address when key business events occur",
+    "categoriesTitle": "Event Notifications",
+    "commissionPendingTitle": "Pending Commission Alerts",
+    "commissionPendingDesc": "Get notified when a referral order generates new pending commission",
+    "commissionPaidTitle": "Commission Paid Alerts",
+    "commissionPaidDesc": "Get notified when commission is approved and ready for payout",
+    "payoutSentTitle": "Payout Dispatched Alerts",
+    "payoutSentDesc": "Get notified when funds are transferred to your bank or Stripe account",
+    "payoutFailedTitle": "Payout Failed Alerts",
+    "payoutFailedDesc": "Receive critical alerts if a payout transfer fails due to account issues",
+    "newReferralTitle": "New Referral Alerts",
+    "newReferralDesc": "Get notified when a new customer registers using your referral link or code"
   }
 }

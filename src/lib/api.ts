@@ -48,8 +48,7 @@ export async function apiFetch<T = unknown>(
     }
   }
 
-  const url = path.startsWith("http") ? path : path;
-  const res = await fetch(url, {
+  const res = await fetch(path, {
     ...rest,
     headers: finalHeaders,
     body: body === undefined ? undefined : JSON.stringify(body),

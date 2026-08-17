@@ -960,5 +960,37 @@
     "settings": "Настройки",
     "kols": "KOL",
     "commissions": "Комиссии"
+  },
+  "notifications": {
+    "title": "Уведомления",
+    "unread": "новых",
+    "markAllRead": "Прочитать все",
+    "loading": "Загрузка",
+    "noNotifications": "Нет новых уведомлений",
+    "noNotificationsSub": "Здесь будут отображаться новые комиссии, выплаты и события рефералов",
+    "preferences": "Настройки",
+    "viewEarnings": "Смотреть доход",
+    "justNow": "только что",
+    "ago": "назад"
+  },
+  "notificationSettings": {
+    "title": "Настройки уведомлений",
+    "subtitle": "Управляйте email-оповещениями и уведомлениями в приложении.",
+    "loadError": "Не удалось загрузить настройки",
+    "saveError": "Не удалось сохранить настройки",
+    "savedSuccess": "Настройки уведомлений успешно обновлены!",
+    "emailMasterTitle": "Email-уведомления",
+    "emailMasterDesc": "Получайте оповещения на email при ключевых событиях",
+    "categoriesTitle": "Категории уведомлений",
+    "commissionPendingTitle": "Ожидающие комиссии",
+    "commissionPendingDesc": "Оповещение при создании новой комиссии от реферала",
+    "commissionPaidTitle": "Выплаченные комиссии",
+    "commissionPaidDesc": "Оповещение при подтверждении и начислении комиссии",
+    "payoutSentTitle": "Отправка выплаты",
+    "payoutSentDesc": "Оповещение при успешном переводе средств на счёт",
+    "payoutFailedTitle": "Ошибка выплаты",
+    "payoutFailedDesc": "Срочное оповещение при сбое выплаты из-за ошибки счёта",
+    "newReferralTitle": "Новый реферал",
+    "newReferralDesc": "Оповещение при регистрации нового клиента по вашей ссылке"
   }
 }

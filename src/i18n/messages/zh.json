@@ -960,5 +960,37 @@
     "settings": "设置",
     "kols": "KOL",
     "commissions": "佣金明细"
+  },
+  "notifications": {
+    "title": "通知中心",
+    "unread": "未读",
+    "markAllRead": "全部已读",
+    "loading": "加载中",
+    "noNotifications": "暂无新通知",
+    "noNotificationsSub": "新的佣金变动、提现进度与客户绑定将在此提醒",
+    "preferences": "通知设置",
+    "viewEarnings": "查看佣金",
+    "justNow": "刚刚",
+    "ago": "前"
+  },
+  "notificationSettings": {
+    "title": "通知偏好设置",
+    "subtitle": "管理系统发送给您的邮件提醒与站内通知。",
+    "loadError": "加载偏好设置失败",
+    "saveError": "保存偏好设置失败",
+    "savedSuccess": "通知偏好已成功更新！",
+    "emailMasterTitle": "接收邮件通知",
+    "emailMasterDesc": "系统在重要业务事件发生时，向您的注册邮箱发送通知邮件",
+    "categoriesTitle": "事件通知分类",
+    "commissionPendingTitle": "佣金待入账提醒",
+    "commissionPendingDesc": "当有客户通过您的推广码下单并产生待结算佣金时提醒",
+    "commissionPaidTitle": "佣金结算到账提醒",
+    "commissionPaidDesc": "当佣金通过审核并正式结算完成时提醒",
+    "payoutSentTitle": "出金打款已汇出提醒",
+    "payoutSentDesc": "当收益提现或 Stripe 出金成功汇出时提醒",
+    "payoutFailedTitle": "出金打款失败告警",
+    "payoutFailedDesc": "当提现因账户信息有误或银行异常失败时紧急告警",
+    "newReferralTitle": "新客户绑定提醒",
+    "newReferralDesc": "当有新客户首次通过您的专属推广链接或邀请码注册时提醒"
   }
 }

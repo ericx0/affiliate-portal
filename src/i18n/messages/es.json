@@ -960,5 +960,37 @@
     "settings": "Ajustes",
     "kols": "KOL",
     "commissions": "Comisiones"
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "unread": "no leídas",
+    "markAllRead": "Marcar todo como leído",
+    "loading": "Cargando",
+    "noNotifications": "Sin notificaciones nuevas",
+    "noNotificationsSub": "Aquí aparecerán nuevas comisiones, actualizaciones de pagos y eventos de referidos",
+    "preferences": "Ajustes",
+    "viewEarnings": "Ver ganancias",
+    "justNow": "ahora",
+    "ago": "hace"
+  },
+  "notificationSettings": {
+    "title": "Preferencias de Notificación",
+    "subtitle": "Administre las alertas por correo electrónico y notificaciones dentro de la app.",
+    "loadError": "Error al cargar preferencias de notificación",
+    "saveError": "Error al guardar preferencias de notificación",
+    "savedSuccess": "¡Preferencias de notificación actualizadas con éxito!",
+    "emailMasterTitle": "Notificaciones por Correo",
+    "emailMasterDesc": "Reciba alertas por correo en eventos clave de su cuenta",
+    "categoriesTitle": "Categorías de Notificación",
+    "commissionPendingTitle": "Alertas de Comisión Pendiente",
+    "commissionPendingDesc": "Aviso cuando una orden referida genera una nueva comisión pendiente",
+    "commissionPaidTitle": "Alertas de Comisión Pagada",
+    "commissionPaidDesc": "Aviso cuando una comisión es aprobada y lista para cobro",
+    "payoutSentTitle": "Alertas de Pago Enviado",
+    "payoutSentDesc": "Aviso cuando los fondos son transferidos a su banco o cuenta de Stripe",
+    "payoutFailedTitle": "Alertas de Error en Pago",
+    "payoutFailedDesc": "Alerta crítica si la transferencia falla por problemas en su cuenta",
+    "newReferralTitle": "Alertas de Nuevo Referido",
+    "newReferralDesc": "Aviso cuando un nuevo cliente se registra con su código o enlace"
   }
 }

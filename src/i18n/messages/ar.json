@@ -960,5 +960,37 @@
     "settings": "الإعدادات",
     "kols": "صانعو المحتوى",
     "commissions": "العمولات"
+  },
+  "notifications": {
+    "title": "مركز الإشعارات",
+    "unread": "غير مقروء",
+    "markAllRead": "تحديد الكل كمقروء",
+    "loading": "جارٍ التحميل",
+    "noNotifications": "لا توجد إشعارات جديدة",
+    "noNotificationsSub": "ستظهر هنا العمولات الجديدة وتحديثات السحب وتنبيهات الإحالة",
+    "preferences": "الإعدادات",
+    "viewEarnings": "عرض الأرباح",
+    "justNow": "الآن",
+    "ago": "منذ"
+  },
+  "notificationSettings": {
+    "title": "تفضيلات الإشعارات",
+    "subtitle": "إدارة تنبيهات البريد الإلكتروني والإشعارات داخل التطبيق.",
+    "loadError": "فشل في تحميل تفضيلات الإشعارات",
+    "saveError": "فشل في حفظ تفضيلات الإشعارات",
+    "savedSuccess": "تم تحديث تفضيلات الإشعارات بنجاح!",
+    "emailMasterTitle": "إشعارات البريد الإلكتروني",
+    "emailMasterDesc": "تلقي تنبيهات عبر البريد الإلكتروني المسجل عند حدوث أحداث مهمة",
+    "categoriesTitle": "فئات الإشعارات",
+    "commissionPendingTitle": "تنبيهات العمولات المعلقة",
+    "commissionPendingDesc": "تنبيه عند إنشاء عمولة معلقة جديدة من طلب إحالة",
+    "commissionPaidTitle": "تنبيهات العمولات المدفوعة",
+    "commissionPaidDesc": "تنبيه عند اعتماد العمولة وجاهزيتها للسحب",
+    "payoutSentTitle": "تنبيهات إرسال الدفعات",
+    "payoutSentDesc": "تنبيه عند تحويل الأموال بنجاح إلى حسابك المصرفي أو حساب Stripe",
+    "payoutFailedTitle": "تنبيهات فشل الدفع",
+    "payoutFailedDesc": "تنبيه عاجل عند فشل التحويل بسبب مشكلة في الحساب",
+    "newReferralTitle": "تنبيهات الإحالات الجديدة",
+    "newReferralDesc": "تنبيه عند تسجيل عميل جديد باستخدام رمز أو رابط الإحالة الخاص بك"
   }
 }
