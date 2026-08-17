@@ -23,7 +23,7 @@
     "notRegisteredKol": "No KOL account found for this email. Please register via your Agent's invite code first.",
     "rateLimited": "Too many requests. Please wait a minute and try again.",
     "registeredAsAgent": "This email is registered as an Agent. Please use agent.linkchinamed.com to log in.",
-    "subtitle": "KOL Partners Agent Sign In",
+    "subtitle": "KOL Affiliate Sign In",
     "tabOtp": "Email Code",
     "tabPassword": "Password",
     "signIn": "Sign In",

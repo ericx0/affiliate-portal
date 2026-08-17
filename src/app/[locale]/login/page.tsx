@@ -199,9 +199,9 @@ export default function LoginPage() {
         </div>
         <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-6">
           <div className="flex flex-col items-center gap-3 mb-4">
-            <Image src="/logo.png" alt="LinkChinaMed" width={160} height={48} className="h-12 w-auto" priority />
+            <Image src="/logo.png" alt="LinkChinaMed" width={160} height={48} className="h-12 w-auto object-contain" priority />
             <h1 className="text-xl font-semibold">
-              LinkChinaMed <span className="text-brand">Partners</span>
+              LinkChinaMed <span className="text-brand">Affiliate</span>
             </h1>
             <p className="text-sm text-gray-600">{t("subtitle")}</p>
           </div>
