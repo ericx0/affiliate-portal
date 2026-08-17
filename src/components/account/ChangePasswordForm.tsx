@@ -6,7 +6,6 @@ import { supabase } from "@/lib/supabase";
 
 export default function ChangePasswordForm() {
   const t = useTranslations("account.changePassword");
-  const [current, setCurrent] = useState("");
   const [next, setNext] = useState("");
   const [confirm, setConfirm] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -34,14 +33,6 @@ export default function ChangePasswordForm() {
         setError(t("errorGeneric"));
         return;
       }
-      const { error: signInErr } = await supabase.auth.signInWithPassword({
-        email: user.email,
-        password: current,
-      });
-      if (signInErr) {
-        setError(t("errorCurrent"));
-        return;
-      }
       const { error: updateErr } = await supabase.auth.updateUser({
         password: next,
       });
@@ -49,7 +40,6 @@ export default function ChangePasswordForm() {
         setError(updateErr.message || t("errorGeneric"));
         return;
       }
-      setCurrent("");
       setNext("");
       setConfirm("");
       setSuccess(true);
@@ -62,47 +52,57 @@ export default function ChangePasswordForm() {
   };
 
   return (
-    <form onSubmit={submit} className="space-y-3">
-      <input
-        type="password"
-        autoComplete="current-password"
-        placeholder={t("currentPlaceholder")}
-        value={current}
-        onChange={(e) => setCurrent(e.target.value)}
-        required
-        className="w-full p-3 border rounded-xl"
-      />
-      <input
-        type="password"
-        autoComplete="new-password"
-        placeholder={t("newPlaceholder")}
-        value={next}
-        onChange={(e) => setNext(e.target.value)}
-        required
-        minLength={8}
-        className="w-full p-3 border rounded-xl"
-      />
-      <input
-        type="password"
-        autoComplete="new-password"
-        placeholder={t("confirmPlaceholder")}
-        value={confirm}
-        onChange={(e) => setConfirm(e.target.value)}
-        required
-        minLength={8}
-        className="w-full p-3 border rounded-xl"
-      />
-      <div className="flex items-center gap-3">
-        <button
-          type="submit"
-          disabled={submitting}
-          className="px-4 py-2 bg-brand-500 text-white rounded-xl font-semibold disabled:opacity-50"
-        >
-          {submitting ? t("submitting") : t("submit")}
-        </button>
-        {success && <span className="text-green-600 text-sm">{t("success")}</span>}
-        {error && <span className="text-rose-600 text-sm">{error}</span>}
+    <form onSubmit={submit} className="space-y-4 max-w-md">
+      <div>
+        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          {t("newLabel")}
+        </label>
+        <input
+          type="password"
+          value={next}
+          onChange={(e) => setNext(e.target.value)}
+          placeholder={t("newPlaceholder")}
+          required
+          minLength={8}
+          autoComplete="new-password"
+          className="h-10 w-full rounded-md border border-gray-300 px-3 text-sm focus:border-brand-500 focus:outline-none"
+        />
       </div>
+
+      <div>
+        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+          {t("confirmLabel")}
+        </label>
+        <input
+          type="password"
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
+          placeholder={t("confirmPlaceholder")}
+          required
+          minLength={8}
+          autoComplete="new-password"
+          className="h-10 w-full rounded-md border border-gray-300 px-3 text-sm focus:border-brand-500 focus:outline-none"
+        />
+      </div>
+
+      {error && (
+        <p className="text-sm text-red-600 bg-red-50 p-2 rounded border border-red-200">
+          {error}
+        </p>
+      )}
+      {success && (
+        <p className="text-sm text-green-600 bg-green-50 p-2 rounded border border-green-200">
+          {t("success")}
+        </p>
+      )}
+
+      <button
+        type="submit"
+        disabled={submitting}
+        className="px-4 py-2 bg-brand-500 text-white rounded-md text-sm font-semibold hover:bg-brand-600 disabled:opacity-50"
+      >
+        {submitting ? t("submitting") : t("submit")}
+      </button>
     </form>
   );
 }
