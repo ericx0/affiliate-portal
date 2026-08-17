@@ -1,7 +1,5 @@
 import { supabase } from "./supabase";
 
-const API_BASE = process.env.NEXT_PUBLIC_AFFILIATE_API_URL || "";
-
 export type ApiFetchOptions = Omit<RequestInit, "body"> & {
   body?: unknown;
   /** Set to true for endpoints that must not send Authorization (e.g. the very first call before the user has a session). */
@@ -24,7 +22,7 @@ function getCachedSession() {
 
 /**
  * Thin wrapper around fetch that:
- *  - prefixes the configured NEXT_PUBLIC_AFFILIATE_API_URL
+ *  - uses relative URLs (resolved by Next.js rewrites() in next.config.js)
  *  - JSON-encodes `body` if it's an object
  *  - attaches `Authorization: Bearer <supabase session access_token>` unless `noAuth: true`
  *  - throws an Error with the server's `error.message` on non-2xx
@@ -50,7 +48,7 @@ export async function apiFetch<T = unknown>(
     }
   }
 
-  const url = path.startsWith("http") ? path : `${API_BASE}${path}`;
+  const url = path.startsWith("http") ? path : path;
   const res = await fetch(url, {
     ...rest,
     headers: finalHeaders,

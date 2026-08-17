@@ -18,6 +18,21 @@ if (process.env.NODE_ENV === "production") {
   }
 }
 
+// Fail the build if NEXT_PUBLIC_AFFILIATE_API_URL points at api.linkchinamed.com
+// (the Cloudflare Worker → Supabase PostgREST), not the actual affiliate-service
+// backend. Frontend should use relative URLs via rewrites() below.
+const FORBIDDEN_AFFILIATE_HOSTS = ["https://api.linkchinamed.com"];
+if (
+  process.env.NEXT_PUBLIC_AFFILIATE_API_URL &&
+  FORBIDDEN_AFFILIATE_HOSTS.includes(
+    process.env.NEXT_PUBLIC_AFFILIATE_API_URL.trim(),
+  )
+) {
+  throw new Error(
+    "[affiliate-portal] NEXT_PUBLIC_AFFILIATE_API_URL points to api.linkchinamed.com which is Cloudflare Worker → Supabase PostgREST, NOT affiliate-service. Use Next.js rewrite (see rewrites() in this file).",
+  );
+}
+
 const createNextIntlPlugin = require("next-intl/plugin");
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
@@ -31,6 +46,18 @@ const nextConfig = {
     return [
       { source: "/", destination: "/en", permanent: false },
       { source: "/dev/:path*", destination: "/en/404", permanent: false },
+    ];
+  },
+  // Proxy /api/affiliate/* calls to the actual affiliate-service backend.
+  // Frontend uses relative URLs (lib/api.ts), so this keeps the public surface
+  // uniform across environments without exposing the upstream host.
+  async rewrites() {
+    return [
+      {
+        source: "/api/affiliate/:path*",
+        destination:
+          "https://affiliate-service-rho.vercel.app/api/affiliate/:path*",
+      },
     ];
   },
 };
