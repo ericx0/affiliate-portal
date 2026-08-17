@@ -17,7 +17,7 @@ const TURNSTILE_SITE_KEY =
 type Mode = "otp" | "password";
 
 const inputClass =
-  "h-10 w-full rounded-md border border-gray-300 px-3 text-sm outline-none focus:border-brand focus:ring-2 focus:ring-brand/30";
+  "h-10 w-full rounded-md border border-gray-300 px-3 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30";
 
 export default function LoginPage() {
   const t = useTranslations("login");
@@ -201,7 +201,7 @@ export default function LoginPage() {
           <div className="flex flex-col items-center gap-3 mb-4">
             <Image src="/logo.png" alt="LinkChinaMed" width={160} height={48} className="h-12 w-auto object-contain" priority />
             <h1 className="text-xl font-semibold">
-              LinkChinaMed <span className="text-brand">Affiliate</span>
+              LinkChinaMed <span className="text-brand-500">Affiliate</span>
             </h1>
             <p className="text-sm text-gray-600">{t("subtitle")}</p>
           </div>
@@ -258,7 +258,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading || !turnstileToken}
-                className="w-full h-10 rounded-md bg-brand text-white font-medium hover:opacity-90 disabled:opacity-50"
+                className="w-full h-10 rounded-md bg-brand-500 text-white font-medium hover:opacity-90 disabled:opacity-50"
               >
                 {loading ? t("signingIn") : t("signIn")}
               </button>
@@ -281,14 +281,14 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading || !turnstileToken}
-                className="w-full h-10 rounded-md bg-brand text-white font-medium hover:opacity-90 disabled:opacity-50"
+                className="w-full h-10 rounded-md bg-brand-500 text-white font-medium hover:opacity-90 disabled:opacity-50"
               >
                 {loading ? t("sending") : t("sendCode")}
               </button>
               <p className="text-sm text-gray-500 text-center">
                 {t.rich("noAccountApply", {
                   link: (chunks) => (
-                    <Link href="/register" className="text-brand hover:underline">{chunks}</Link>
+                    <Link href="/register" className="text-brand-500 hover:underline">{chunks}</Link>
                   ),
                 })}
               </p>
@@ -314,7 +314,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading || code.length !== 6}
-                className="w-full h-10 rounded-md bg-brand text-white font-medium hover:opacity-90 disabled:opacity-50"
+                className="w-full h-10 rounded-md bg-brand-500 text-white font-medium hover:opacity-90 disabled:opacity-50"
               >
                 {loading ? t("sending") : t("verifyLogin")}
               </button>
