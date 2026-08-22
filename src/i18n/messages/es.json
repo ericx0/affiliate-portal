@@ -44,7 +44,8 @@
     "inviteCodePlaceholder": "Ingresa el código de invitación de tu agente",
     "inviteCodeAutoFilled": "Código {code} aplicado desde tu enlace de invitación.",
     "errorInviteRequired": "Se requiere un código de invitación de agente para registrarse. Pide al agente que te invitó su enlace o código de invitación.",
-    "errorInviteInvalid": "Este código de invitación no es válido o el agente está desactivado. Confirma con tu agente un código de invitación válido."
+    "errorInviteInvalid": "Este código de invitación no es válido o el agente está desactivado. Confirma con tu agente un código de invitación válido.",
+    "roleNotice": "Este correo electrónico se utilizará como su cuenta de afiliado. Cada correo solo puede vincularse a un rol (Agente o KOL). Si ya tiene otro rol, utilice un correo diferente."
   },
   "dashboard": {
     "title": "Panel de Afiliados",
@@ -990,7 +991,33 @@
     "payoutSentDesc": "Aviso cuando los fondos son transferidos a su banco o cuenta de Stripe",
     "payoutFailedTitle": "Alertas de Error en Pago",
     "payoutFailedDesc": "Alerta crítica si la transferencia falla por problemas en su cuenta",
-    "newReferralTitle": "Alertas de Nuevo Referido",
-    "newReferralDesc": "Aviso cuando un nuevo cliente se registra con su código o enlace"
+    "newReferralTitle": "Alertas de nuevo referido",
+    "newReferralDesc": "Recibe una alerta cuando un nuevo cliente se registre usando tu enlace o código de referido"
+  },
+  "aiMarketing": {
+    "title": "Asistente de Textos de Marketing con IA",
+    "subtitle": "Genera rápidamente textos de marketing para cada plataforma: copia y publica en un clic",
+    "clearChat": "Limpiar chat",
+    "contentType": "Tipo de contenido",
+    "platform": "Plataforma de publicación",
+    "extraContext": "Notas adicionales (Opcional)",
+    "extraContextPlaceholder": "p. ej., Público objetivo de 30-45 años; destacar oncología; incluir código promocional REF123...",
+    "quickStart": "Inicio rápido",
+    "quickStartSub": "Selecciona el tipo y la plataforma a la izquierda, o pulsa en una plantilla",
+    "inputPlaceholder": "Describe el texto que necesitas o qué servicios y público deseas promocionar…",
+    "send": "Enviar",
+    "copy": "Copiar texto",
+    "copied": "Copiado",
+    "disclaimer": "⚠️ El contenido generado por IA es solo de referencia. Verifica la precisión antes de publicar y cumple con las normas publicitarias.",
+    "requestFailed": "Error en la solicitud",
+    "networkError": "Error de red",
+    "types": {
+      "short_video": "Guion de video corto",
+      "social_post": "Publicación social",
+      "email": "Plantilla de correo",
+      "referral_intro": "Introducción de referido",
+      "service_desc": "Descripción del servicio",
+      "story": "Story / Estado"
+    }
   }
 }

@@ -51,6 +51,7 @@ const QUICK_PROMPTS = [
 
 export default function AiAssistPage() {
   const locale = useLocale();
+  const t = useTranslations("aiMarketing");
 
   const [contentType, setContentType] = React.useState("short_video");
   const [platform, setPlatform] = React.useState("tiktok");
@@ -60,6 +61,15 @@ export default function AiAssistPage() {
   const [streaming, setStreaming] = React.useState(false);
   const [copiedId, setCopiedId] = React.useState<string | null>(null);
   const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  const contentTypes = [
+    { value: "short_video",    emoji: "🎬", label: t("types.short_video") },
+    { value: "social_post",    emoji: "📱", label: t("types.social_post") },
+    { value: "email",          emoji: "📧", label: t("types.email") },
+    { value: "referral_intro", emoji: "🔗", label: t("types.referral_intro") },
+    { value: "service_desc",   emoji: "💎", label: t("types.service_desc") },
+    { value: "story",          emoji: "✨", label: t("types.story") },
+  ];
 
   React.useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -97,7 +107,7 @@ export default function AiAssistPage() {
         setMessages((prev) =>
           prev.map((m) =>
             m.id === assistantId
-              ? { ...m, streaming: false, error: err?.error?.message, content: "⚠️ " + (err?.error?.message ?? "请求失败") }
+              ? { ...m, streaming: false, error: err?.error?.message, content: "⚠️ " + (err?.error?.message ?? t("requestFailed")) }
               : m,
           ),
         );
@@ -143,7 +153,7 @@ export default function AiAssistPage() {
       setMessages((prev) =>
         prev.map((m) =>
           m.id === assistantId
-            ? { ...m, streaming: false, error: err?.message, content: "⚠️ " + (err?.message ?? "网络错误") }
+            ? { ...m, streaming: false, error: err?.message, content: "⚠️ " + (err?.message ?? t("networkError")) }
             : m,
         ),
       );
@@ -165,15 +175,15 @@ export default function AiAssistPage() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
             <Wand2 className="w-6 h-6 text-brand-500" />
-            AI 营销文案助手
+            {t("title")}
           </h1>
-          <p className="text-sm text-slate-500 mt-1">帮你快速生成各平台推广文案，一键复制直接发布</p>
+          <p className="text-sm text-slate-500 mt-1">{t("subtitle")}</p>
         </div>
         <button
           onClick={() => { setMessages([]); setInput(""); setContext(""); }}
           className="self-start flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-700"
         >
-          <RefreshCw className="w-3.5 h-3.5" /> 清空对话
+          <RefreshCw className="w-3.5 h-3.5" /> {t("clearChat")}
         </button>
       </div>
 
@@ -182,9 +192,9 @@ export default function AiAssistPage() {
         <div className="lg:col-span-1 space-y-5">
           {/* Content type */}
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 space-y-3">
-            <div className="text-sm font-bold text-slate-800">📝 内容类型</div>
+            <div className="text-sm font-bold text-slate-800">📝 {t("contentType")}</div>
             <div className="grid grid-cols-2 gap-2">
-              {CONTENT_TYPES.map((ct) => (
+              {contentTypes.map((ct) => (
                 <button
                   key={ct.value}
                   onClick={() => setContentType(ct.value)}
@@ -203,7 +213,7 @@ export default function AiAssistPage() {
 
           {/* Platform */}
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 space-y-3">
-            <div className="text-sm font-bold text-slate-800">📡 发布平台</div>
+            <div className="text-sm font-bold text-slate-800">📡 {t("platform")}</div>
             <div className="grid grid-cols-2 gap-2">
               {PLATFORMS.map((p) => (
                 <button
@@ -224,12 +234,12 @@ export default function AiAssistPage() {
 
           {/* Extra context */}
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 space-y-3">
-            <div className="text-sm font-bold text-slate-800">💡 补充说明（选填）</div>
+            <div className="text-sm font-bold text-slate-800">💡 {t("extraContext")}</div>
             <textarea
               value={context}
               onChange={(e) => setContext(e.target.value)}
               rows={3}
-              placeholder="例如：目标受众是30-45岁海外华人；重点推肿瘤科服务；需要加入我的优惠码 REF123…"
+              placeholder={t("extraContextPlaceholder")}
               className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs resize-none focus:outline-none focus:ring-2 focus:ring-brand-300"
             />
           </div>
@@ -243,8 +253,8 @@ export default function AiAssistPage() {
               <div className="space-y-5">
                 <div className="text-center py-6">
                   <Sparkles className="w-10 h-10 text-brand-400 mx-auto" />
-                  <p className="text-sm font-semibold text-slate-700 mt-3">快速开始</p>
-                  <p className="text-xs text-slate-400 mt-1">选择左边的类型和平台，或者直接点击下方模板</p>
+                  <p className="text-sm font-semibold text-slate-700 mt-3">{t("quickStart")}</p>
+                  <p className="text-xs text-slate-400 mt-1">{t("quickStartSub")}</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {QUICK_PROMPTS.map((qp) => (
@@ -260,7 +270,16 @@ export default function AiAssistPage() {
                 </div>
               </div>
             ) : (
-              messages.map((m) => <MessageBubble key={m.id} message={m} onCopy={handleCopy} copiedId={copiedId} />)
+              messages.map((m) => (
+                <MessageBubble
+                  key={m.id}
+                  message={m}
+                  onCopy={handleCopy}
+                  copiedId={copiedId}
+                  copyText={t("copy")}
+                  copiedText={t("copied")}
+                />
+              ))
             )}
           </div>
 
@@ -273,7 +292,7 @@ export default function AiAssistPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-              placeholder="描述你需要的文案，或直接告诉 AI 你要推广什么服务、面向哪些受众…"
+              placeholder={t("inputPlaceholder")}
               rows={2}
               className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm resize-none focus:outline-none focus:ring-2 focus:ring-brand-300"
               disabled={streaming}
@@ -284,11 +303,11 @@ export default function AiAssistPage() {
               className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-brand-500 text-white text-sm font-semibold rounded-xl hover:bg-brand-600 disabled:opacity-50 transition-colors"
             >
               {streaming ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-              发送
+              {t("send")}
             </button>
           </form>
           <div className="px-4 py-2 bg-slate-50 border-t border-slate-100 text-[11px] text-slate-400 leading-relaxed">
-            ⚠️ AI 生成内容仅供参考，请在发布前检查事实准确性。宣传时请确保遵守各平台规则及当地广告法规。
+            {t("disclaimer")}
           </div>
         </div>
       </div>
@@ -300,10 +319,14 @@ function MessageBubble({
   message,
   onCopy,
   copiedId,
+  copyText,
+  copiedText,
 }: {
   message: ChatMessage;
   onCopy: (id: string, content: string) => void;
   copiedId: string | null;
+  copyText: string;
+  copiedText: string;
 }) {
   const isUser = message.role === "user";
   return (
@@ -337,9 +360,9 @@ function MessageBubble({
             className="absolute -bottom-7 left-0 flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity"
           >
             {copiedId === message.id ? (
-              <><Check className="w-3 h-3 text-emerald-500" /> 已复制</>
+              <><Check className="w-3 h-3 text-emerald-500" /> {copiedText}</>
             ) : (
-              <><Copy className="w-3 h-3" /> 复制文案</>
+              <><Copy className="w-3 h-3" /> {copyText}</>
             )}
           </button>
         )}

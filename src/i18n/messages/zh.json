@@ -44,7 +44,8 @@
     "inviteCodePlaceholder": "请输入代理提供的邀请码",
     "inviteCodeAutoFilled": "已自动填入邀请链接中的邀请码 {code}。",
     "errorInviteRequired": "注册必须填写代理邀请码。请向邀请你的代理索取有效的邀请链接或邀请码。",
-    "errorInviteInvalid": "该邀请码无效或对应代理已停用。请与邀请你的代理确认有效的邀请码。"
+    "errorInviteInvalid": "此邀请码无效或所属代理已被停用。请向你的代理索取有效的邀请码。",
+    "roleNotice": "本邮箱将作为您的联盟营销账号。每个邮箱只能绑定一个角色(代理或 KOL),如您已是另一角色,请使用另一个邮箱。"
   },
   "dashboard": {
     "title": "推广者看板",
@@ -990,7 +991,33 @@
     "payoutSentDesc": "当收益提现或 Stripe 出金成功汇出时提醒",
     "payoutFailedTitle": "出金打款失败告警",
     "payoutFailedDesc": "当提现因账户信息有误或银行异常失败时紧急告警",
-    "newReferralTitle": "新客户绑定提醒",
-    "newReferralDesc": "当有新客户首次通过您的专属推广链接或邀请码注册时提醒"
+    "newReferralTitle": "新绑定客户提醒",
+    "newReferralDesc": "有新客户通过您的专属推广码或链接成功完成注册绑定时发送"
+  },
+  "aiMarketing": {
+    "title": "AI 营销文案助手",
+    "subtitle": "帮你快速生成各平台推广文案，一键复制直接发布",
+    "clearChat": "清空对话",
+    "contentType": "内容类型",
+    "platform": "发布平台",
+    "extraContext": "补充说明（选填）",
+    "extraContextPlaceholder": "例如：目标受众是30-45岁海外华人；重点推肿瘤科服务；需要加入我的优惠码 REF123…",
+    "quickStart": "快速开始",
+    "quickStartSub": "选择左边的类型和平台，或者直接点击下方模板",
+    "inputPlaceholder": "描述你需要的文案，或直接告诉 AI 你要推广什么服务、面向哪些受众…",
+    "send": "发送",
+    "copy": "复制文案",
+    "copied": "已复制",
+    "disclaimer": "⚠️ AI 生成内容仅供参考，请在发布前检查事实准确性。宣传时请确保遵守各平台规则及当地广告法规。",
+    "requestFailed": "请求失败",
+    "networkError": "网络错误",
+    "types": {
+      "short_video": "短视频脚本",
+      "social_post": "社交帖子",
+      "email": "邮件模板",
+      "referral_intro": "推广介绍",
+      "service_desc": "服务说明",
+      "story": "Story / 朋友圈"
+    }
   }
 }

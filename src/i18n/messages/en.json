@@ -44,7 +44,8 @@
     "inviteCodePlaceholder": "Enter the invite code from your agent",
     "inviteCodeAutoFilled": "Invite code {code} applied from your invite link.",
     "errorInviteRequired": "An agent invite code is required to register. Please ask the agent who invited you for their invite link or code.",
-    "errorInviteInvalid": "This invite code is invalid or the agent is no longer active. Please check with your agent for a valid invite code."
+    "errorInviteInvalid": "This invite code is invalid or the agent is no longer active. Please check with your agent for a valid invite code.",
+    "roleNotice": "This email will be used as your affiliate partner account. Each email can only be associated with one role (Agent or KOL). If you are already registered in another role, please use a different email address."
   },
   "dashboard": {
     "title": "Affiliate Dashboard",
@@ -992,5 +993,31 @@
     "payoutFailedDesc": "Receive critical alerts if a payout transfer fails due to account issues",
     "newReferralTitle": "New Referral Alerts",
     "newReferralDesc": "Get notified when a new customer registers using your referral link or code"
+  },
+  "aiMarketing": {
+    "title": "AI Marketing Copy Assistant",
+    "subtitle": "Quickly generate marketing copy for each platform — copy and publish with one click",
+    "clearChat": "Clear conversation",
+    "contentType": "Content Type",
+    "platform": "Publishing Platform",
+    "extraContext": "Additional Notes (Optional)",
+    "extraContextPlaceholder": "e.g., Target audience is overseas Chinese aged 30-45; emphasize oncology care; include promo code REF123...",
+    "quickStart": "Quick Start",
+    "quickStartSub": "Select a type and platform on the left, or click a template below",
+    "inputPlaceholder": "Describe the copy you need, or tell the AI what services and audience to target…",
+    "send": "Send",
+    "copy": "Copy text",
+    "copied": "Copied",
+    "disclaimer": "⚠️ AI-generated content is for reference only. Please verify accuracy before publishing and adhere to platform and advertising guidelines.",
+    "requestFailed": "Request failed",
+    "networkError": "Network error",
+    "types": {
+      "short_video": "Short Video Script",
+      "social_post": "Social Post",
+      "email": "Email Template",
+      "referral_intro": "Referral Intro",
+      "service_desc": "Service Overview",
+      "story": "Story / Moments"
+    }
   }
 }
